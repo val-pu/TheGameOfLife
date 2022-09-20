@@ -9,8 +9,8 @@ import kotlin.random.Random
 
 class ActorManager(val gameView: GameView) {
 
-    var cells = Array<Array<Actor>>(40) { x ->
-        Array<Actor>(40) { y ->
+    var cells = Array<Array<Actor>>(70) { x ->
+        Array<Actor>(70) { y ->
             Actor(x, y, Random.nextBoolean())
         }
     }

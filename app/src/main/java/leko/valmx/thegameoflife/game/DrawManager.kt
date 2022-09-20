@@ -20,6 +20,8 @@ class DrawManager(val gameView: GameView) {
 
         canvas.drawPaint(paintManager.bgPaint)
 
+
+
         val cells = actorManager.cells
 
         repeat(cells.size) { x ->
