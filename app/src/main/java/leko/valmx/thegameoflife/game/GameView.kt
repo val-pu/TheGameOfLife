@@ -21,6 +21,7 @@ class GameView(context: Context?, attrs: AttributeSet?) :
     val actorManager = ActorManager(this)
     val interactionManager = InteractionManager(this)
     val interfaceManager = InterfaceManager(this)
+    val toolsManager = ToolsManager(this)
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
@@ -43,6 +44,8 @@ class GameView(context: Context?, attrs: AttributeSet?) :
         paintManager.init()
         actorManager
         animationManager.init()
+        actorManager.init()
+
 
     }
 

@@ -47,7 +47,10 @@ class AnimationManager(val gameView: GameView) : Runnable {
             if (it.counter == 0L) it.onAnimationStart()
 
             it.counter += freezeLength.toLong()
-            it.onAnimate((1F*it.counter/it.length))
+            var av = Math.pow((1F*it.counter/it.length).toDouble(),2.0).toFloat()
+            if( av> 1) av = 1F
+
+            it.onAnimate(av)
 
             if (it.counter > it.length) {
                 it.onAnimationFinished()

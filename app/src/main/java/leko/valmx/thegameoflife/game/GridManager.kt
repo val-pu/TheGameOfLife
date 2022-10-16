@@ -10,16 +10,28 @@ class GridManager(val view: GameView) {
 
     var inset = 1F
     var radius = 0F
+    var width = 0F
+    var height = 0F
+    var gridWidth = 0F
 
     var defaultWidthCells = 40
     var step = 0F
+    set(value) {
+        field = value
+        inset = step * .05F
+        radius = step * .08F
+        gridWidth = step * .08F
+    }
+    var dStep = 0F //Unzoomed step
 
     fun init() {
 
         step = (view.width / defaultWidthCells).toFloat()
+        width = view.width.toFloat()
+        height = view.height.toFloat()
 
-        inset = step * .02F
-        radius = step * .08F
+
+        dStep = step
 
     }
 
@@ -28,6 +40,9 @@ class GridManager(val view: GameView) {
     }
 
     fun getCellRect(x: Int, y: Int): RectF {
+
+//        if(!isValid(x) || !isValid(y)) return null
+
         return RectF(
             step * x - this.x,
             step * y - this.y,

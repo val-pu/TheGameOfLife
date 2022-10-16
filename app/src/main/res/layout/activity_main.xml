@@ -4,122 +4,196 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     tools:context=".MainActivity">
 
     <leko.valmx.thegameoflife.game.GameView
-        android:layout_width="match_parent"
         android:id="@+id/game"
-        android:layout_height="match_parent"/>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/nextStep"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:backgroundTint="#FFF"
-        android:clickable="true"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:translationZ="-1dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/chevron_right" />
+        tools:layout_editor_absoluteY="-9dp" />
 
     <TextView
         android:id="@+id/gen_counter"
-        android:layout_margin="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pixel"
+        android:text="Generation 0"
         android:textColor="@color/black"
         android:textSize="25sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Generation 0"
-        android:fontFamily="@font/pixel"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/auto_play"
-        android:layout_width="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#FFF"
-        android:clickable="true"
-        app:layout_constraintBottom_toTopOf="@+id/nextStep"
-        app:layout_constraintEnd_toEndOf="@+id/nextStep"
-        app:layout_constraintStart_toStartOf="@+id/nextStep"
-        app:srcCompat="@drawable/play" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/edit_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:clickable="true"
-        android:backgroundTint="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/auto_play"
-        app:layout_constraintEnd_toEndOf="@+id/auto_play"
-        app:layout_constraintStart_toStartOf="@+id/auto_play"
-        app:srcCompat="@drawable/edit_2" />
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/reset_btn"
         android:layout_width="wrap_content"
-        android:layout_height="25dp"
-        android:clickable="true"
+        android:layout_height="wrap_content"
+
         android:layout_margin="10dp"
+        android:backgroundTint="@color/white"
+        android:clickable="true"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/trash_2" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/tooltip_speed"
-        tools:visibility="visible"
-        android:visibility="gone"
+        android:id="@+id/constraintLayout2"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:background="@drawable/round_rect"
+        android:layout_margin="10dp"
         android:animateLayoutChanges="true"
-        android:elevation="1dp"
-        app:layout_constraintBottom_toBottomOf="@+id/auto_play"
-        app:layout_constraintEnd_toEndOf="@+id/auto_play"
-        app:layout_constraintTop_toTopOf="@+id/auto_play">
+        android:background="@drawable/round_rect"
+        android:backgroundTint="@color/white"
+        android:elevation="10dp"
+        android:paddingEnd="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
+        <leko.valmx.thegameoflife.views.ThemeView
+            android:id="@+id/themeView"
+            android:layout_width="32dp"
+            android:layout_height="100dp"
+            android:layout_margin="10dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floatingActionButton2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/theme_selector"
+            android:layout_width="150dp"
+            android:layout_height="52dp"
+            android:layout_marginStart="10dp"
+            android:elevation="5dp"
+
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/themeView"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/chevrons_right" />
+            tools:visibility="visible">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_speed_fast"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            android:layout_marginHorizontal="10dp"
-            android:clickable="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/floatingActionButton2"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/chevrons_right" />
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/round_rect_left" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_speed_slow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:elevation="1dp"
-            android:backgroundTint="@color/active"
-            android:clickable="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/fab_speed_fast"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/chevron_right" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_themes"
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+
+                android:layout_marginStart="3dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/divider"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:barrierDirection="left"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="2dp"
+                android:layout_height="50dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_editor_absoluteX="1dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <com.ramotion.fluidslider.FluidSlider
+        android:id="@+id/fluidSlider"
 
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="10dp"
+        android:visibility="gone"
+        app:end_text=""
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="@+id/linearLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:size="small"
+        app:start_text="Speed"
+        tools:visibility="visible" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/round_rect"
+        android:backgroundTint="@color/white"
+        android:elevation="4dp"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/nextStep"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/chevron_right" />
+
+        <ImageView
+            android:id="@+id/edit_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/edit_2" />
+
+        <ImageView
+            android:id="@+id/auto_play"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/play" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_rect"
+        android:backgroundTint="@color/white"
+        android:elevation="3dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/linearLayout"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:id="@+id/tool_apply"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:src="@drawable/check" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:src="@drawable/x" />
+
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
