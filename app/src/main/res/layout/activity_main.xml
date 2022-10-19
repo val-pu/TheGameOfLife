@@ -127,7 +127,7 @@
         android:visibility="gone"
         app:end_text=""
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        app:layout_constraintEnd_toEndOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:size="small"
         app:start_text="Speed"

@@ -22,11 +22,65 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
     var moveMode = false
     var zoomMode = false
 
+    interface Interactable {
+        fun onInteraction(motionEvent: MotionEvent, dereg: () -> Unit)
+
+        fun drawInteraction() // Draws stuff as long as the interaction is active
+
+        fun isNonMovementInteraction(event: MotionEvent): Boolean
+
+        fun onDeregister()
+    }
+
+    private var registeredInteraction: Interactable? = null
+
+    fun registerInteraction(interactable: Interactable) {
+
+    }
+
+    private var isToolUsed = false
+
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
 
         val toolsManager = gameView.toolsManager
 
-        if (event!!.pointerCount == 1) {
+        when (event!!.action) {
+
+            ACTION_DOWN -> {
+
+                if (event.pointerCount != 1) return true
+
+                if (registeredInteraction != null) isToolUsed =
+                    registeredInteraction!!.isNonMovementInteraction(event)
+                onMove(event)
+            }
+
+            else -> {
+
+                if (event.pointerCount == 2) {
+                    isToolUsed = false
+                }
+
+
+                if (isToolUsed) {
+                    registeredInteraction!!.onInteraction(event) {
+                        registeredInteraction = null
+                        isToolUsed = false
+                    }
+                    return true
+                }
+
+                onZoom(event)
+            }
+
+        }
+
+        if (event.pointerCount == 1) {
+
+            if (registeredInteraction != null) {
+
+                return true
+            }
 
             if (!toolsManager.isToolMove) {
 
