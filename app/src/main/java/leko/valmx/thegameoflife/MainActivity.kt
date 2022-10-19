@@ -1,12 +1,14 @@
 package leko.valmx.thegameoflife
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.PersistableBundle
 import android.util.Log
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,13 +24,17 @@ class MainActivity : AppCompatActivity(), Runnable, OnThemeSelectedListener {
     var editMode = false
     var themeSelectingMode = false
 
-    var autoModeSpeed = (250L*0.5).toLong()
-    var autoModeSpeedFac = 250L
+    var autoModeSpeed = (1550L).toLong()
+    var autoModeSpeedFac = autoModeSpeed
 
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun onCreate(savedInstanceState: Bundle?) {
         setContentView(R.layout.activity_main)
-        Log.i("Anim", "Running")
+
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN)
+
 
         super.onCreate(savedInstanceState)
         game.interfaceManager.onNewGeneration = this
@@ -82,9 +88,7 @@ class MainActivity : AppCompatActivity(), Runnable, OnThemeSelectedListener {
 
             if (autoPlayRunning) {
                 autoPlayRunning = false
-                fluidSlider.visibility = GONE
             } else {
-                fluidSlider.visibility = VISIBLE
                 autoPlayRunning = true
 
                 Handler().postDelayed(object : Runnable {

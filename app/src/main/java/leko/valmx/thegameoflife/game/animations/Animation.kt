@@ -2,7 +2,7 @@ package leko.valmx.thegameoflife.game.animations
 
 abstract class Animation {
 
-    var length = 1000L
+    var animLength = 1000L
 
     var counter = 0L
 

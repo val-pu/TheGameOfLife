@@ -12,7 +12,17 @@ class DrawManager(val gameView: GameView) {
 
     }
 
+    var lowDetail = false
+
+    fun updateLowDetail() {
+        val gridManager = gameView.gridManager
+        lowDetail = gameView.canvas.width / gridManager.step > 30
+    }
+
+
     fun draw() {
+
+        updateLowDetail()
 
         val canvas = gameView.canvas
         val paintManager = gameView.paintManager
@@ -27,19 +37,31 @@ class DrawManager(val gameView: GameView) {
 
         val cells = actorManager.cells
 
+        val step = gridManager.step
+
+        val startVisibleX = (gridManager.x / step).toInt()
+        val startVisibleY = (gridManager.y / step).toInt()
+
+        val endVisibleX = (canvas.width / step + startVisibleX).toInt()
+        val endVisibleY = (canvas.height / step + startVisibleY).toInt()
+
+
+
         cells.values.forEach { values ->
 
             values!!.values.forEach { cell ->
+                if (cell!!.x !in startVisibleX..endVisibleX) return@forEach
+                if (cell.y !in startVisibleY..endVisibleY) return@forEach
                 val cellRect = gridManager.getCellRect(cell!!.x, cell!!.y)
 
-                if (cell!!.draw)
 
-                    canvas.drawRoundRect(
-                        cellRect,
-                        gridManager.radius,
-                        gridManager.radius,
-                        actorPaint
-                    )
+                if (cell.draw) {
+
+                    drawCell(cellRect,paintManager.cellPaint)
+                    if (!lowDetail)
+
+                        drawConnectedPieces(cell)
+                }
 
 
             }
@@ -51,6 +73,60 @@ class DrawManager(val gameView: GameView) {
 
     var isGridShown = false
     var bypassCheckForAnimation = false
+
+
+    fun drawConnectedPieces(cell: ActorManager.Cell) {
+
+        val actorManager = gameView.actorManager
+        val paintManager = gameView.paintManager
+        val gridManager = gameView.gridManager
+
+        val x = cell.x
+        val y = cell.y
+        val cellR =
+            lazy {
+                gridManager.getCellRect(x, y)
+            }
+
+        var connectionsDrawn = 0
+
+        val leftCell = actorManager.getCell(x + 1, y)
+
+
+
+        if (leftCell != null && leftCell.draw) {
+
+            val cellRect = gridManager.getCellRect(leftCell)
+
+            drawCell(cellRect.apply { union(cellR.value) }, paintManager.cellPaint)
+            connectionsDrawn++
+
+        }
+        val bottomCell = actorManager.getCell(x, y + 1)
+
+        if (bottomCell != null && bottomCell.draw) {
+
+            val cellRect = gridManager.getCellRect(bottomCell)
+
+            drawCell(cellRect.apply { union(cellR.value) }, paintManager.cellPaint)
+            connectionsDrawn++
+
+        }
+
+        if (connectionsDrawn != 2) return
+
+        val bottomRightCell = actorManager.getCell(x + 1, y + 1)
+
+        if (bottomRightCell != null && bottomRightCell.draw) {
+
+            val cellRect = gridManager.getCellRect(bottomRightCell)
+
+            drawCell(cellRect.apply { union(cellR.value) }, paintManager.cellPaint)
+
+        }
+
+
+    }
 
     fun drawGrid() {
 
@@ -94,7 +170,7 @@ class DrawManager(val gameView: GameView) {
                     }
 
                     override fun onAnimationStart() {
-                        length = 300
+                        animLength = 300
                         bypassCheckForAnimation = true
                         paintManager.gridPaint.alpha = 20
                     }
@@ -113,19 +189,24 @@ class DrawManager(val gameView: GameView) {
         val countY = height / step + 3
         val radius = gridManager.radius
 
+        // Vertikales Grid
+
         repeat(countX.toInt()) { i ->
             repeat(countY.toInt()) { j ->
                 val segment = RectF(i * step + x, j * step + y, i * step + x, (j + 1) * step + y)
-                segment.inset(-gridWdth * .3F, gridWdth * .8F)
+                segment.inset(-gridWdth * .1F, step * .19F)
 
                 gameView.canvas.drawRoundRect(segment, radius, radius, paintManager.gridPaint)
 
             }
         }
+
+        // Horizontales Grid
+
         repeat(countY.toInt()) { i ->
             repeat(countX.toInt()) { j ->
                 val segment = RectF(j * step + x, i * step + y, (j + 1) * step + x, i * step + y)
-                segment.inset(gridWdth * .8F, -gridWdth * .3F)
+                segment.inset(step * .19F, -gridWdth * .1F)
 
                 gameView.canvas.drawRoundRect(segment, radius, radius, paintManager.gridPaint)
 
@@ -158,7 +239,7 @@ class DrawManager(val gameView: GameView) {
 
         bgPaint.alpha = 255
 
-        toolPaint.strokeWidth = gridManager.step*.3F
+        toolPaint.strokeWidth = gridManager.step * .3F
         gameView.canvas.drawRoundRect(toolBounds, rad, rad, toolPaint)
 
 
@@ -172,8 +253,11 @@ class DrawManager(val gameView: GameView) {
 
     fun drawCell(rect: RectF, paint: Paint) {
         val gridManager = gameView.gridManager
+        if (lowDetail) {
+            gameView.canvas.drawRect(rect, paint)
 
-        gameView.canvas.drawRoundRect(rect, gridManager.radius, gridManager.radius, paint)
+        } else
+            gameView.canvas.drawRoundRect(rect, gridManager.radius, gridManager.radius, paint)
 
     }
 
@@ -184,16 +268,20 @@ class DrawManager(val gameView: GameView) {
         val paintManager = gameView.paintManager
 
         val step = gridManager.step
-        val inset = gridManager.inset
+        if (!lowDetail) {
+            val inset = gridManager.inset
 
-        drawCell(
-            RectF(x, y, x + step, y + step).apply { inset(inset, inset) },
-            paintManager.cellPaint
-        )
+            drawCell(
+                RectF(x, y, x + step, y + step).apply { inset(inset, inset) },
+                paintManager.cellPaint
+            )
+        } else {
+            gameView.canvas.drawRect(
+                RectF(x, y, x + step, y + step), paintManager.cellPaint
+            )
+
+        }
     }
-
-
-
 
 
 }

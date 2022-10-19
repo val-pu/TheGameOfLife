@@ -49,6 +49,16 @@ class ActorManager(val gameView: GameView) {
 
     }
 
+    fun setCell(cell: Cell) {
+        if (cells[cell.x] == null) {
+            cells[cell.x] = HashMap()
+        }
+
+        cells[cell.x]!![cell.y] = cell
+
+    }
+
+
     fun doCycle() {
 
         toBeKilledAlived = LinkedList()
@@ -153,11 +163,9 @@ class ActorManager(val gameView: GameView) {
 
                 val rect = gridManager.getCellRect(x, y)
 
-                drawManager.drawCell(rect, paintManager.bgPaint)
 
                 val inset = rect.width() / 2F * (animatedValue)
                 rect.inset(inset, inset)
-                rect.offset(inset*.7F,inset*.7F)
 
                 drawManager.drawCell(rect, actorDyingPaint)
                 actorDyingPaint.alpha = 255
@@ -167,11 +175,10 @@ class ActorManager(val gameView: GameView) {
 
             override fun onAnimationFinished() {
 
-                actor.draw = true
             }
 
             override fun onAnimationStart() {
-                length = 150L
+                animLength = 350L
                 actor.draw = false
                 setCell(actor.x, actor.y, true)
             }
@@ -198,11 +205,9 @@ class ActorManager(val gameView: GameView) {
 
                 val rect = gridManager.getCellRect(x, y)
 
-                drawManager.drawCell(rect, paintManager.bgPaint)
 
                 val inset = rect.width() / 2F * (1 - animatedValue)
                 rect.inset(inset, inset)
-                rect.offset(inset*.7F,inset*.7F)
 
                 drawManager.drawCell(rect, actorDyingPaint)
                 actorDyingPaint.alpha = 255
@@ -214,8 +219,8 @@ class ActorManager(val gameView: GameView) {
             }
 
             override fun onAnimationStart() {
-                length = 150L
-                setCell(actor.x, actor.y)
+                animLength = 350L
+                setCell(actor)
                 actor.draw = false
 
             }

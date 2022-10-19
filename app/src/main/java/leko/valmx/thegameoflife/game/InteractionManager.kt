@@ -1,14 +1,13 @@
 package leko.valmx.thegameoflife.game
 
+import android.content.pm.ModuleInfo
 import android.util.Log
 import android.view.MotionEvent
 import android.view.MotionEvent.*
 import android.view.View
 import android.view.View.OnTouchListener
-import kotlin.math.abs
-import kotlin.math.absoluteValue
-import kotlin.math.max
-import kotlin.math.roundToInt
+import leko.valmx.thegameoflife.game.animations.Animation
+import kotlin.math.*
 
 class InteractionManager(val gameView: GameView) : OnTouchListener {
 
@@ -40,7 +39,18 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
 
     private var isToolUsed = false
 
+    var currentInteractable: Interactable? = null
+
+    var dt = 0L
+    var lastTime = 0L
+
+    var dirty = false
+
+
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+        if (System.currentTimeMillis() - lastTime != 0L)
+            dt = System.currentTimeMillis() - lastTime
+        lastTime = System.currentTimeMillis()
 
         val toolsManager = gameView.toolsManager
 
@@ -70,39 +80,42 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
                     return true
                 }
 
-                onZoom(event)
+                if (event.pointerCount == 2)
+
+                    onZoom(event)
+                else onMove(event)
             }
 
         }
-
-        if (event.pointerCount == 1) {
-
-            if (registeredInteraction != null) {
-
-                return true
-            }
-
-            if (!toolsManager.isToolMove) {
-
-                onMove(event!!)
-            } else toolsManager.handleToolsMoveEvent(event)
-
-
-        } else if (event.pointerCount == 2) {
-            zoomMode = true
-
-            toolsManager.isToolMove = false
-
-            onZoom(event)
-        }
-
-        if (event.pointerCount == 1 && zoomMode) zoomMode = false
-
-        if (event.action == ACTION_UP) {
-
-            toolsManager.onToolDragStop()
-
-        }
+//
+//        if (event.pointerCount == 1) {
+//
+//            if (registeredInteraction != null) {
+//
+//                return true
+//            }
+//
+//            if (!toolsManager.isToolMove) {
+//
+//                onMove(event!!)
+//            } else toolsManager.handleToolsMoveEvent(event)
+//
+//
+//        } else if (event.pointerCount == 2) {
+//            zoomMode = true
+//
+//            toolsManager.isToolMove = false
+//
+//            onZoom(event)
+//        }
+//
+//        if (event.pointerCount == 1 && zoomMode) zoomMode = false
+//
+//        if (event.action == ACTION_UP) {
+//
+//            toolsManager.onToolDragStop()
+//
+//        }
 
         return true
     }
@@ -113,6 +126,15 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
     var lYPointer2 = 0F
 
     private fun onZoom(event: MotionEvent) {
+
+        if (!dirty) {
+            lXPointer1 = event.getX(0)
+            lYPointer1 = event.getY(0)
+            lXPointer2 = event.getX(1)
+            lYPointer2 = event.getY(1)
+        }
+
+        dirty = true
 
         val gridManager = gameView.gridManager
 
@@ -203,7 +225,23 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
 
     }
 
+    var lastDx = 0F
+    var lastDy = 0F
+
     fun onMove(event: MotionEvent): Boolean {
+
+        val animationManager = gameView.animationManager
+        val gridManager = gameView.gridManager
+
+        if (dirty) {
+            lastX = event.x
+            lastY = event.y
+        }
+
+        dirty = false
+
+
+
         when (event!!.action) {
 
 
@@ -228,10 +266,12 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
                 val dx = lastX - event.x
                 val dy = lastY - event.y
 
-                val gridManager = gameView.gridManager
                 Log.i("AM AT", "${gridManager.x} ${gridManager.y}")
                 gridManager.x += dx
                 gridManager.y += dy
+
+                lastDx = dx
+                lastDy = dy
 
                 lastX = event.x
                 lastY = event.y
@@ -242,6 +282,40 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
             }
 
             ACTION_UP -> {
+
+
+                // Adding move stuff
+
+                val dx = lastX - event.x
+                val dy = lastY - event.y
+
+                val vx = lastDx / dt
+                val vy = lastDy / dt
+
+                animationManager.animations.add(object : Animation() {
+
+                    var lastMovement = 0.0
+
+                    override fun onAnimate(animatedValue: Float) {
+
+                        gridManager.x += ((vx * (1 - (counter / animLength.toFloat())*.8F) * ((animLength - counter).absoluteValue / (10F * 10 * 10)))/**E.pow(-counter/animLength.toDouble()-.5)*/)
+                        gridManager.y += ((vy * (1 - (counter / animLength.toFloat())*.8F) * ((animLength - counter).absoluteValue / (10F * 10 * 10)))/**E.pow(-counter/animLength.toDouble()-.5)*/)
+
+                        Log.i(
+                            "MOVIUN",
+                            "MOVED >Y by ${(vy * (1 - counter.toFloat() / animLength) * ((animLength - counter).absoluteValue / (10F * 10 * 10))).toFloat()}"
+                        )
+
+
+                    }
+
+                    override fun onAnimationFinished() {
+                    }
+
+                    override fun onAnimationStart() {
+                        animLength = 550
+                    }
+                })
 
                 if (!editMode) return true
 
@@ -273,4 +347,6 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
         }
         return true
     }
+
+
 }

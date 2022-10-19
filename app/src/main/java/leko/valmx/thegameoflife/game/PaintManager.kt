@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.graphics.Color
 import android.graphics.Color.*
 import android.graphics.Paint
-import leko.valmx.thegameoflife.R
 import leko.valmx.thegameoflife.game.animations.Animation
 import leko.valmx.thegameoflife.recyclers.ThemeAdapter
 
@@ -46,6 +45,7 @@ class PaintManager(val gameView: GameView) {
                 bgPaint.color = multiplyColorWithScalar(bgOld, bgNew, animatedValue)
                 gridPaint.color = multiplyColorWithScalar(gridOld, gridNew, animatedValue)
                 cellPaint.color = multiplyColorWithScalar(cellOld, cellNew, animatedValue)
+                animLength = 450L
 
             }
 
