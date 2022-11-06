@@ -43,15 +43,15 @@ class GridManager(val view: GameView) {
 //        if(!isValid(x) || !isValid(y)) return null
 
 
-
         return RectF(
             step * x - this.x,
             step * y - this.y,
             step * (x + 1) - this.x,
             step * (y + 1) - this.y
         ).apply {
-            if(!view.drawManager.lowDetail)
-            inset(inset, inset) }
+            if (!view.drawManager.lowDetail)
+                inset(inset, inset)
+        }
     }
 
     fun getCellRect(cell: ActorManager.Cell): RectF = getCellRect(cell.x, cell.y)

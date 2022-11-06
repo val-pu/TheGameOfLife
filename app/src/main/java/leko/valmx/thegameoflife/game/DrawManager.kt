@@ -66,7 +66,7 @@ class DrawManager(val gameView: GameView) {
 
             }
         }
-        drawBoundsTool()
+//        drawBoundsTool()
 
 
     }
@@ -179,7 +179,11 @@ class DrawManager(val gameView: GameView) {
                 return
             }
 
-        if (!isGridShown && !bypassCheckForAnimation) return
+        if (!isGridShown && !bypassCheckForAnimation) {
+            drawTool()
+
+            return
+        }
 
         val x = -(gridManager.x % step) - step
         val y = -(gridManager.y % step) - step
@@ -212,44 +216,17 @@ class DrawManager(val gameView: GameView) {
 
             }
         }
+        drawTool()
 
 
     }
 
-    fun drawBoundsTool() {
-        val toolsManager = gameView.toolsManager
-        val gridManager = gameView.gridManager
 
-        if (!toolsManager.isToolActive) return
-
-        val rad = gridManager.radius
-
-
-        val toolBounds = toolsManager.generateBoundsRect()
-
-        val toolPaint = Paint().apply {
-            color = GREEN
-            alpha = 255
-            style = Paint.Style.STROKE
+    fun drawTool() {
+        gameView.interactionManager.registeredInteraction?.let {
+            it.drawInteraction()
         }
-        val bgPaint = gameView.paintManager.bgPaint
-        bgPaint.alpha = 180
-
-        gameView.canvas.drawRoundRect(toolBounds, rad, rad, gameView.paintManager.bgPaint)
-
-        bgPaint.alpha = 255
-
-        toolPaint.strokeWidth = gridManager.step * .3F
-        gameView.canvas.drawRoundRect(toolBounds, rad, rad, toolPaint)
-
-
-//        gameView.canvas.drawRoundRect(toolBounds, rad, rad, toolPaint)
-
-        toolsManager.drawSelectedShape()
-
-
     }
-
 
     fun drawCell(rect: RectF, paint: Paint) {
         val gridManager = gameView.gridManager
@@ -260,6 +237,8 @@ class DrawManager(val gameView: GameView) {
             gameView.canvas.drawRoundRect(rect, gridManager.radius, gridManager.radius, paint)
 
     }
+
+
 
     fun drawCell(x: Float, y: Float) {
 

@@ -5,8 +5,8 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.util.AttributeSet
-import android.widget.ImageView
-import androidx.core.widget.ImageViewCompat
+import leko.valmx.thegameoflife.MainActivity
+import leko.valmx.thegameoflife.game.tools.SelectionTool
 
 class GameView(context: Context?, attrs: AttributeSet?) :
     androidx.appcompat.widget.AppCompatImageView(context!!, attrs) {
@@ -21,7 +21,11 @@ class GameView(context: Context?, attrs: AttributeSet?) :
     val actorManager = ActorManager(this)
     val interactionManager = InteractionManager(this)
     val interfaceManager = InterfaceManager(this)
-    val toolsManager = ToolsManager(this)
+    val toolsManager = SelectionTool(this)
+    val previewManager = PreviewManager(this)
+    val feedBackManager = FeedBackManager(this)
+
+    lateinit var mainActivity: MainActivity
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
@@ -32,6 +36,7 @@ class GameView(context: Context?, attrs: AttributeSet?) :
     }
 
     fun init() {
+        initialized = true
 
         val bm = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         canvas.setBitmap(bm)
@@ -43,8 +48,11 @@ class GameView(context: Context?, attrs: AttributeSet?) :
         gridManager.init()
         paintManager.init()
         actorManager
-        animationManager.init()
         actorManager.init()
+        paintManager.loadSavedTheme(context)
+        animationManager.init()
+//        actorManager.cells = HashMap()
+        actorManager.applyRuleSet()
 
 
     }

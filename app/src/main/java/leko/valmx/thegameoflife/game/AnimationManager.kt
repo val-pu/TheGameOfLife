@@ -24,7 +24,6 @@ class AnimationManager(val gameView: GameView) : Runnable {
         running = true
 
         Handler().postDelayed(this, freezeLength.roundToLong())
-        gameView.actorManager.doCycle()
 
     }
 

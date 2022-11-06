@@ -1,9 +1,10 @@
 package leko.valmx.thegameoflife.game
 
+import android.util.Log
 import leko.valmx.thegameoflife.game.animations.Animation
+import leko.valmx.thegameoflife.game.utils.GameRuleSet
 import java.util.LinkedList
 import kotlin.math.roundToInt
-import kotlin.random.Random
 
 class ActorManager(val gameView: GameView) {
 
@@ -11,22 +12,27 @@ class ActorManager(val gameView: GameView) {
     var initialSize = 50
     var initialSizeY = 70
 
+    var aLength = 100L
+
     var cells = HashMap<Int, HashMap<Int, Cell?>?>()
 
-    var toBeKilledAlived = LinkedList<Cell>()
+    var toBeKilled = LinkedList<Cell>()
     var toBeResurrected = LinkedList<Cell>()
     var hasManyNeighbours = LinkedList<Cell>()
 
     fun init() {
 
-        repeat(3400) {
-            val x = Random.nextInt(initialSize)
-            val y =  Random.nextInt(initialSizeY)
-            setCell(x, y)
-
-        }
+//        repeat(3400) {
+//            val x = Random.nextInt(initialSize)
+//            val y = Random.nextInt(initialSizeY)
+//            setCell(x, y)
+//
+//        }
+//
 
     }
+
+
 
     fun getCell(x: Int, y: Int): Cell? {
 
@@ -58,38 +64,53 @@ class ActorManager(val gameView: GameView) {
 
     }
 
+    var aliveNeighbours = LinkedList<Int>()
+    var resurrectNeighbours = LinkedList<Int>()
+
+    fun applyRuleSet() {
+
+        aliveNeighbours = LinkedList<Int>()
+        resurrectNeighbours = LinkedList<Int>()
+
+        GameRuleSet(gameView.context).apply { loadRules() }.ruleSet.withIndex().forEach { (i, rule) ->
+            if (rule == GameRuleSet.Rule.SURVIVE) aliveNeighbours.add(i +1)
+            else if (rule == GameRuleSet.Rule.LIVE) resurrectNeighbours.add(i +1)
+            else if (rule == GameRuleSet.Rule.LIVE_SURVIVE)  {
+                resurrectNeighbours.add(i +1)
+                aliveNeighbours.add(i +1)
+            }
+
+
+        }
+
+    }
 
     fun doCycle() {
 
-        toBeKilledAlived = LinkedList()
+
+        toBeKilled = LinkedList()
         hasManyNeighbours = LinkedList()
         toBeResurrected = LinkedList()
 
         cells.values.forEach { x ->
-
             x!!.values.forEach { cell ->
 
                 var neighbours = getNeighboursOfCell(cell!!)
 
-                if ((neighbours) != 0 && (neighbours) < 9) hasManyNeighbours.add(cell!!)
 
-
-                when (neighbours) {
-                    1, 0, 4, 5, 6, 7, 8 -> toBeKilledAlived.add(cell)
+                getDeadNeighboursOfCell(cell.x, cell.y).forEach { a ->
+                    if (resurrectNeighbours.contains(getNeighboursOfCell(a))) toBeResurrected.add(a)
                 }
 
+                if (aliveNeighbours.contains(neighbours)) return@forEach
+
+                toBeKilled.add(cell)
 
             }
         }
 
-        hasManyNeighbours.forEach {
-            getDeadNeighboursOfCell(it.x, it.y).forEach { a ->
-                if (getNeighboursOfCell(a) == 3) toBeResurrected.add(a)
-            }
-        }
 
-
-        toBeKilledAlived.forEach { cell ->
+        toBeKilled.forEach { cell ->
             kill(cell)
         }
         toBeResurrected.forEach { cell ->
@@ -150,15 +171,16 @@ class ActorManager(val gameView: GameView) {
         val gridManager = gameView.gridManager
         val paintManager = gameView.paintManager
         val drawManager = gameView.drawManager
+        setCell(actor.x, actor.y, true)
 
-        animationManager.animations.add(object : Animation() {
+        /*animationManager.animations.add(object : Animation() {
             override fun onAnimate(animatedValue: Float) {
                 val x = actor.x
                 val y = actor.y
 
                 val actorDyingPaint = paintManager.cellPaint
 
-                actorDyingPaint.alpha = ((1 -animatedValue) * 100+150).roundToInt()
+                actorDyingPaint.alpha = ((1 - animatedValue) * 100).roundToInt()
 
 
                 val rect = gridManager.getCellRect(x, y)
@@ -178,12 +200,12 @@ class ActorManager(val gameView: GameView) {
             }
 
             override fun onAnimationStart() {
-                animLength = 350L
+                animLength = aLength
                 actor.draw = false
                 setCell(actor.x, actor.y, true)
             }
 
-        })
+        })*/
 
     }
 
@@ -192,15 +214,16 @@ class ActorManager(val gameView: GameView) {
         val gridManager = gameView.gridManager
         val paintManager = gameView.paintManager
         val drawManager = gameView.drawManager
+        setCell(actor)
 
-        animationManager.animations.add(object : Animation() {
+        /*animationManager.animations.add(object : Animation() {
             override fun onAnimate(animatedValue: Float) {
                 val x = actor.x
                 val y = actor.y
 
                 val actorDyingPaint = paintManager.cellPaint
 
-                actorDyingPaint.alpha = (( animatedValue) * 100 + 155).roundToInt()
+                actorDyingPaint.alpha = ((animatedValue) * 100).roundToInt()
 
 
                 val rect = gridManager.getCellRect(x, y)
@@ -219,13 +242,13 @@ class ActorManager(val gameView: GameView) {
             }
 
             override fun onAnimationStart() {
-                animLength = 350L
+                animLength = aLength
                 setCell(actor)
                 actor.draw = false
 
             }
 
-        })
+        })*/
 
 
     }
@@ -236,7 +259,11 @@ class ActorManager(val gameView: GameView) {
     }
 
 
-    class Cell(val x: Int, val y: Int, var draw: Boolean = true)
+    class Cell(val x: Int, val y: Int, var draw: Boolean = true) {
+        override fun toString(): String {
+            return "$x, $y"
+        }
+    }
 
 
 }

@@ -26,7 +26,7 @@ class ThemeView(context: Context, attrs: AttributeSet?) : AppCompatImageView(con
 
         val radius = width * .1F
 
-        canvas!!.drawRoundRect(bgRect, radius, radius, backColor)
+        canvas!!.drawCircle(bgRect.centerX(),bgRect.centerX(), bgRect.width()/2, backColor)
 
         val dxy = width / 3F
 
@@ -38,7 +38,7 @@ class ThemeView(context: Context, attrs: AttributeSet?) : AppCompatImageView(con
 
         rect2.inset(inset, inset)
 
-        canvas.drawRoundRect(rect2, radius, radius, cellColor)
+        canvas!!.drawCircle(rect2.centerX(),rect2.centerX(), rect2.width()/2, cellColor)
 
     }
 

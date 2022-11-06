@@ -19,6 +19,12 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="IconButton">
+        <item name="android:tint">@color/white</item>
+        <item name="android:padding">15dp</item>
+
+    </style>
+
     <style name="Theme.TheGameOfLife.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.TheGameOfLife.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />

@@ -1,39 +1,48 @@
 package leko.valmx.thegameoflife
 
 import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.os.PersistableBundle
-import android.util.Log
-import android.view.View.GONE
+import android.view.View
+import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.WindowManager
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
+import leko.valmx.thegameoflife.game.InteractionManager
+import leko.valmx.thegameoflife.game.PaintManager
 import leko.valmx.thegameoflife.game.animations.Animation
-import leko.valmx.thegameoflife.recyclers.MultiplierAdapter
+import leko.valmx.thegameoflife.game.tools.AutoPlayTool
+import leko.valmx.thegameoflife.game.tools.EditTool
 import leko.valmx.thegameoflife.recyclers.ThemeAdapter
+import leko.valmx.thegameoflife.sheets.OptionsSheet
+import java.util.LinkedList
 import kotlin.math.roundToLong
 
-class MainActivity : AppCompatActivity(), Runnable, OnThemeSelectedListener {
+class MainActivity : AppCompatActivity(), Runnable, OnThemeSelectedListener,
+    PaintManager.ThemeUpdateListener {
 
     var autoPlayRunning = false
-    var editMode = false
     var themeSelectingMode = false
 
-    var autoModeSpeed = (1550L).toLong()
+    var autoModeSpeed = (500L).toLong()
+        set(value) {
+            game.actorManager.aLength = value / 3
+            field = value
+        }
     var autoModeSpeedFac = autoModeSpeed
 
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun onCreate(savedInstanceState: Bundle?) {
         setContentView(R.layout.activity_main)
 
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
 
 
         super.onCreate(savedInstanceState)
@@ -41,17 +50,22 @@ class MainActivity : AppCompatActivity(), Runnable, OnThemeSelectedListener {
 
         val prefs = getSharedPreferences(PREF_ID, MODE_PRIVATE)
 
-        val bundle = ThemeAdapter.ThemeBundle(
-            prefs.getInt("BACK", resources.getColor(R.color.back_1)),
-            prefs.getInt("CELL", resources.getColor(R.color.cell_1)),
-            prefs.getInt("GRID", resources.getColor(R.color.grid_1))
-        )
+        // Views, die custom eingefärbt werden sollen
 
-        game.paintManager.gridPaint.color = bundle.grid
-        game.paintManager.bgPaint.color = bundle.back
-        game.paintManager.cellPaint.color = bundle.cell
+        themedView.apply {
+            add(ViewThemeBundle(nextStep.id))
+            add(ViewThemeBundle(auto_play.id))
+            add(ViewThemeBundle(edit_btn.id))
+            add(ViewThemeBundle(theme_selector_wrapper.id))
+            add(ViewThemeBundle(top_bar.id))
+            add(ViewThemeBundle(tool_bar.id))
+            add(ViewThemeBundle(btn_more.id))
+        }
 
-        onThemeSelected(bundle)
+        game.mainActivity = this
+
+
+        onThemeUpdated()
 
         val animationManager = game.animationManager
         val gridManager = game.gridManager
@@ -84,38 +98,18 @@ class MainActivity : AppCompatActivity(), Runnable, OnThemeSelectedListener {
             game.actorManager.doCycle()
         }
 
-        auto_play.setOnClickListener {
-
-            if (autoPlayRunning) {
-                autoPlayRunning = false
-            } else {
-                autoPlayRunning = true
-
-                Handler().postDelayed(object : Runnable {
-                    override fun run() {
-
-                        if (!autoPlayRunning) return
-
-                        game.actorManager.doCycle()
-
-                        Handler().postDelayed(this, autoModeSpeed)
-                    }
-
-                }, autoModeSpeed)
-            }
-
-            if (autoPlayRunning) {
-                auto_play.setImageDrawable(resources.getDrawable(R.drawable.pause))
-//                tooltip_speed.visibility = VISIBLE
-            } else {
-                auto_play.setImageDrawable(
-
-                    resources.getDrawable(R.drawable.play)
-                )
-//                tooltip_speed.visibility = GONE
-            }
+        nextStep.post {
+            game.actorManager.doCycle()
+            game.actorManager.doCycle()
+            game.actorManager.doCycle()
+            game.actorManager.doCycle()
 
         }
+
+        auto_play.setOnClickListener {
+            game.interactionManager.registeredInteraction = AutoPlayTool(game)
+        }
+
 
         themeView.setOnClickListener {
 
@@ -126,17 +120,11 @@ class MainActivity : AppCompatActivity(), Runnable, OnThemeSelectedListener {
                 theme_selector.visibility = VISIBLE
 
             } else
-                theme_selector.visibility = GONE
+                theme_selector.visibility = INVISIBLE
         }
 
         edit_btn.setOnClickListener {
-            editMode = !editMode
-            game.interactionManager.editMode = editMode
-
-            if (editMode) edit_btn.setImageDrawable(resources.getDrawable(R.drawable.edit_3)) else edit_btn.setImageDrawable(
-                resources.getDrawable(R.drawable.edit_2)
-            )
-
+            game.interactionManager.registeredInteraction = EditTool(game)
         }
 
 
@@ -151,15 +139,44 @@ class MainActivity : AppCompatActivity(), Runnable, OnThemeSelectedListener {
         }
 
         fluidSlider.positionListener = {
-            autoModeSpeed = (autoModeSpeedFac*(1-it)).roundToLong()
+            autoModeSpeed = (autoModeSpeedFac * (1 - it)).roundToLong()
         }
 
-        tool_apply.setOnClickListener {
-            game.toolsManager.applyStencil()
+
+
+        tool_apply.post {
+            onThemeUpdated()
         }
+
+        btn_end_tool.setOnClickListener {
+            game.interactionManager.registeredInteraction = null
+        }
+
+        btn_more.setOnClickListener {
+            OptionsSheet(this, game).show(this)
+        }
+
+
+        initContextTools()
 
     }
 
+    fun initContextTools() {
+        context_tools_recycler.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+    }
+
+    fun initContextTool(interactable: InteractionManager.Interactable?) {
+
+        if (context_tools.visibility == VISIBLE) {
+            context_tools.visibility = INVISIBLE
+            tool_bar.visibility = VISIBLE
+        } else {
+            context_tools.visibility = VISIBLE
+            tool_bar.visibility = INVISIBLE
+        }
+
+    }
 
     override fun onPostCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onPostCreate(savedInstanceState, persistentState)
@@ -199,14 +216,44 @@ class MainActivity : AppCompatActivity(), Runnable, OnThemeSelectedListener {
         prefs.putInt("GRID", theme.grid)
         prefs.putInt("CELL", theme.cell)
         prefs.putInt("BACK", theme.back)
+        prefs.putInt("UI", theme.ui)
+        prefs.putInt("ICON", theme.icon)
+        prefs.putInt("TOOL", theme.tool)
+        prefs.putInt("TOOL_STROKE", theme.toolStroke)
 
         prefs.apply()
 
+        onThemeUpdated()
 
         themeView.gridColor.color = theme.grid
         themeView.cellColor.color = theme.cell
         themeView.backColor.color = theme.back
         themeView.invalidate()
+    }
+
+    // System zum updaten der UI-Farben
+
+    class ViewThemeBundle(val viewId: Int)
+
+    val themedView = LinkedList<ViewThemeBundle>()
+
+
+    override fun onThemeUpdated() {
+        gen_counter!!.setTextColor(game.paintManager.iconPaint.color)
+
+        themedView.forEach {
+
+            findViewById<View>(it.viewId).apply {
+
+                if (this is ImageView)
+                    drawable.setTint(game.paintManager.iconPaint.color)
+                else {
+                    background.setTint(game.paintManager.uiPaint.color)
+
+                }
+            }
+        }
+
     }
 
 

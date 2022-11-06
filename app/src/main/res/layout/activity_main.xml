@@ -15,26 +15,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:layout_editor_absoluteY="-9dp" />
 
-    <TextView
-        android:id="@+id/gen_counter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/pixel"
-        android:text="Generation 0"
-        android:textColor="@color/black"
-        android:textSize="25sp"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/reset_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:layout_margin="10dp"
+
         android:backgroundTint="@color/white"
         android:clickable="true"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/trash_2" />
@@ -49,42 +38,36 @@
         android:layout_marginBottom="10dp"
         android:visibility="gone"
         app:end_text=""
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintBottom_toTopOf="@+id/tool_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:size="small"
         app:start_text="Speed"
-        tools:visibility="visible" />
+        tools:visibility="gone" />
 
     <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
+        android:id="@+id/tool_bar"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:background="@drawable/round_rect"
-        android:backgroundTint="@color/white"
-        android:elevation="4dp"
+        android:background="@drawable/round_rect_c"
+        android:elevation="5dp"
         android:orientation="horizontal"
-        android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
             android:id="@+id/nextStep"
+            style="@style/IconButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+
             android:src="@drawable/chevron_right" />
 
         <ImageView
-            android:id="@+id/edit_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/edit_2" />
-
-        <ImageView
             android:id="@+id/auto_play"
+            style="@style/IconButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -95,8 +78,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:visibility="gone"
-            android:src="@drawable/grid" />
+            android:src="@drawable/grid"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/edit_btn"
+            style="@style/IconButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/edit_2" />
+
+        <ImageView
+            android:id="@+id/btn_more"
+            android:layout_width="wrap_content"
+            style="@style/IconButton"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/ic_baseline_more_vert_24" />
 
     </LinearLayout>
 
@@ -105,16 +104,16 @@
         android:layout_height="wrap_content"
         android:background="@drawable/round_rect"
         android:backgroundTint="@color/white"
-        android:visibility="gone"
         android:elevation="3dp"
         android:orientation="vertical"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="@+id/tool_bar"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:layout_width="wrap_content"
             android:id="@+id/tool_apply"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:src="@drawable/check" />
@@ -128,21 +127,23 @@
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/top_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@drawable/rect"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout2"
+            android:id="@+id/theme_selector_wrapper"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:animateLayoutChanges="true"
-            android:background="@drawable/round_rect"
-            android:backgroundTint="@color/cell_1"
-            android:elevation="10dp"
+            android:background="@drawable/round_rect_c"
+            android:backgroundTint="@color/white"
+            android:elevation="2dp"
             android:paddingEnd="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -213,8 +214,54 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <TextView
+            android:id="@+id/gen_counter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/quicksand"
+            android:text="Generation 0"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:background="@drawable/round_rect_c"
+        android:id="@+id/context_tools"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:layout_margin="10dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <ImageView
+            android:id="@+id/btn_end_tool"
+            android:layout_width="wrap_content"
+            style="@style/IconButton"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/x" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/context_tools_recycler"
+            android:layout_width="match_parent"
+
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            tools:itemCount="11"
+            tools:listitem="@layout/context_tool" />
+
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

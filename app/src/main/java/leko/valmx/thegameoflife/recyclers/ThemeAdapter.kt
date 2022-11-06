@@ -9,11 +9,21 @@ import kotlinx.android.synthetic.main.activity_main.view.*
 import leko.valmx.thegameoflife.MainActivity
 import leko.valmx.thegameoflife.R
 import leko.valmx.thegameoflife.game.GameView
+import leko.valmx.thegameoflife.game.PaintManager
 import java.util.LinkedList
 
-class ThemeAdapter(val game: GameView, val mainActivity: MainActivity) : Adapter<ThemeAdapter.VH>() {
+class ThemeAdapter(val game: GameView, val mainActivity: MainActivity) :
+    Adapter<ThemeAdapter.VH>() {
 
-    class ThemeBundle(val back: Int, val cell: Int, val grid: Int)
+    class ThemeBundle(
+        val back: Int,
+        val cell: Int,
+        val grid: Int,
+        val ui: Int,
+        val icon: Int,
+        val tool: Int,
+        val toolStroke: Int
+    )
 
     val themes = LinkedList<ThemeBundle>()
 
@@ -25,28 +35,44 @@ class ThemeAdapter(val game: GameView, val mainActivity: MainActivity) : Adapter
             ThemeBundle(
                 res.getColor(R.color.back_1),
                 res.getColor(R.color.cell_1),
-                res.getColor(R.color.grid_1)
+                res.getColor(R.color.grid_1),
+                res.getColor(R.color.ui_1),
+                res.getColor(R.color.icon_1),
+                res.getColor(R.color.tool_1),
+                res.getColor(R.color.tool_stroke_1),
             )
         )
         themes.add(
             ThemeBundle(
                 res.getColor(R.color.back_2),
                 res.getColor(R.color.cell_2),
-                res.getColor(R.color.grid_2)
+                res.getColor(R.color.grid_2),
+                res.getColor(R.color.ui_2),
+                res.getColor(R.color.icon_2),
+                res.getColor(R.color.tool_1),
+                res.getColor(R.color.tool_stroke_1),
             )
         )
         themes.add(
             ThemeBundle(
                 res.getColor(R.color.back_3),
                 res.getColor(R.color.cell_3),
-                res.getColor(R.color.grid_3)
+                res.getColor(R.color.grid_3),
+                res.getColor(R.color.ui_3),
+                res.getColor(R.color.icon_3),
+                res.getColor(R.color.tool_1),
+                res.getColor(R.color.tool_stroke_1),
             )
         )
         themes.add(
             ThemeBundle(
                 res.getColor(R.color.back_4),
                 res.getColor(R.color.cell_4),
-                res.getColor(R.color.grid_4)
+                res.getColor(R.color.grid_4),
+                res.getColor(R.color.ui_4),
+                res.getColor(R.color.icon_4),
+                res.getColor(R.color.tool_1),
+                res.getColor(R.color.tool_stroke_1),
             )
         )
     }
@@ -69,7 +95,7 @@ class ThemeAdapter(val game: GameView, val mainActivity: MainActivity) : Adapter
         itemView.themeView.gridColor.color = themeBundle.grid
 
         itemView.setOnClickListener {
-            game.paintManager.applyTheme(themeBundle)
+            game.paintManager.applyTheme(themeBundle, mainActivity)
             mainActivity.onThemeSelected(themeBundle)
         }
 
