@@ -88,6 +88,11 @@ class PaintManager(val gameView: GameView) {
 
     }
 
+    fun applyPreviewTheme() {
+        cellPaint.color = BLACK
+        bgPaint.color = WHITE
+    }
+
     val PREF_ID = "CGOL_VALGAMES"
 
     fun loadSavedTheme(ctx: Context) {

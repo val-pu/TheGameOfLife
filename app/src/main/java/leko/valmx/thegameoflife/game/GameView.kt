@@ -7,6 +7,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.util.AttributeSet
 import leko.valmx.thegameoflife.MainActivity
 import leko.valmx.thegameoflife.game.tools.SelectionTool
+import leko.valmx.thegameoflife.game.tools.copypasta.Sketch
 
 class GameView(context: Context?, attrs: AttributeSet?) :
     androidx.appcompat.widget.AppCompatImageView(context!!, attrs) {
@@ -35,7 +36,7 @@ class GameView(context: Context?, attrs: AttributeSet?) :
         }
     }
 
-    fun init() {
+    fun init(onInitilized: (() -> Unit?)? = null) {
         initialized = true
 
         val bm = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
@@ -54,6 +55,12 @@ class GameView(context: Context?, attrs: AttributeSet?) :
 //        actorManager.cells = HashMap()
         actorManager.applyRuleSet()
 
+        onInitilized?.let { it() }
+    }
+
+
+
+    fun initWithSketch(sketch: Sketch) {
 
     }
 

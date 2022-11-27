@@ -10,6 +10,10 @@ abstract class Animation {
 
     abstract fun onAnimationFinished()
 
+    fun endAnim() {
+        counter = animLength * 2
+    }
+
     abstract fun onAnimationStart()
 
 }

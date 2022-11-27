@@ -60,8 +60,8 @@ class ThemeAdapter(val game: GameView, val mainActivity: MainActivity) :
                 res.getColor(R.color.grid_3),
                 res.getColor(R.color.ui_3),
                 res.getColor(R.color.icon_3),
-                res.getColor(R.color.tool_1),
-                res.getColor(R.color.tool_stroke_1),
+                res.getColor(R.color.tool_3),
+                res.getColor(R.color.tool_stroke_3),
             )
         )
         themes.add(

@@ -1,11 +1,13 @@
 package leko.valmx.thegameoflife.game
 
-import android.annotation.SuppressLint
 import android.util.Log
+import leko.valmx.thegameoflife.game.tools.copypasta.Sketch
+import java.util.logging.Handler
 
 class PreviewManager(val game: GameView) {
 
-    fun init(cells: Array<Array<Int>>) {
+    fun init(sketch: Sketch, stopTasks: Boolean = false) {
+        game.paintManager.applyPreviewTheme()
         game.setOnTouchListener(null)
         val actorManager = game.actorManager
 
@@ -13,7 +15,9 @@ class PreviewManager(val game: GameView) {
 
         actorManager.cells = HashMap()
 
-        val w = cells.size + cells.size*4
+        val cells = sketch.cells
+
+        val w = cells.size + cells.size
         val h = cells[0].size
 
         gridManager.step = (game.width / w).toFloat()
@@ -21,21 +25,24 @@ class PreviewManager(val game: GameView) {
 
         val baseH = (game.height / gridManager.step.toInt() - h) / 2
 
-        val baseX = (w-cells.size)/2
+        val baseX = (w - cells.size) / 2
 
 
 
         cells.forEachIndexed { x, yArray ->
 
             yArray.forEachIndexed { y, value ->
-                if (value == 1) actorManager.setCell(x + baseX, y + baseH)
-
-                Log.i("SEt At","X: $x, Y: $y")
-
-
+                if (value) actorManager.setCell(x + baseX, y + baseH)
             }
 
         }
+
+
+        android.os.Handler().postDelayed({
+            game.animationManager.running = !stopTasks
+            game.invalidate()
+        }, 100L)
+
 
     }
 

@@ -4,16 +4,23 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.util.Log
 import android.view.MotionEvent
+import android.widget.Toast
 import androidx.core.graphics.toRect
+import com.maxkeppeler.sheets.option.Info
+import com.maxkeppeler.sheets.option.Option
+import com.maxkeppeler.sheets.option.OptionSheet
 import leko.valmx.thegameoflife.R
 import leko.valmx.thegameoflife.game.GameView
 import leko.valmx.thegameoflife.game.InteractionManager
-import leko.valmx.thegameoflife.recyclers.ContextToolsRecycler
+import leko.valmx.thegameoflife.game.tools.copypasta.Sketch
+import leko.valmx.thegameoflife.recyclers.ContextToolsAdapter
+import leko.valmx.thegameoflife.sheets.BlueprintSaveSheet
 import java.util.*
+import kotlin.math.abs
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
-class SelectionTool(val gameView: GameView) : InteractionManager.Interactable {
+open class SelectionTool(val gameView: GameView) : InteractionManager.Interactable {
 
     companion object {
         val AUTO_TRIGGER_TIME: Long = 560L
@@ -24,14 +31,17 @@ class SelectionTool(val gameView: GameView) : InteractionManager.Interactable {
 
     var toolRect: RectF? = null
 
+    // relevant for child classes
+    var allowResize = true
+
     var interactionType = InteractionType.DRAG_LEFT
 
     enum class InteractionType {
         DRAG_LEFT, DRAG_RIGHT, DRAG_TOP, DRAG_BOTTOM, DRAG_TL, DRAG_TR, DRAG_BR, DRAG_BL, DRAG_WHOLE, CREATE
     }
 
-    init {
-//        gameView.interactionManager.registerInteraction(this)
+    override fun getName(): String {
+        return "Selecting..."
     }
 
     private var lastX = 0F
@@ -52,7 +62,7 @@ class SelectionTool(val gameView: GameView) : InteractionManager.Interactable {
 
 
 
-
+        if (!allowResize) interactionType = InteractionType.DRAG_WHOLE
 
         assert(toolRect != null)
         when (interactionType) {
@@ -166,22 +176,65 @@ class SelectionTool(val gameView: GameView) : InteractionManager.Interactable {
 
     }
 
-    override fun addContextItems(items: LinkedList<ContextToolsRecycler.ContextTool>) {
-        items.add(ContextToolsRecycler.ContextTool(R.drawable.ic_outline_casino_24) {
+    override fun addContextItems(items: LinkedList<ContextToolsAdapter.ContextTool>) {
+        items.add(ContextToolsAdapter.ContextTool(R.drawable.ic_outline_casino_24) {
             randomizeSelection()
         })
-        items.add(ContextToolsRecycler.ContextTool(R.drawable.trash_2) {
+        items.add(ContextToolsAdapter.ContextTool(R.drawable.trash_2) {
             deleteSelection()
         })
+        items.add(ContextToolsAdapter.ContextTool(R.drawable.square) {
+            fillSelection()
+        })
+
+        items.add(ContextToolsAdapter.ContextTool(R.drawable.save) {
+            if (toolRect == null) {
+                Toast.makeText(gameView.context, "Select something first!", Toast.LENGTH_LONG)
+                    .show()
+                return@ContextTool
+            }
+
+            saveSelectionToSketch()
+        })
+
     }
 
+    private fun saveSelectionToSketch() {
+        BlueprintSaveSheet(gameView.context, getSketchForSelection()).show(gameView.context)
+    }
+
+    private fun getSketchForSelection(): Sketch {
+
+        val actorManager = gameView.actorManager
+
+        val startX = toolRect!!.left.toInt()
+        val endX = toolRect!!.right.toInt()
+
+        val startY = toolRect!!.top.toInt()
+        val endY = toolRect!!.bottom.toInt()
+
+        val resultArray = Array<Array<Boolean>>(abs(endX - startX)) {
+            Array<Boolean>(abs(endY - startY)) {
+                false
+            }
+        }
+
+        for (x in startX until endX)
+            for (y in startY until endY) {
+                val normedX = abs(x - startX)
+                val normedY = abs(y - startY)
+                resultArray[normedX][normedY] = actorManager.getCell(x, y) != null
+            }
+
+        return Sketch(resultArray)
+    }
 
     override fun onDeregister() {
 
     }
 
 
-    fun drawBoundsTool() {
+    private fun drawBoundsTool() {
         val toolsManager = gameView.toolsManager
         val gridManager = gameView.gridManager
         val paintManager = gameView.paintManager
@@ -229,7 +282,7 @@ class SelectionTool(val gameView: GameView) : InteractionManager.Interactable {
 
     }
 
-    fun beautifyToolBounds() {
+    private fun beautifyToolBounds() {
 
         val step = 1
 
@@ -240,21 +293,78 @@ class SelectionTool(val gameView: GameView) : InteractionManager.Interactable {
         val width = toolRect!!.width().roundToInt()
 
         toolRect = RectF(left, top, left + width, heigt + top)
+        mendSelection()
 
     }
 
-    fun randomizeSelection() {
+    private fun randomizeSelection() {
 
+        OptionSheet().show(gameView.context) {
+
+            with(
+                Option("10%"),
+                Option("25%"),
+                Option("50%"),
+                Option("75%"),
+            )
+            withInfo(Info("How much should be filled in?"))
+
+            onPositive { index: Int, option: Option ->
+                if (index == 0) {
+                    randomizeSelection(10)
+                } else
+                    randomizeSelection(25 * index)
+
+            }
+
+        }
+
+
+    }
+
+    fun randomizeSelection(fillPercentage: Int) {
         for (x in toolRect!!.left.toInt() until toolRect!!.right.toInt())
-            for (y in toolRect!!.top.toInt()until toolRect!!.bottom.toInt()) {
+            for (y in toolRect!!.top.toInt() until toolRect!!.bottom.toInt()) {
 
-                gameView.actorManager.setCell(x, y, Random.nextBoolean())
+                gameView.actorManager.setCell(x, y, Random.nextInt(100) >= fillPercentage)
 
             }
 
     }
 
-    fun deleteSelection() {
+    private fun fillSelection() {
+
+        for (x in toolRect!!.left.toInt() until toolRect!!.right.toInt())
+            for (y in toolRect!!.top.toInt() until toolRect!!.bottom.toInt()) {
+
+                gameView.actorManager.setCell(x, y)
+
+            }
+
+    }
+
+    private fun mendSelection() {
+
+        println(toolRect)
+        Log.i("Mending", "$toolRect")
+
+        if (toolRect == null) return
+
+        if (toolRect!!.left > toolRect!!.right) {
+            val left = toolRect!!.left
+            toolRect!!.left = toolRect!!.right
+            toolRect!!.right = left
+        }
+        if (toolRect!!.top > toolRect!!.bottom) {
+
+            val top = toolRect!!.top
+            toolRect!!.top = toolRect!!.bottom
+            toolRect!!.bottom = top
+
+        }
+    }
+
+    private fun deleteSelection() {
         for (x in toolRect!!.left.toInt() until toolRect!!.right.toInt())
             for (y in toolRect!!.top.toInt() until toolRect!!.bottom.toInt()) {
 

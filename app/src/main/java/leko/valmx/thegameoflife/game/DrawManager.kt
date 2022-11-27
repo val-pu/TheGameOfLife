@@ -1,9 +1,12 @@
 package leko.valmx.thegameoflife.game
 
-import android.graphics.Color.*
+import android.graphics.Color.BLUE
+import android.graphics.Color.RED
 import android.graphics.Paint
 import android.graphics.RectF
 import leko.valmx.thegameoflife.game.animations.Animation
+import kotlin.math.ceil
+import kotlin.math.floor
 import kotlin.math.roundToInt
 
 class DrawManager(val gameView: GameView) {
@@ -14,7 +17,7 @@ class DrawManager(val gameView: GameView) {
 
     var lowDetail = false
 
-    fun updateLowDetail() {
+    private fun checkIfLowDetailShouldBeShown() {
         val gridManager = gameView.gridManager
         lowDetail = gameView.canvas.width / gridManager.step > 30
     }
@@ -22,7 +25,7 @@ class DrawManager(val gameView: GameView) {
 
     fun draw() {
 
-        updateLowDetail()
+        checkIfLowDetailShouldBeShown()
 
         val canvas = gameView.canvas
         val paintManager = gameView.paintManager
@@ -32,18 +35,18 @@ class DrawManager(val gameView: GameView) {
         val actorPaint = paintManager.cellPaint
 
         canvas.drawPaint(paintManager.bgPaint)
-        drawGrid()
+//        drawGrid()
 
 
         val cells = actorManager.cells
 
         val step = gridManager.step
 
-        val startVisibleX = (gridManager.x / step).toInt()
-        val startVisibleY = (gridManager.y / step).toInt()
+        val startVisibleX = floor(gridManager.x / step).toInt()
+        val startVisibleY = floor(gridManager.y / step).toInt()
 
-        val endVisibleX = (canvas.width / step + startVisibleX).toInt()
-        val endVisibleY = (canvas.height / step + startVisibleY).toInt()
+        val endVisibleX = ceil((canvas.width / step + startVisibleX).toDouble()).toInt()
+        val endVisibleY = ceil((canvas.height / step + startVisibleY).toDouble()).toInt()
 
 
 
@@ -55,18 +58,39 @@ class DrawManager(val gameView: GameView) {
                 val cellRect = gridManager.getCellRect(cell!!.x, cell!!.y)
 
 
-                if (cell.draw) {
 
-                    drawCell(cellRect,paintManager.cellPaint)
-                    if (!lowDetail)
+                drawCell(cellRect, paintManager.cellPaint)
+                /*    if (!lowDetail)
 
                         drawConnectedPieces(cell)
-                }
+                */
+                val actorManager1 = gameView.actorManager
+                val paintManager1 = gameView.paintManager
+                paintManager.bgPaint.textSize = gameView.gridManager.step
+                /*gameView.canvas.drawText(
+                    actorManager.getNeighboursOfCell(cell).toString(),
+                    cellRect.left,
+                    cellRect.top + gameView.gridManager.step,
+                    Paint().apply {
+                        color = RED
+                        textSize = gameView.gridManager.step
+                    })
 
-
+                actorManager.getDeadNeighboursOfCell(cell.x, cell.y).forEach { c ->
+                    val cellR2 = gridManager.getCellRect(c)
+                    gameView.canvas.drawText(
+                        actorManager.getNeighboursOfCell(c).toString(),
+                        cellR2.left,
+                        cellR2.top + gameView.gridManager.step,
+                        Paint().apply {
+                            color = BLUE
+                            textSize = gameView.gridManager.step
+                        })
+                }*/
             }
         }
 //        drawBoundsTool()
+        drawTool()
 
 
     }
@@ -94,7 +118,7 @@ class DrawManager(val gameView: GameView) {
 
 
 
-        if (leftCell != null && leftCell.draw) {
+        if (leftCell != null) {
 
             val cellRect = gridManager.getCellRect(leftCell)
 
@@ -104,7 +128,7 @@ class DrawManager(val gameView: GameView) {
         }
         val bottomCell = actorManager.getCell(x, y + 1)
 
-        if (bottomCell != null && bottomCell.draw) {
+        if (bottomCell != null) {
 
             val cellRect = gridManager.getCellRect(bottomCell)
 
@@ -117,7 +141,7 @@ class DrawManager(val gameView: GameView) {
 
         val bottomRightCell = actorManager.getCell(x + 1, y + 1)
 
-        if (bottomRightCell != null && bottomRightCell.draw) {
+        if (bottomRightCell != null) {
 
             val cellRect = gridManager.getCellRect(bottomRightCell)
 
@@ -216,16 +240,13 @@ class DrawManager(val gameView: GameView) {
 
             }
         }
-        drawTool()
 
 
     }
 
 
     fun drawTool() {
-        gameView.interactionManager.registeredInteraction?.let {
-            it.drawInteraction()
-        }
+        gameView.interactionManager.registeredInteraction?.drawInteraction()
     }
 
     fun drawCell(rect: RectF, paint: Paint) {
@@ -233,11 +254,12 @@ class DrawManager(val gameView: GameView) {
         if (lowDetail) {
             gameView.canvas.drawRect(rect, paint)
 
+
+
         } else
             gameView.canvas.drawRoundRect(rect, gridManager.radius, gridManager.radius, paint)
 
     }
-
 
 
     fun drawCell(x: Float, y: Float) {
@@ -248,7 +270,7 @@ class DrawManager(val gameView: GameView) {
 
         val step = gridManager.step
         if (!lowDetail) {
-            val inset = gridManager.inset
+            val inset = gridManager.inset + gridManager.inset * .1f
 
             drawCell(
                 RectF(x, y, x + step, y + step).apply { inset(inset, inset) },

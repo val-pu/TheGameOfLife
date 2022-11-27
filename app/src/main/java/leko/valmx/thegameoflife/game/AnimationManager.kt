@@ -12,7 +12,7 @@ class AnimationManager(val gameView: GameView) : Runnable {
 
     var running = false
 
-    var freezeLength = 1000 / 100F
+    var freezeLength = 1000 / 230F
 
     val animations = LinkedList<Animation>()
 
@@ -31,6 +31,8 @@ class AnimationManager(val gameView: GameView) : Runnable {
 
 
         if(!running) return
+
+        val startTimeStamp = System.currentTimeMillis()
 
         val drawManager = gameView.drawManager
         val actorManager = gameView.actorManager
@@ -64,7 +66,9 @@ class AnimationManager(val gameView: GameView) : Runnable {
 
         gameView.invalidate()
 
-        Handler().postDelayed(this, freezeLength.roundToLong())
+        val dt = System.currentTimeMillis()-startTimeStamp
+
+        Handler().postDelayed(this, freezeLength.roundToLong()-dt/2)
     }
 
 }

@@ -12,6 +12,21 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+
+        <item name="sheetsPrimaryColor">@color/grid_2</item>
+        <item name="sheetsHighlightColor">@color/black</item>
+        <item name="sheetsBackgroundColor">@color/white</item>
+        <item name="sheetsDividerColor">@color/black</item>
+        <item name="sheetsIconsColor">@color/black</item>
+        <item name="sheetsContentFont">@font/quicksand</item>
+        <item name="sheetsTitleFont">@font/quicksand</item>
+        <item name="sheetsTitleColor">@color/black</item>
+        <item name="sheetsButtonColor">@color/black</item>
+        <item name="sheetsOptionSelectedTextColor">@color/black</item>
+        <item name="sheetsOptionDisabledTextColor">@color/black</item>
+        <item name="sheetsPositiveButtonColor">@color/black</item>
+        <item name="sheetsTextInputLayoutHintTextColor">@color/black</item>
+        <item name="fontFamily">@font/quicksand</item>
     </style>
 
     <style name="Theme.TheGameOfLife.NoActionBar">
@@ -23,6 +38,13 @@
         <item name="android:tint">@color/white</item>
         <item name="android:padding">15dp</item>
 
+    </style>
+
+    <style name="SheetTitle">
+<!--        <item name="android:textColor">@color/black</item>-->
+        <item name="android:textSize">24sp</item>
+        <item name="android:fontFamily">@font/quicksand</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="Theme.TheGameOfLife.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

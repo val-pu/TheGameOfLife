@@ -1,0 +1,45 @@
+B0123478/S34678$InverseLife//
+B1/S1$Gnarl//
+B1357/S1357$Replicator//
+B2/S$Seeds//
+B234/S$Serviettes//
+B25678/S5678$Iceballs//
+B3/S12$Flock//
+B3/S1234$Mazectric//
+B3/S12345$Maze//
+B3/S1237$SnowLife//
+B3/S124$Corrosion of Conformity//
+B3/S128$EightFlock//
+B3/S13$LowLife//
+B3/S238$EightLife//
+B3/S4567$Lifeguard 2//
+B3/S45678$Coral//
+B34/S34$3-4 Life//
+B34/S456$Bacteria//
+B345/S2$Blinkers//
+B345/S4567$Assimilation//
+B345/S5$Long Life//
+B3457/S4568$Gems//
+B34578/S456$Gems Minor//
+B35/S234578$Land Rush//
+B3567/S15678$Bugs//
+B35678/S4678$Holstein//
+B35678/S5678$Diamoeba//
+B357/S1358$Amoeba//
+B357/S238$Pseudo Life//
+B3578/S24678$Geology//
+B36/S12$HighFlock//
+B36/S125$2×2//
+B36/S128$IronFlock//
+B36/S23$HighLife//
+B36/S235$Blinker Life//
+B36/S238$IronLife//
+B36/S245$Logarithmic replicator rule//
+B368/S245$Morley//
+B5678/S45678$Vote//
+B4678/S35678$Vote 4/5//
+B45/S12345$Electrified Maze//
+B38/S23$Pedestrian Life//
+B45678/S2345$Walled cities//
+B45/S1235$Oscillators Rule//
+B56/S14568$Rings 'n' Slugs

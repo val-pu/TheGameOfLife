@@ -11,8 +11,8 @@ import kotlinx.android.synthetic.main.context_tool.view.*
 import leko.valmx.thegameoflife.R
 import java.util.LinkedList
 
-class ContextToolsRecycler(val data: LinkedList<ContextTool>) :
-    RecyclerView.Adapter<ContextToolsRecycler.VH>() {
+class ContextToolsAdapter(val data: LinkedList<ContextTool>) :
+    RecyclerView.Adapter<ContextToolsAdapter.VH>() {
 
     class VH(view: View) : ViewHolder(view) {
 

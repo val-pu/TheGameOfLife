@@ -12,7 +12,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import kotlinx.android.synthetic.main.activity_intro.*
 import kotlinx.android.synthetic.main.activity_main.*
-import leko.valmx.thegameoflife.databinding.ActivityIntroBinding
+import leko.valmx.thegameoflife.game.tools.copypasta.SketchLoadSaver
 
 class IntroActivity : AppCompatActivity() {
 
@@ -30,14 +30,14 @@ class IntroActivity : AppCompatActivity() {
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
         preview.post {
+            val loader = SketchLoadSaver(this)
+            preview.init() {
+//preview.previewManager.init(
+//                loader.getSketch(loader.getSketchNames()!![1])!!  )
+            }
 
-            preview.previewManager.init(
-                arrayOf(
-                    arrayOf(0, 1, 0),
-                    arrayOf(1, 0, 0),
-                    arrayOf(1, 1, 1)
-                )
-            )
+
+
         }
 
         Handler().postDelayed(object : Runnable {

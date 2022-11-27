@@ -3,12 +3,13 @@ package leko.valmx.thegameoflife
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.util.Log
 import android.view.View
-import android.view.View.INVISIBLE
-import android.view.View.VISIBLE
+import android.view.View.*
 import android.view.WindowManager
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
@@ -17,8 +18,13 @@ import leko.valmx.thegameoflife.game.PaintManager
 import leko.valmx.thegameoflife.game.animations.Animation
 import leko.valmx.thegameoflife.game.tools.AutoPlayTool
 import leko.valmx.thegameoflife.game.tools.EditTool
+import leko.valmx.thegameoflife.game.tools.PasteTool
+import leko.valmx.thegameoflife.game.tools.copypasta.Sketch
 import leko.valmx.thegameoflife.recyclers.ThemeAdapter
-import leko.valmx.thegameoflife.sheets.OptionsSheet
+import leko.valmx.thegameoflife.sheets.MoreOptionsSheet
+import leko.valmx.thegameoflife.sheets.RulesSheet
+import leko.valmx.thegameoflife.utils.AssetUtils
+import leko.valmx.thegameoflife.utils.blueprints.Blueprint
 import java.util.LinkedList
 import kotlin.math.roundToLong
 
@@ -38,6 +44,7 @@ class MainActivity : AppCompatActivity(), Runnable, OnThemeSelectedListener,
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun onCreate(savedInstanceState: Bundle?) {
         setContentView(R.layout.activity_main)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -57,9 +64,10 @@ class MainActivity : AppCompatActivity(), Runnable, OnThemeSelectedListener,
             add(ViewThemeBundle(auto_play.id))
             add(ViewThemeBundle(edit_btn.id))
             add(ViewThemeBundle(theme_selector_wrapper.id))
-            add(ViewThemeBundle(top_bar.id))
             add(ViewThemeBundle(tool_bar.id))
             add(ViewThemeBundle(btn_more.id))
+            add(ViewThemeBundle(tool_name_bar.id))
+            add(ViewThemeBundle(tools.id))
         }
 
         game.mainActivity = this
@@ -68,8 +76,6 @@ class MainActivity : AppCompatActivity(), Runnable, OnThemeSelectedListener,
         onThemeUpdated()
 
         val animationManager = game.animationManager
-        val gridManager = game.gridManager
-        val actorManager1 = game.actorManager
 
         animationManager.animations.add(object : Animation() {
             override fun onAnimate(animatedValue: Float) {
@@ -83,6 +89,7 @@ class MainActivity : AppCompatActivity(), Runnable, OnThemeSelectedListener,
 
             }
 
+
             override fun onAnimationFinished() {
 //                gridManager.step = baseStep
             }
@@ -90,6 +97,21 @@ class MainActivity : AppCompatActivity(), Runnable, OnThemeSelectedListener,
             override fun onAnimationStart() {
             }
         })
+        game.post {
+
+            game.interactionManager.registeredInteraction = PasteTool(
+                game,
+                game,
+                Sketch(
+                    Blueprint(
+                        AssetUtils.loadAssetString(
+                            this,
+                            "patterns/135degreemwsstog.rle"
+                        )!!
+                    ).cells
+                )
+            )
+        }
 
         recycler_themes.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
         recycler_themes.adapter = ThemeAdapter(game, this)
@@ -120,7 +142,7 @@ class MainActivity : AppCompatActivity(), Runnable, OnThemeSelectedListener,
                 theme_selector.visibility = VISIBLE
 
             } else
-                theme_selector.visibility = INVISIBLE
+                theme_selector.visibility = GONE
         }
 
         edit_btn.setOnClickListener {
@@ -153,7 +175,7 @@ class MainActivity : AppCompatActivity(), Runnable, OnThemeSelectedListener,
         }
 
         btn_more.setOnClickListener {
-            OptionsSheet(this, game).show(this)
+            MoreOptionsSheet(this, game)
         }
 
 
@@ -171,9 +193,13 @@ class MainActivity : AppCompatActivity(), Runnable, OnThemeSelectedListener,
         if (context_tools.visibility == VISIBLE) {
             context_tools.visibility = INVISIBLE
             tool_bar.visibility = VISIBLE
+            tool_name_bar.visibility = INVISIBLE
         } else {
             context_tools.visibility = VISIBLE
             tool_bar.visibility = INVISIBLE
+            tool_name_bar.visibility = VISIBLE
+            if (interactable != null)
+                context_tool_info.text = interactable.getName()
         }
 
     }
@@ -202,7 +228,6 @@ class MainActivity : AppCompatActivity(), Runnable, OnThemeSelectedListener,
     override fun run() {
         generations++
         gen_counter.text = "Generation $generations"
-
     }
 
     val PREF_ID = "CGOL_VALGAMES"
@@ -242,16 +267,21 @@ class MainActivity : AppCompatActivity(), Runnable, OnThemeSelectedListener,
         gen_counter!!.setTextColor(game.paintManager.iconPaint.color)
 
         themedView.forEach {
+            try {
 
-            findViewById<View>(it.viewId).apply {
+                findViewById<View>(it.viewId).apply {
 
-                if (this is ImageView)
-                    drawable.setTint(game.paintManager.iconPaint.color)
-                else {
-                    background.setTint(game.paintManager.uiPaint.color)
+                    if (this is ImageView)
+                        drawable.setTint(game.paintManager.iconPaint.color)
+                    else {
+                        background.setTint(game.paintManager.uiPaint.color)
 
+                    }
                 }
+            } catch (e: java.lang.NullPointerException) {
+                Log.e("theming@gol", "Could not apply theme to for ${it.viewId}")
             }
+
         }
 
     }

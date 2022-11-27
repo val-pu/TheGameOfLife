@@ -1,5 +1,6 @@
 package leko.valmx.thegameoflife.game
 
+import android.util.Log
 import android.view.MotionEvent
 import android.view.MotionEvent.*
 import android.view.View
@@ -8,7 +9,7 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import leko.valmx.thegameoflife.game.animations.Animation
 import leko.valmx.thegameoflife.game.tools.SelectionTool
-import leko.valmx.thegameoflife.recyclers.ContextToolsRecycler
+import leko.valmx.thegameoflife.recyclers.ContextToolsAdapter
 import java.util.LinkedList
 import kotlin.math.*
 
@@ -25,11 +26,16 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
     var summedDt = 0L
     var lastTime = 0L
 
-    var dirty = false
+    var deltaT = 0
+    var lastT = 0
+
+    var resetMoveValues = false
+    var resetZoomValues = false
 
     interface Interactable {
         fun onInteraction(motionEvent: MotionEvent, dereg: () -> Unit)
 
+        fun getName() = ""
 
         fun drawInteraction() // Draws stuff as long as the interaction is active
 
@@ -39,15 +45,15 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
 
         fun onInteractionEnd(event: MotionEvent?)
 
-        fun addContextItems(items: LinkedList<ContextToolsRecycler.ContextTool>)
+        fun addContextItems(items: LinkedList<ContextToolsAdapter.ContextTool>)
     }
 
     var registeredInteraction: Interactable? = null
         set(value) {
             if (value != null) {
-                val list = LinkedList<ContextToolsRecycler.ContextTool>()
+                val list = LinkedList<ContextToolsAdapter.ContextTool>()
                 value.addContextItems(list)
-                gameView.mainActivity.context_tools_recycler.adapter = ContextToolsRecycler(list)
+                gameView.mainActivity.context_tools_recycler.adapter = ContextToolsAdapter(list)
             }
             gameView.mainActivity.initContextTool(value)
 
@@ -71,8 +77,6 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
         }
 
 
-
-
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
 
 
@@ -93,9 +97,13 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
 
             ACTION_DOWN -> {
 
-                resetTrackValues()
+                resetMoveValues = true
+                resetZoomValues = true
 
-                if (event.pointerCount != 1) return true
+                if(isExtraVelocityRunning) isExtraVelocityRunning = false
+
+                resetTrackValues()
+                resetSmoothingValues()
 
                 /*
                  * Jedes mal, wenn ein neuer "Eventblock" aufgezeichnet wird wird gecheckt, ob es sich evtl. um eine für das aktuelle Tool relevante Interaktion handelt
@@ -104,20 +112,29 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
                     isToolUsed = it.isNonMovementInteraction(event)
                 }
 
+                if(!isToolUsed && event.pointerCount == 1) onMove(event)
+                else onZoom(event)
+
+
             }
 
-            else -> {
+            ACTION_MOVE, ACTION_UP -> {
                 mendTrackValues(event)
 
                 // Stoppe die Interaktion, falls der User zoomt
                 if (event.pointerCount == 2) {
                     isToolUsed = false
+
                     registeredInteraction?.onInteractionEnd(event)
                 }
 
-                if (event.action == ACTION_UP) lastTime = 0L
+                if (event.action == ACTION_UP) {
+                    lastTime = 0L
+                    triggerMovementInterpolation()
+                }
 
                 if (isToolUsed) {
+                    resetMoveValues = true
 
                     if (event.action == ACTION_UP) {
                         registeredInteraction!!.onInteractionEnd(event)
@@ -131,11 +148,12 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
                     return true
                 }
 
+
+
                 if (event.pointerCount == 2)
 
                     onZoom(event)
                 else onMove(event)
-
             }
 
         }
@@ -159,6 +177,7 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
     final val MIN_OFF_FOR_LASTXYMEND = 200
 
     private fun mendTrackValues(event: MotionEvent) {
+        return
 
         val dx = abs(event.x - lastX)
         val dy = abs(event.y - lastY)
@@ -181,14 +200,17 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
     private fun onZoom(event: MotionEvent) {
         allowLongTapSelection = false
 
-        if (!dirty) {
+        if (resetZoomValues) {
             lXP0 = event.getX(0)
             lYP0 = event.getY(0)
             lXP1 = event.getX(1)
             lYP1 = event.getY(1)
+            resetZoomValues = false
+            return
         }
 
-        dirty = true
+        resetMoveValues = true
+
 
         val gridManager = gameView.gridManager
 
@@ -212,13 +234,16 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
                 val xP0 = event.getX(0)
 
 
-                var x = ((xP1 + xP0) / 2F)
-                var y = ((yP0 + yP1) / 2F)
-                var lX = ((lXP0 + lXP1) / 2F)
-                var lY = ((lYP0 + lYP1) / 2F)
+                val x = ((xP1 + xP0) / 2F)
+                val y = ((yP0 + yP1) / 2F)
+                val lX = ((lXP0 + lXP1) / 2F)
+                val lY = ((lYP0 + lYP1) / 2F)
 
                 val movedX = x - lX
                 val movedY = y - lY
+
+                xVelocity = -movedX*1.5F
+                yVelocity = -movedY*1.5F
 
                 val dx = abs(xP0 - xP1)
                 val dy = abs(yP0 - yP1)
@@ -230,45 +255,23 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
                 } else {
                     dy / lDy
                 }
-                gridManager.x-=movedX
-                gridManager.y-=movedY
-                var absX = gridManager.x / gridManager.step
-                var absY = gridManager.y / gridManager.step
+                gridManager.x -= movedX
+                gridManager.y -= movedY
 
+                if(abs(zoomFac-1)<.3F)
 
+                gridManager.zoomByFac(zoomFac, x, y)
 
+                zoomFocusX = x
+                zoomFocusY = y
+                zoomVelocity = zoomFac
 
-                if (zoomFac < 1) {
-                    absX -= (x / gridManager.step) * (1 - zoomFac)
-                    absY -= (y / gridManager.step) * (1 - zoomFac)
-                } else {
-                    absX += (x / gridManager.step) * (zoomFac - 1)
-                    absY += (y / gridManager.step) * (zoomFac - 1)
-                }
-
-
-
-                val toAddX = (x * (-1 + zoomFac))
-                val toAddY = (y * (-1 + zoomFac))
-
-
-                if (!abs(toAddX).isNaN() && !(zoomFac > 1.2F || zoomFac < .8F)) {
-                    gridManager.step *= zoomFac
-                    gridManager.width += zoomFac * (1 - zoomFac)
-                    gridManager.height += zoomFac * (1 - zoomFac)
-                    gridManager.x = absX * gridManager.step
-                    gridManager.y = absY * gridManager.step
-
-
-
-                }
                 lXP0 = event.getX(0)
                 lYP0 = event.getY(0)
                 lXP1 = event.getX(1)
                 lYP1 = event.getY(1)
 
             }
-
 
 
         }
@@ -278,16 +281,24 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
     var lastDx = 0F
     var lastDy = 0F
 
+    /*
+     * Check if extra zoom / movement when ACTION_UP is triggered is running stopped
+     */
+    var isExtraVelocityRunning = true
+
     fun onMove(event: MotionEvent): Boolean {
 
         val animationManager = gameView.animationManager
         val gridManager = gameView.gridManager
 
-        if (dirty) {
+        if (resetMoveValues) {
             lastX = event.x
             lastY = event.y
+            resetMoveValues = false
         }
-        dirty = false
+
+        resetZoomValues = true
+
 
 
 
@@ -321,7 +332,7 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
                     }
 
 
-                if (dirty) {
+                if (resetMoveValues) {
                     lastX = event.x
                     lastY = event.y
                     return true
@@ -332,6 +343,9 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
 
                 gridManager.x += dx
                 gridManager.y += dy
+
+                yVelocity = dy
+                xVelocity = dx
 
                 lastDx = dx
                 lastDy = dy
@@ -357,33 +371,9 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
                 val vx = lastDx / dt
                 val vy = lastDy / dt
 
-                animationManager.animations.add(object : Animation() {
-
-                    var lastMovement = 0.0
-
-                    override fun onAnimate(animatedValue: Float) {
-
-                        gridManager.x += ((vx * (1 - (counter / animLength.toFloat()) * .8F) * ((animLength - counter).absoluteValue / (10F * 10 * 10)))
-                                /**E.pow(-counter/animLength.toDouble()-.5)*/
-                                )
-                        gridManager.y += ((vy * (1 - (counter / animLength.toFloat()) * .8F) * ((animLength - counter).absoluteValue / (10F * 10 * 10)))
-                                /**E.pow(-counter/animLength.toDouble()-.5)*/
-                                )
-
-
-                    }
-
-                    override fun onAnimationFinished() {
-                    }
-
-                    override fun onAnimationStart() {
-                        animLength = 550
-                    }
-                })
-
                 if (!editMode) return true
 
-                if(!allowLongTapSelection) return true
+                if (!allowLongTapSelection) return true
 
                 if (amountMoved > 100) return true
 
@@ -409,6 +399,77 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
             }
         }
         return true
+    }
+
+    private var xVelocity = 0F
+    private var yVelocity = 0F
+    private var zoomVelocity = 0F
+
+    private var zoomFocusX = 0F
+    private var zoomFocusY = 0F
+
+    private val moveVelocityCutoff =
+        5F // Specifies when the automove feature should be disabled, when precision is needed by the user
+    private val zoomVelocityCutoff =
+        .010F // Specifies when the autozoom AKA Smoothing feature should be disabled, when precision is needed by the user
+
+    private fun triggerMovementInterpolation() {
+        val gridManager = gameView.gridManager
+        val animationManager = gameView.animationManager
+
+        isExtraVelocityRunning = true
+
+        animationManager.animations.add(object : Animation() {
+
+            var lastMovement = 0.0
+
+            var lastZoomFac = 1F
+
+            override fun onAnimate(animatedValue: Float) {
+                if (!isExtraVelocityRunning) {
+                    endAnim()
+                    return
+                }
+
+
+                if (sqrt(xVelocity * xVelocity + yVelocity * yVelocity) > moveVelocityCutoff) {
+                    gridManager.x += ((xVelocity/dt * (1 - (counter / animLength.toFloat()) * .8F) * ((animLength - counter).absoluteValue / (10F * 10 * 10))))
+                    gridManager.y += ((yVelocity/dt * (1 - (counter / animLength.toFloat()) * .8F) * ((animLength - counter).absoluteValue / (10F * 10 * 10))))
+                }
+
+                if (abs(zoomVelocity - 1) > zoomVelocityCutoff) {
+
+
+                    val zoomFactor = (1 - animatedValue) * (1 + ((zoomVelocity - 1) * 4))
+                    Log.i(
+                        "VALUE IS",
+                        "${1 - (1 - zoomVelocity) * .1F * ((exp(-((animatedValue * 3 - 1)))))}"
+                    )
+
+                    gridManager.zoomByFac(
+                        1 - (1 - zoomVelocity) * .2F * ((exp(-((animatedValue * 3 - 1))))),
+                        zoomFocusX,
+                        zoomFocusY
+                    )
+                }
+
+            }
+
+            override fun onAnimationFinished() {
+            }
+
+            override fun onAnimationStart() {
+                animLength = 700L
+            }
+        })
+    }
+
+    private fun resetSmoothingValues() {
+        xVelocity = 0F
+        yVelocity = 0F
+        deltaT = 0
+        zoomVelocity = 0F
+        zoomVelocity = 1F
     }
 
 

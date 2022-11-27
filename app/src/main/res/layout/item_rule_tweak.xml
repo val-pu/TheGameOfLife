@@ -26,19 +26,23 @@
         <CheckBox
             android:id="@+id/check_survive"
             android:layout_width="wrap_content"
-            android:gravity="center"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:buttonTint="#000000"
+            android:textColor="#000"
             android:fontFamily="@font/quicksand"
+            android:gravity="center"
             android:text="Survive" />
 
         <CheckBox
             android:id="@+id/check_born"
+            android:textColor="#000"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_weight="1"
+            android:buttonTint="#000000"
             android:fontFamily="@font/quicksand"
+            android:gravity="center"
             android:text="Born" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,32 +9,37 @@
     <color name="white">#FFFFFFFF</color>
     <color name="active">#E2E2E2</color>
 
-<!--    Theme Colors -->
+    <!--    Theme Colors -->
 
     <color name="grid_1">#FEAA15</color>
     <color name="cell_1">#FEFEFE</color>
-    <color name="back_1">#35315D</color>
-    <color name="back_2">#000000</color>
+    <color name="back_1">#000000</color>
+    <color name="ui_1">#393939</color>
+    <color name="icon_1">#FFFFFF</color>
+    <color name="tool_1">#A5A5A5</color>
+    <color name="tool_stroke_1">#77E2E2E2</color>
+
+    <color name="back_2">#3949AB</color>
     <color name="cell_2">#FFFFFF</color>
     <color name="grid_2">#3B3B3B</color>
-    <color name="back_3">#E8FCCF</color>
-    <color name="cell_3">#52B788</color>
+    <color name="ui_2">#393939</color>
+    <color name="icon_2">#FFFFFF</color>
+
+    <color name="back_3">#FEC3A6</color>
+    <color name="cell_3">#FB6376</color>
     <color name="grid_3">#FFFFFF</color>
+    <color name="ui_3">#FFAC81</color>
+    <color name="icon_3">#FFFFFF</color>
+    <color name="tool_3">#FB6376</color>
+    <color name="tool_stroke_3">#5D2A42</color>
+
     <color name="cell_4">#F95738</color>
     <color name="back_4">#FFFFFF</color>
     <color name="grid_4">#90BDE8</color>
+    <color name="ui_4">#393939</color>
+    <color name="icon_4">#FFFFFF</color>
 
     <color name="cell_5">#FEFEFE</color>
     <color name="back_5">#847FFE</color>
     <color name="grid_5">#FEAA15</color>
-    <color name="ui_1">#0F0F0F</color>
-    <color name="icon_1">#FEAA15</color>
-    <color name="ui_2">#393939</color>
-    <color name="icon_2">#FFFFFF</color>
-    <color name="ui_3">#00ACC1</color>
-    <color name="icon_3">#FFFFFF</color>
-    <color name="ui_4">#FFFFFF</color>
-    <color name="icon_4">#E53935</color>
-    <color name="tool_1">#A5A5A5</color>
-    <color name="tool_stroke_1">#77E2E2E2</color>
 </resources>
