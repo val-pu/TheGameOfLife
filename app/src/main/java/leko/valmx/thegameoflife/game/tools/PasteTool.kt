@@ -39,8 +39,8 @@ class PasteTool(val game: GameView, gameView: GameView, val sketch: Sketch) :
 
         step = gridManager.step
 
-        val startX = (gridManager.x / step).roundToInt()
-        val startY = (gridManager.y / step).roundToInt()
+        val startX = (gridManager.xOffset / step).roundToInt()
+        val startY = (gridManager.yOffset / step).roundToInt()
 
         toolRect = Rect(startX, startY, startX + w, startY + h).toRectF()
 
@@ -63,8 +63,8 @@ class PasteTool(val game: GameView, gameView: GameView, val sketch: Sketch) :
         val step = gridManager.step
 
         // X \land Y um wie viel das Brett verschoben ist (von 0,0)
-        val gameX = gridManager.x
-        val gameY = gridManager.y
+        val gameX = gridManager.xOffset
+        val gameY = gridManager.yOffset
 
         sketch.cells.withIndex().forEach { (x, yArray) ->
             yArray.forEachIndexed { y, isCell ->

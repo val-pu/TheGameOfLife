@@ -1,96 +1,94 @@
 package leko.valmx.thegameoflife.game
 
 import android.graphics.RectF
-import kotlin.math.abs
-import kotlin.math.min
+import android.widget.Toast
+
+/**
+ * One of the more commonly used classes in the project
+ *
+ * @author val-mx
+ *
+ * Used in the context of { GameView.kt } and stores dimension variables
+ * and manipulates them
+ */
 
 class GridManager(val gameView: GameView) {
 
-    var x = 0F
-    var y = 0F
+    // Offset vars (How much is the screen away from the projects (0,0)) Used the enable moving & zooming
+    var xOffset = 0F
+    var yOffset = 0F
 
-    var inset = 1F
-    var radius = 0F
-    var width = 0F
-    var height = 0F
-    var gridWidth = 0F
+    // Style variables
+    var cellRadius = 0F
+    var cellInset = 1F
+    var gridWidth = 0F // Currently unused as no grid is present
 
     var defaultWidthCells = 40
+
     var step = 0F
         set(value) {
+            // recalculate style vars when the value of cell is changed
             field = value
-            inset = step * .05F
-            radius = step * .08F
+            cellInset = step * .05F
+            cellRadius = step * .08F
             gridWidth = step * .08F
         }
-    var dStep = 0F //Unzoomed step
 
+    /**
+     * Called when gameview is initialized
+     */
     fun init() {
-
         step = (gameView.width / defaultWidthCells).toFloat()
-        width = gameView.width.toFloat()
-        height = gameView.height.toFloat()
 
-
-        dStep = step
-
+        minZoomWidth = gameView.width / 7F
+        maxZoomWidth = gameView.width / 1000F
     }
 
-    fun isValid(xy: Int): Boolean {
-        return xy >= 0 && xy < gameView.actorManager.cells.size
-    }
-
+    // Gets the fitting rect to draw the cell, with styles applied
     fun getCellRect(x: Int, y: Int): RectF {
-
-//        if(!isValid(x) || !isValid(y)) return null
-
-
         return RectF(
-            step * x - this.x,
-            step * y - this.y,
-            step * (x + 1) - this.x,
-            step * (y + 1) - this.y
+            step * x - this.xOffset,
+            step * y - this.yOffset,
+            step * (x + 1) - this.xOffset,
+            step * (y + 1) - this.yOffset
         ).apply {
             if (!gameView.drawManager.lowDetail)
-                inset(inset, inset)
+                inset(cellInset, cellInset)
         }
     }
 
     fun getCellRect(cell: ActorManager.Cell): RectF = getCellRect(cell.x, cell.y)
 
+    // Help methods to convert canvas x, y to game x, y
     fun convertX(x: Float): Float {
-        return x - this.x
+        return x - this.xOffset
     }
 
     fun convertY(y: Float): Float {
-        return y - this.y
+        return y - this.yOffset
     }
 
-    var maxZoomWidth = gameView.width/7F
-    get() {
-        if(field == 0F) {
-            field = gameView.width/7F
-        }
-        return field
-    }
-    var minZoomWidth = gameView.width/1000F
-    get() {
-        if(field == 0F) {
-            field = gameView.width/1000F
-        }
-        return field
-    }
+    // Min and max of zoom (Min 7 cells width and max 1000)
+    private var maxZoomWidth = gameView.width / 1000F
+    private var minZoomWidth = gameView.width / 7F
+
+    /**
+     *
+     */
     fun zoomByFac(
         zoomFactor: Float,
         focusX: Float = gameView.width / 2F,
         focusY: Float = gameView.height / 2f
     ) {
+        // Return if zoomed out or zoomed in too much and doing the corresponding action to worsen the toomuchness
+        // TODO: Fix this
 
-        if(step>=maxZoomWidth && zoomFactor>1) return
-        if(step<= minZoomWidth && zoomFactor<1) return
+//        if (step >= maxZoomWidth && zoomFactor > 1) return
+//        if (step <= minZoomWidth && zoomFactor < 1) return
 
-        var absX = this.x / this.step
-        var absY = this.y / this.step
+        // The offset from 0,0 in cells
+        var absX = this.xOffset / this.step
+        var absY = this.yOffset / this.step
 
         if (zoomFactor < 1) {
             absX -= (focusX / this.step) * (1 - zoomFactor)
@@ -101,17 +99,11 @@ class GridManager(val gameView: GameView) {
         }
 
 
-        val toAddX = (focusX * (-1 + zoomFactor))
-        val toAddY = (focusY * (-1 + zoomFactor))
-
-
-//        if (!abs(toAddX).isNaN() && !(zoomFactor > 1.2F || zoomFactor < .8F)) { // Checks to prevent stupid shit (may be unnecessary by now)
+        // Changing cell size
         this.step *= zoomFactor
-        this.width += zoomFactor * (1 - zoomFactor)
-        this.height += zoomFactor * (1 - zoomFactor)
-        this.x = absX * this.step
-        this.y = absY * this.step
-//        }
+
+        this.xOffset = absX * this.step
+        this.yOffset = absY * this.step
     }
 
 

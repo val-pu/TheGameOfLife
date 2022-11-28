@@ -56,48 +56,45 @@ class Blueprint(rleString: String) {
 
         while (iterator.hasNext()) cellString += iterator.next()
 
-        val rows = cellString.split("$")
+        // How much will one feature be repeated
+        var digitString = ""
 
-        repeat(rows.size) { i ->
-            val row = rows[i]
+        var rowIndex = 0
+        var lineIndex = 0
 
-            // How much will one feature be repeated
-            var digitString = ""
+        cellString.toCharArray().forEach { char ->
+            if (!char.isDigit() && !arrayOf('o', 'b', '$').contains(char)) return@forEach
 
-            var rowIndex = 0
-            row.toCharArray().forEach { char ->
+            if (char.isDigit()) {
+                digitString += char
+            } else {
 
-                if(!char.isDigit() && (char != 'o' && char!= 'b')) return@forEach
-
-                if (char.isDigit()) {
-                    digitString += char
+                val repeatAmount = if (digitString != "") {
+                    digitString.toInt()
                 } else {
-
-                    val repeatAmount = if (digitString != "") {
-                        digitString.toInt()
-                    } else {
-                        Log.i("Parsing char","$char")
-
-                        1
-                    }
-
-                    repeat(repeatAmount) {
-
-                        if(rowIndex>=width) return@repeat
-
-                        cells[rowIndex][i] = char == 'o'
-                        rowIndex++
-                    }
-                    digitString = ""
+                    Log.i("Parsing char", "$char")
+                    1
                 }
+
+                repeat(repeatAmount) {
+                    Log.i("Row", "$rowIndex + $repeatAmount + $char")
+
+                    if (rowIndex >= width) {
+                        rowIndex = 0
+                    }
+
+                    if (char == '$') {
+                        lineIndex++;
+                        rowIndex = 0
+                        return@repeat
+                    }
+
+                    cells[rowIndex][lineIndex] = char == 'o'
+
+                    rowIndex++
+                }
+                digitString = ""
             }
-
-
-            Log.i("Parsing char","$rowIndex + $width")
         }
-
-
-
     }
-
 }

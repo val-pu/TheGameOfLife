@@ -53,9 +53,9 @@ open class SelectionTool(val gameView: GameView) : InteractionManager.Interactab
 
 
         val x =
-            (gridManager.x + motionEvent.x) / gridManager.step
+            (gridManager.xOffset + motionEvent.x) / gridManager.step
         val y =
-            (gridManager.y + motionEvent.y) / gridManager.step
+            (gridManager.yOffset + motionEvent.y) / gridManager.step
 
         val dx = x - lastX
         val dy = y - lastY
@@ -130,11 +130,11 @@ open class SelectionTool(val gameView: GameView) : InteractionManager.Interactab
 
         val gridManager = gameView.gridManager
 
-        val normedX = gridManager.x / gridManager.step
-        val normedY = gridManager.y / gridManager.step
+        val normedX = gridManager.xOffset / gridManager.step
+        val normedY = gridManager.yOffset / gridManager.step
 
-        val x = (gridManager.x + event.x) / gridManager.step
-        val y = (gridManager.y + event.y) / gridManager.step
+        val x = (gridManager.xOffset + event.x) / gridManager.step
+        val y = (gridManager.yOffset + event.y) / gridManager.step
         lastX = x
         lastY = y
 
@@ -240,7 +240,7 @@ open class SelectionTool(val gameView: GameView) : InteractionManager.Interactab
         val paintManager = gameView.paintManager
 
 
-        val rad = gridManager.radius
+        val rad = gridManager.cellRadius
         val step = gridManager.step
 
         val toolBounds = toolRect!!
@@ -255,8 +255,8 @@ open class SelectionTool(val gameView: GameView) : InteractionManager.Interactab
 
         toolPaint.alpha = 60
 
-        val baseX = gridManager.x / step
-        val baseY = gridManager.y / step
+        val baseX = gridManager.xOffset / step
+        val baseY = gridManager.yOffset / step
 
         val bounds = RectF(
             (toolBounds.left - baseX) * step,
@@ -276,7 +276,7 @@ open class SelectionTool(val gameView: GameView) : InteractionManager.Interactab
         val gridManager = gameView.gridManager
 
         val checkRect =
-            this.toolRect!!.toRect().apply { offset(gridManager.x.toInt(), gridManager.y.toInt()) }
+            this.toolRect!!.toRect().apply { offset(gridManager.xOffset.toInt(), gridManager.yOffset.toInt()) }
 
         return checkRect.contains(event.x.toInt(), event.y.toInt())
 

@@ -199,8 +199,9 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
 
     private fun onZoom(event: MotionEvent) {
         allowLongTapSelection = false
-
+        if(event.pointerCount!= 2) return
         if (resetZoomValues) {
+            // TODO fehler
             lXP0 = event.getX(0)
             lYP0 = event.getY(0)
             lXP1 = event.getX(1)
@@ -255,8 +256,8 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
                 } else {
                     dy / lDy
                 }
-                gridManager.x -= movedX
-                gridManager.y -= movedY
+                gridManager.xOffset -= movedX
+                gridManager.yOffset -= movedY
 
                 if(abs(zoomFac-1)<.3F)
 
@@ -341,8 +342,8 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
                 val dx = lastX - event.x
                 val dy = lastY - event.y
 
-                gridManager.x += dx
-                gridManager.y += dy
+                gridManager.xOffset += dx
+                gridManager.yOffset += dy
 
                 yVelocity = dy
                 xVelocity = dx
@@ -383,8 +384,8 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
 
                 val step = gridManager.step
 
-                val x = ((event.x + gridManager.x) / step - 0.5).roundToInt()
-                val y = ((event.y + gridManager.y) / step - 0.5).roundToInt()
+                val x = ((event.x + gridManager.xOffset) / step - 0.5).roundToInt()
+                val y = ((event.y + gridManager.yOffset) / step - 0.5).roundToInt()
 
 
                 val cell = actorManager.getCell(x, y)
@@ -433,8 +434,8 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
 
 
                 if (sqrt(xVelocity * xVelocity + yVelocity * yVelocity) > moveVelocityCutoff) {
-                    gridManager.x += ((xVelocity/dt * (1 - (counter / animLength.toFloat()) * .8F) * ((animLength - counter).absoluteValue / (10F * 10 * 10))))
-                    gridManager.y += ((yVelocity/dt * (1 - (counter / animLength.toFloat()) * .8F) * ((animLength - counter).absoluteValue / (10F * 10 * 10))))
+                    gridManager.xOffset += ((xVelocity/dt * (1 - (counter / animLength.toFloat()) * .8F) * ((animLength - counter).absoluteValue / (10F * 10 * 10))))
+                    gridManager.yOffset += ((yVelocity/dt * (1 - (counter / animLength.toFloat()) * .8F) * ((animLength - counter).absoluteValue / (10F * 10 * 10))))
                 }
 
                 if (abs(zoomVelocity - 1) > zoomVelocityCutoff) {

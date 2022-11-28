@@ -106,7 +106,7 @@ class MainActivity : AppCompatActivity(), Runnable, OnThemeSelectedListener,
                     Blueprint(
                         AssetUtils.loadAssetString(
                             this,
-                            "patterns/135degreemwsstog.rle"
+                            "patterns/p184gun.rle"
                         )!!
                     ).cells
                 )

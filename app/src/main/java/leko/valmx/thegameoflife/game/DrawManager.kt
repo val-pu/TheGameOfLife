@@ -1,7 +1,5 @@
 package leko.valmx.thegameoflife.game
 
-import android.graphics.Color.BLUE
-import android.graphics.Color.RED
 import android.graphics.Paint
 import android.graphics.RectF
 import leko.valmx.thegameoflife.game.animations.Animation
@@ -42,8 +40,8 @@ class DrawManager(val gameView: GameView) {
 
         val step = gridManager.step
 
-        val startVisibleX = floor(gridManager.x / step).toInt()
-        val startVisibleY = floor(gridManager.y / step).toInt()
+        val startVisibleX = floor(gridManager.xOffset / step).toInt()
+        val startVisibleY = floor(gridManager.yOffset / step).toInt()
 
         val endVisibleX = ceil((canvas.width / step + startVisibleX).toDouble()).toInt()
         val endVisibleY = ceil((canvas.height / step + startVisibleY).toDouble()).toInt()
@@ -152,99 +150,6 @@ class DrawManager(val gameView: GameView) {
 
     }
 
-    fun drawGrid() {
-
-
-        val gridManager = gameView.gridManager
-        val paintManager = gameView.paintManager
-
-        val width = gridManager.width
-        val height = gridManager.height
-        val step = gridManager.step
-        if (!bypassCheckForAnimation)
-            if (!isGridShown && step >= 80) {
-                isGridShown = true
-                gameView.animationManager.animations.add(object : Animation() {
-                    override fun onAnimate(animatedValue: Float) {
-                        paintManager.gridPaint.alpha = (255 * animatedValue).roundToInt()
-                    }
-
-                    override fun onAnimationFinished() {
-                        bypassCheckForAnimation = false
-                        paintManager.gridPaint.alpha = 255
-                    }
-
-                    override fun onAnimationStart() {
-                        bypassCheckForAnimation = true
-                        paintManager.gridPaint.alpha = 0
-                    }
-
-                })
-                return
-            } else if (step < 80 && isGridShown) {
-                isGridShown = false
-                gameView.animationManager.animations.add(object : Animation() {
-                    override fun onAnimate(animatedValue: Float) {
-                        paintManager.gridPaint.alpha = (255 * (1 - animatedValue)).roundToInt()
-                    }
-
-                    override fun onAnimationFinished() {
-                        bypassCheckForAnimation = false
-                        paintManager.gridPaint.alpha = 0
-                    }
-
-                    override fun onAnimationStart() {
-                        animLength = 300
-                        bypassCheckForAnimation = true
-                        paintManager.gridPaint.alpha = 20
-                    }
-
-                })
-                return
-            }
-
-        if (!isGridShown && !bypassCheckForAnimation) {
-            drawTool()
-
-            return
-        }
-
-        val x = -(gridManager.x % step) - step
-        val y = -(gridManager.y % step) - step
-        val gridWdth = gridManager.gridWidth
-
-        val countX = width / step + 3
-        val countY = height / step + 3
-        val radius = gridManager.radius
-
-        // Vertikales Grid
-
-        repeat(countX.toInt()) { i ->
-            repeat(countY.toInt()) { j ->
-                val segment = RectF(i * step + x, j * step + y, i * step + x, (j + 1) * step + y)
-                segment.inset(-gridWdth * .1F, step * .19F)
-
-                gameView.canvas.drawRoundRect(segment, radius, radius, paintManager.gridPaint)
-
-            }
-        }
-
-        // Horizontales Grid
-
-        repeat(countY.toInt()) { i ->
-            repeat(countX.toInt()) { j ->
-                val segment = RectF(j * step + x, i * step + y, (j + 1) * step + x, i * step + y)
-                segment.inset(step * .19F, -gridWdth * .1F)
-
-                gameView.canvas.drawRoundRect(segment, radius, radius, paintManager.gridPaint)
-
-            }
-        }
-
-
-    }
-
-
     fun drawTool() {
         gameView.interactionManager.registeredInteraction?.drawInteraction()
     }
@@ -257,7 +162,7 @@ class DrawManager(val gameView: GameView) {
 
 
         } else
-            gameView.canvas.drawRoundRect(rect, gridManager.radius, gridManager.radius, paint)
+            gameView.canvas.drawRoundRect(rect, gridManager.cellRadius, gridManager.cellRadius, paint)
 
     }
 
@@ -270,7 +175,7 @@ class DrawManager(val gameView: GameView) {
 
         val step = gridManager.step
         if (!lowDetail) {
-            val inset = gridManager.inset + gridManager.inset * .1f
+            val inset = gridManager.cellInset + gridManager.cellInset * .1f
 
             drawCell(
                 RectF(x, y, x + step, y + step).apply { inset(inset, inset) },
