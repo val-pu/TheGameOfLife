@@ -2,6 +2,7 @@ package leko.valmx.thegameoflife.game
 
 import android.graphics.RectF
 import android.widget.Toast
+import kotlin.math.max
 
 /**
  * One of the more commonly used classes in the project
@@ -40,8 +41,8 @@ class GridManager(val gameView: GameView) {
     fun init() {
         step = (gameView.width / defaultWidthCells).toFloat()
 
-        minZoomWidth = gameView.width / 7F
         maxZoomWidth = gameView.width / 1000F
+        minZoomWidth = gameView.width / 7F
     }
 
     // Gets the fitting rect to draw the cell, with styles applied
@@ -83,20 +84,16 @@ class GridManager(val gameView: GameView) {
         // Return if zoomed out or zoomed in too much and doing the corresponding action to worsen the toomuchness
         // TODO: Fix this
 
-//        if (step >= maxZoomWidth && zoomFactor > 1) return
-//        if (step <= minZoomWidth && zoomFactor < 1) return
+        if (step >= minZoomWidth && zoomFactor > 1) return
+        if (step <= maxZoomWidth && zoomFactor < 1) return
+//        if (step <= minZoomWidth) return
 
         // The offset from 0,0 in cells
         var absX = this.xOffset / this.step
         var absY = this.yOffset / this.step
 
-        if (zoomFactor < 1) {
-            absX -= (focusX / this.step) * (1 - zoomFactor)
-            absY -= (focusY / this.step) * (1 - zoomFactor)
-        } else {
-            absX += (focusX / this.step) * (zoomFactor - 1)
-            absY += (focusY / this.step) * (zoomFactor - 1)
-        }
+        absX -= (focusX / this.step) * (1 - zoomFactor)
+        absY -= (focusY / this.step) * (1 - zoomFactor)
 
 
         // Changing cell size
