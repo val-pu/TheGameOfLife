@@ -15,13 +15,19 @@ import leko.valmx.thegameoflife.game.utils.GameRuleHelper
 import leko.valmx.thegameoflife.recyclers.RulePresetPickerAdapter
 import leko.valmx.thegameoflife.recyclers.RuleSheetAdapter
 
-class SourceSheet(context: Context, val urlString: String, val time: String, val licenceName: String, val licenceUrl: String) : Sheet() {
+class SourceSheet(
+    context: Context,
+    private val urlString: String,
+    private val time: String,
+    private val licenceName: String,
+    private val licenceUrl: String
+) : Sheet() {
 
     init {
         show(context)
     }
 
-    fun show(ctx: Context) {
+    private fun show(ctx: Context) {
         this.windowContext = ctx
         this.width = null
 

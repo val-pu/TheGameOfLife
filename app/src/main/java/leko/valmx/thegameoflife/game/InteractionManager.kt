@@ -37,15 +37,17 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
 
         fun getName() = ""
 
-        fun drawInteraction() // Draws stuff as long as the interaction is active
+        fun drawInteraction() {} // Draws stuff as long as the interaction is active
 
-        fun isNonMovementInteraction(event: MotionEvent): Boolean
+        fun isNonMovementInteraction(event: MotionEvent): Boolean {
+            return false
+        }
 
-        fun onDeregister()
+        fun onDeregister() {}
 
-        fun onInteractionEnd(event: MotionEvent?)
+        fun onInteractionEnd(event: MotionEvent?) {}
 
-        fun addContextItems(items: LinkedList<ContextToolsAdapter.ContextTool>)
+        fun addContextItems(items: LinkedList<ContextToolsAdapter.ContextTool>) {}
     }
 
     var registeredInteraction: Interactable? = null
@@ -100,7 +102,7 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
                 resetMoveValues = true
                 resetZoomValues = true
 
-                if(isExtraVelocityRunning) isExtraVelocityRunning = false
+                if (isExtraVelocityRunning) isExtraVelocityRunning = false
 
                 resetTrackValues()
                 resetSmoothingValues()
@@ -112,7 +114,7 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
                     isToolUsed = it.isNonMovementInteraction(event)
                 }
 
-                if(!isToolUsed && event.pointerCount == 1) onMove(event)
+                if (!isToolUsed && event.pointerCount == 1) onMove(event)
                 else onZoom(event)
 
 
@@ -199,7 +201,7 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
 
     private fun onZoom(event: MotionEvent) {
         allowLongTapSelection = false
-        if(event.pointerCount!= 2) return
+        if (event.pointerCount != 2) return
         if (resetZoomValues) {
             // TODO fehler
             lXP0 = event.getX(0)
@@ -243,8 +245,8 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
                 val movedX = x - lX
                 val movedY = y - lY
 
-                xVelocity = -movedX*1.5F
-                yVelocity = -movedY*1.5F
+                xVelocity = -movedX * 1.5F
+                yVelocity = -movedY * 1.5F
 
                 val dx = abs(xP0 - xP1)
                 val dy = abs(yP0 - yP1)
@@ -259,9 +261,9 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
                 gridManager.xOffset -= movedX
                 gridManager.yOffset -= movedY
 
-                if(abs(zoomFac-1)<.3F)
+                if (abs(zoomFac - 1) < .3F)
 
-                gridManager.zoomByFac(zoomFac, x, y)
+                    gridManager.zoomByFac(zoomFac, x, y)
 
                 zoomFocusX = x
                 zoomFocusY = y
@@ -434,8 +436,8 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
 
 
                 if (sqrt(xVelocity * xVelocity + yVelocity * yVelocity) > moveVelocityCutoff) {
-                    gridManager.xOffset += ((xVelocity/dt * (1 - (counter / animLength.toFloat()) * .8F) * ((animLength - counter).absoluteValue / (10F * 10 * 10))))
-                    gridManager.yOffset += ((yVelocity/dt * (1 - (counter / animLength.toFloat()) * .8F) * ((animLength - counter).absoluteValue / (10F * 10 * 10))))
+                    gridManager.xOffset += ((xVelocity / dt * (1 - (counter / animLength.toFloat()) * .8F) * ((animLength - counter).absoluteValue / (10F * 10 * 10))))
+                    gridManager.yOffset += ((yVelocity / dt * (1 - (counter / animLength.toFloat()) * .8F) * ((animLength - counter).absoluteValue / (10F * 10 * 10))))
                 }
 
                 if (abs(zoomVelocity - 1) > zoomVelocityCutoff) {

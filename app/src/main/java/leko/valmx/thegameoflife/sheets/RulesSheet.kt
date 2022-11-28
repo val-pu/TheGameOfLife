@@ -1,5 +1,6 @@
 package leko.valmx.thegameoflife.sheets
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.view.View
@@ -12,11 +13,10 @@ import leko.valmx.thegameoflife.game.utils.GameRuleHelper
 import leko.valmx.thegameoflife.recyclers.RulePresetPickerAdapter
 import leko.valmx.thegameoflife.recyclers.RuleSheetAdapter
 
-class RulesSheet(context: Context, val gameView: GameView) : Sheet(),
+class RulesSheet(val gameView: GameView) : Sheet(),
     RulePresetPickerAdapter.RuleSelectedListener {
     fun show(ctx: Context) {
         this.windowContext = ctx
-        this.width = null
 
         positiveText = "Apply"
         positiveListener = {
@@ -24,11 +24,7 @@ class RulesSheet(context: Context, val gameView: GameView) : Sheet(),
             gameView.actorManager.applyRuleSet()
         }
 
-
-        showsDialog = true
-
         this.show()
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +43,7 @@ class RulesSheet(context: Context, val gameView: GameView) : Sheet(),
         }
 
         btn_rule_presets.setOnClickListener {
-            RulePresetSelectionSheet(requireContext(), gameView,this).show(requireContext())
+            RulePresetSelectionSheet(requireContext(), gameView, this).show(requireContext())
         }
 
     }
@@ -56,12 +52,11 @@ class RulesSheet(context: Context, val gameView: GameView) : Sheet(),
         return View.inflate(context, R.layout.sheet_rules, null)
     }
 
-    fun updateUi(rule: GameRuleHelper.RuleSet) {
+    private fun updateUi(rule: GameRuleHelper.RuleSet) {
         rulesRecycler.adapter = RuleSheetAdapter(
             requireContext(), rule
         )
-        ruleinteger.text = "RuleInt: ${rule.getRuleInt()}"
-
+//        ruleinteger.text = "RuleInt: ${rule.getRuleInt()}"
     }
 
     override fun onRuleSelected(rule: GameRuleHelper.RuleSet) {

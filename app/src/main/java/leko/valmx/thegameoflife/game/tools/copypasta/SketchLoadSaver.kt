@@ -13,6 +13,8 @@ class SketchLoadSaver(val context: Context) {
         val NAMES_ID = "NAMES"
     }
 
+    // WTF
+
     val prefs = context.getSharedPreferences(PREF_ID, MODE_PRIVATE)
 
     fun getSketchNames(): LinkedList<String>? {

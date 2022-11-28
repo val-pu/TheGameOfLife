@@ -34,8 +34,6 @@ class AutoPlayTool(val game: GameView) : InteractionManager.Interactable, Runnab
 
     }
 
-    override fun drawInteraction() {
-    }
 
     override fun isNonMovementInteraction(event: MotionEvent): Boolean {
         return false

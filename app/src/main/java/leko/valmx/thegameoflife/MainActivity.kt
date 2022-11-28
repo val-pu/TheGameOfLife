@@ -6,6 +6,7 @@ import android.os.PersistableBundle
 import android.util.Log
 import android.view.View
 import android.view.View.*
+import android.view.WindowInsetsController
 import android.view.WindowManager
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
@@ -28,7 +29,7 @@ import leko.valmx.thegameoflife.utils.blueprints.Blueprint
 import java.util.LinkedList
 import kotlin.math.roundToLong
 
-class MainActivity : AppCompatActivity(), Runnable, OnThemeSelectedListener,
+class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
     PaintManager.ThemeUpdateListener {
 
     var autoPlayRunning = false
@@ -43,19 +44,15 @@ class MainActivity : AppCompatActivity(), Runnable, OnThemeSelectedListener,
 
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun onCreate(savedInstanceState: Bundle?) {
-        setContentView(R.layout.activity_main)
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
 
-
         super.onCreate(savedInstanceState)
-        game.interfaceManager.onNewGeneration = this
-
-        val prefs = getSharedPreferences(PREF_ID, MODE_PRIVATE)
+        setContentView(R.layout.activity_main)
 
         // Views, die custom eingefärbt werden sollen
 
@@ -72,11 +69,11 @@ class MainActivity : AppCompatActivity(), Runnable, OnThemeSelectedListener,
 
         game.mainActivity = this
 
-
         onThemeUpdated()
 
-        val animationManager = game.animationManager
+        // Fade in anim
 
+        val animationManager = game.animationManager
         animationManager.animations.add(object : Animation() {
             override fun onAnimate(animatedValue: Float) {
                 val cellPaint = game.paintManager.cellPaint
@@ -86,32 +83,12 @@ class MainActivity : AppCompatActivity(), Runnable, OnThemeSelectedListener,
                 game.canvas.drawPaint(cellPaint)
 
                 cellPaint.alpha = 255
-
             }
 
-
-            override fun onAnimationFinished() {
-//                gridManager.step = baseStep
-            }
-
-            override fun onAnimationStart() {
-            }
+            override fun onAnimationFinished() {}
+            override fun onAnimationStart() {}
         })
-//        game.post {
-//
-//            game.interactionManager.registeredInteraction = PasteTool(
-//                game,
-//                game,
-//                Sketch(
-//                    Blueprint(
-//                        AssetUtils.loadAssetString(
-//                            this,
-//                            "patterns/p184gun.rle"
-//                        )!!
-//                    ).cells
-//                )
-//            )
-//        }
+
 
         recycler_themes.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
         recycler_themes.adapter = ThemeAdapter(game, this)
@@ -125,7 +102,6 @@ class MainActivity : AppCompatActivity(), Runnable, OnThemeSelectedListener,
             game.actorManager.doCycle()
             game.actorManager.doCycle()
             game.actorManager.doCycle()
-
         }
 
         auto_play.setOnClickListener {
@@ -210,8 +186,7 @@ class MainActivity : AppCompatActivity(), Runnable, OnThemeSelectedListener,
 
     override fun onPause() {
         super.onPause()
-        if (autoPlayRunning)
-            auto_play.callOnClick()
+        game.interactionManager.registeredInteraction = null
         game.animationManager.running = false
     }
 
@@ -225,10 +200,6 @@ class MainActivity : AppCompatActivity(), Runnable, OnThemeSelectedListener,
 
     var generations = 0
 
-    override fun run() {
-        generations++
-        gen_counter.text = "Generation $generations"
-    }
 
     val PREF_ID = "CGOL_VALGAMES"
 

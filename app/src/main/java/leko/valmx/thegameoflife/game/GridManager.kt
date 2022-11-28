@@ -82,11 +82,9 @@ class GridManager(val gameView: GameView) {
         focusY: Float = gameView.height / 2f
     ) {
         // Return if zoomed out or zoomed in too much and doing the corresponding action to worsen the toomuchness
-        // TODO: Fix this
 
         if (step >= minZoomWidth && zoomFactor > 1) return
         if (step <= maxZoomWidth && zoomFactor < 1) return
-//        if (step <= minZoomWidth) return
 
         // The offset from 0,0 in cells
         var absX = this.xOffset / this.step
