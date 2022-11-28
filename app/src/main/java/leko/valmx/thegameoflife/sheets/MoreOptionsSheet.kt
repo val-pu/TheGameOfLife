@@ -21,16 +21,18 @@ class MoreOptionsSheet(context: Context, gameView: GameView) {
                 Option(R.drawable.ic_round_ballot_24, "Change rules"),
                 Option(R.drawable.upload, "Place Blueprint"),
                 Option(R.drawable.settings, "App Settings"),
-                Option(R.drawable.ic_round_photo_size_select_small_24, "Start Selection")
+                Option(R.drawable.ic_round_photo_size_select_small_24, "Start Selection"),
+                Option(R.drawable.trash_2, "Clear everything")
             )
             onPositive { index: Int, option: Option ->
 
                 if (index == 0) RulesSheet(context, gameView).show(context)
                 if (index == 1) BlueprintSheet(context, gameView).show(context)
                 if (index == 2) startActivity(Intent(context, SettingActivity::class.java))
-                if (index == 3) {
+                if (index == 3)
                     gameView.interactionManager.registeredInteraction = SelectionTool(gameView)
-                }
+                if (index == 4)
+                    gameView.actorManager.cells = HashMap()
             }
 
         }

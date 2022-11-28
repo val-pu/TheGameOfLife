@@ -14,7 +14,7 @@ class AutoPlayTool(val game: GameView) : InteractionManager.Interactable, Runnab
 
     var deltaT = 500L
         set(value) {
-            if (value < 100) return
+            if (value < 20) return
             if (value > 1500) return
             game.actorManager.aLength = deltaT / 4
 
@@ -51,8 +51,8 @@ class AutoPlayTool(val game: GameView) : InteractionManager.Interactable, Runnab
     }
 
     override fun addContextItems(items: LinkedList<ContextToolsAdapter.ContextTool>) {
-        items.add(ContextToolsAdapter.ContextTool(R.drawable.chevron_left) { deltaT += 40 })
-        items.add(ContextToolsAdapter.ContextTool(R.drawable.chevron_right) { deltaT -= 40 })
+        items.add(ContextToolsAdapter.ContextTool(R.drawable.chevron_left) { deltaT += 80 })
+        items.add(ContextToolsAdapter.ContextTool(R.drawable.chevron_right) { deltaT -= 80 })
     }
 
     override fun run() {
