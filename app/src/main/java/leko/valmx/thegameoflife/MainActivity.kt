@@ -97,21 +97,21 @@ class MainActivity : AppCompatActivity(), Runnable, OnThemeSelectedListener,
             override fun onAnimationStart() {
             }
         })
-        game.post {
-
-            game.interactionManager.registeredInteraction = PasteTool(
-                game,
-                game,
-                Sketch(
-                    Blueprint(
-                        AssetUtils.loadAssetString(
-                            this,
-                            "patterns/p184gun.rle"
-                        )!!
-                    ).cells
-                )
-            )
-        }
+//        game.post {
+//
+//            game.interactionManager.registeredInteraction = PasteTool(
+//                game,
+//                game,
+//                Sketch(
+//                    Blueprint(
+//                        AssetUtils.loadAssetString(
+//                            this,
+//                            "patterns/p184gun.rle"
+//                        )!!
+//                    ).cells
+//                )
+//            )
+//        }
 
         recycler_themes.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
         recycler_themes.adapter = ThemeAdapter(game, this)

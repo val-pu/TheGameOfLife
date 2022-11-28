@@ -30,7 +30,7 @@ class GameView(context: Context?, attrs: AttributeSet?) :
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-        if(!initialized) {
+        if (!initialized) {
             init()
             initialized = true
         }
@@ -57,7 +57,6 @@ class GameView(context: Context?, attrs: AttributeSet?) :
 
         onInitilized?.let { it() }
     }
-
 
 
     fun initWithSketch(sketch: Sketch) {
