@@ -49,6 +49,15 @@ class BlueprintSheet(context: Context, val gameView: GameView) : Sheet(),
             gameView.interactionManager.registeredInteraction = SelectionTool(gameView)
             dismiss()
         }
+
+        btn_browse_preset_blueprints.setOnClickListener {
+            BlueprintPresetSelectionSheet {
+                gameView.interactionManager.registeredInteraction =
+                    PasteTool(gameView, Sketch(it.cells))
+                dismiss()
+            }.show(requireContext())
+        }
+
     }
 
     override fun onCreateLayoutView(): View {
@@ -56,7 +65,7 @@ class BlueprintSheet(context: Context, val gameView: GameView) : Sheet(),
     }
 
     override fun onSketchSelected(sketch: Sketch) {
-        gameView.interactionManager.registeredInteraction = PasteTool(gameView, gameView, sketch)
+        gameView.interactionManager.registeredInteraction = PasteTool(gameView, sketch)
         dismiss()
     }
 }

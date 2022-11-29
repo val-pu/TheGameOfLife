@@ -17,15 +17,15 @@ class PreviewManager(val game: GameView) {
 
         val cells = sketch.cells
 
-        val w = cells.size + cells.size
+        val w = cells.size
         val h = cells[0].size
 
         gridManager.step = (game.width / w).toFloat()
 
 
-        val baseH = (game.height / gridManager.step.toInt() - h) / 2
+        val baseH = 0
 
-        val baseX = (w - cells.size) / 2
+        val baseX = 0
 
 
 

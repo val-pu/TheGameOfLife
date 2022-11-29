@@ -8,6 +8,7 @@ class Blueprint(rleString: String) {
     val iterator = LinkedList<String>(rleString.split("\n")).iterator()
     val comments: LinkedList<String> = LinkedList()
     var author = ""
+    var name = ""
 
     private var nextLine = iterator.next()
 
@@ -21,6 +22,11 @@ class Blueprint(rleString: String) {
                 nextLine.startsWith("#O ") -> {
                     author = nextLine.drop(3)
                 }
+
+                nextLine.startsWith("#N ") -> {
+                    name = nextLine.drop(3)
+                }
+
 
                 nextLine.startsWith("#C ") -> {
                     comments.add(nextLine.drop(3))
@@ -62,7 +68,16 @@ class Blueprint(rleString: String) {
         var rowIndex = 0
         var lineIndex = 0
 
+        var stop = false
+
         cellString.toCharArray().forEach { char ->
+
+            if(char == '!') {
+                stop = true
+            }
+
+            if(stop) return@forEach
+
             if (!char.isDigit() && !arrayOf('o', 'b', '$').contains(char)) return@forEach
 
             if (char.isDigit()) {
@@ -72,12 +87,10 @@ class Blueprint(rleString: String) {
                 val repeatAmount = if (digitString != "") {
                     digitString.toInt()
                 } else {
-                    Log.i("Parsing char", "$char")
                     1
                 }
 
                 repeat(repeatAmount) {
-                    Log.i("Row", "$rowIndex + $repeatAmount + $char")
 
                     if (rowIndex >= width) {
                         rowIndex = 0

@@ -4,6 +4,7 @@ import android.content.Context
 import java.io.IOException
 import java.io.InputStream
 import java.nio.charset.Charset
+import java.util.LinkedList
 
 object AssetUtils {
 
@@ -22,4 +23,14 @@ object AssetUtils {
         }
         return json
     }
+
+    fun listAssetFiles(path: String, context: Context): Array<String> {
+        return try {
+            context.assets.list(path) as Array<String>
+
+        } catch (e: IOException) {
+            emptyArray<String>()
+        }
+    }
+
 }

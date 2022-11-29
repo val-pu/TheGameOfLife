@@ -11,8 +11,8 @@ import leko.valmx.thegameoflife.recyclers.ContextToolsAdapter
 import java.util.*
 import kotlin.math.roundToInt
 
-class PasteTool(val game: GameView, gameView: GameView, val sketch: Sketch) :
-    SelectionTool(gameView) {
+class PasteTool(val game: GameView, val sketch: Sketch) :
+    SelectionTool(game) {
 
     init {
         allowResize = false
