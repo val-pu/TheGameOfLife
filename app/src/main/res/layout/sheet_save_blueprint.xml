@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         style="@style/SheetTitle"
         android:layout_height="wrap_content"
-        android:text="How should the Blueprint be named?"
+        android:text="@string/how_should_the_blueprint_be_named"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
