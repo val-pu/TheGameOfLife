@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Game Of Life</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="view_licenses">Lizenzen einsehen</string>
+    <string name="settings">Einstellungen</string>
+    <string name="view_source_on_github">Source code auf GitHub</string>
+    <string name="select_a_ruleset">Suche eine Regel aus</string>
+    <string name="source">Quelle</string>
+    <string name="rules">Regeln</string>
+    <string name="rules_sheet_description">Manipuliere die Regeln des Spiels</string>
+    <string name="reset_rules">Auf Werkseinstellungen</string>
+    <string name="browse_rules">Predefinierte Regeln</string>
+    <string name="create_new_blueprint">Erstelle eine neue Blaupause</string>
+    <string name="blueprints">Blaupausen</string>
+    <string name="blueprints_sheet_description">Erstelle oder benutze Blaupausen</string>
+    <string name="born">wird geboren</string>
+    <string name="survive">wird leben</string>
+    <string name="how_should_the_blueprint_be_named">Wie soll die Blaupause benannt werden?</string>
+</resources>
