@@ -32,20 +32,15 @@ import kotlin.math.roundToLong
 class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
     PaintManager.ThemeUpdateListener {
 
-    var autoPlayRunning = false
-    var themeSelectingMode = false
+    private var autoPlayRunning = false
+    private var themeSelectingMode = false
 
-    var autoModeSpeed = (500L).toLong()
-        set(value) {
-            game.actorManager.aLength = value / 3
-            field = value
-        }
-    var autoModeSpeedFac = autoModeSpeed
 
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun onCreate(savedInstanceState: Bundle?) {
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -110,11 +105,9 @@ class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
 
 
         themeView.setOnClickListener {
-
-
             themeSelectingMode = !themeSelectingMode
 
-            if (themeSelectingMode) {
+            if (theme_selector.visibility == GONE) {
                 theme_selector.visibility = VISIBLE
 
             } else
@@ -125,26 +118,6 @@ class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
             game.interactionManager.registeredInteraction = EditTool(game)
         }
 
-
-        reset_btn.setOnClickListener {
-
-            val actorManager = game.actorManager
-
-            val cells = actorManager.cells
-
-            actorManager.cells = HashMap()
-
-        }
-
-        fluidSlider.positionListener = {
-            autoModeSpeed = (autoModeSpeedFac * (1 - it)).roundToLong()
-        }
-
-
-
-        tool_apply.post {
-            onThemeUpdated()
-        }
 
         btn_end_tool.setOnClickListener {
             game.interactionManager.registeredInteraction = null
@@ -235,7 +208,6 @@ class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
 
 
     override fun onThemeUpdated() {
-        gen_counter!!.setTextColor(game.paintManager.iconPaint.color)
 
         themedView.forEach {
             try {
@@ -262,5 +234,4 @@ class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
 
 interface OnThemeSelectedListener {
     fun onThemeSelected(theme: ThemeAdapter.ThemeBundle)
-
 }

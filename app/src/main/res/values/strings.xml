@@ -11,4 +11,19 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="title_activity_intro">IntroActivity</string>
     <string name="view_licenses">View Licenses</string>
+    <string name="settings">Settings</string>
+    <string name="view_source_on_github">View Source on GitHub</string>
+    <string name="select_a_ruleset">Select a ruleset</string>
+    <string name="source">Source</string>
+    <string name="rules">Rules</string>
+    <string name="rules_sheet_description">Change the rules of the game. This changes what will happen, when a cell has X neighbours. It can either die (default), live or be born</string>
+    <string name="reset_rules">Reset rules</string>
+    <string name="browse_rules">Browse rules</string>
+    <string name="blueprints">Blueprints</string>
+    <string name="blueprints_sheet_description">Create or use Blueprints to place predefined sections</string>
+    <string name="create_new_blueprint">Create new Blueprint</string>
+    <string name="how_should_the_blueprint_be_named">How should the Blueprint be named?</string>
+    <string name="survive">Survive</string>
+    <string name="born">Born</string>
+    <string name="place">PLACE</string>
 </resources>

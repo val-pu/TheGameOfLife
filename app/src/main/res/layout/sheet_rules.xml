@@ -10,13 +10,12 @@
         android:id="@+id/btn_rule_presets"
         style="@style/SheetTitle"
         android:layout_width="match_parent"
-        android:background="@drawable/round_rect_c"
+        android:background="@drawable/common_round_card"
         android:layout_marginTop="10dp"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/black"
         android:gravity="center"
         android:orientation="horizontal"
-        android:text="Reset rules"
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="normal"
@@ -39,7 +38,7 @@
             android:layout_weight="1"
             android:gravity="center"
 
-            android:text="Browse rules"
+            android:text="@string/browse_rules"
             android:textColor="@color/white"
             android:textSize="15sp"
             android:textStyle="bold" />
@@ -52,7 +51,7 @@
         android:layout_height="wrap_content"
 
         android:fontFamily="@font/quicksand"
-        android:text="Change the rules of the game. This changes what will happen, when a cell has X neighbours. It can either die (default), live or be born"
+        android:text="@string/rules_sheet_description"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -72,11 +71,10 @@
         style="@style/SheetTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/round_rect_c"
+        android:background="@drawable/common_round_card"
         android:backgroundTint="@color/black"
         android:gravity="center"
         android:orientation="horizontal"
-        android:text="Reset rules"
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="normal"
@@ -93,13 +91,13 @@
             app:srcCompat="@drawable/rotate_ccw" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
             android:layout_weight="1"
             android:gravity="center"
 
-            android:text="Reset rules"
+            android:text="@string/reset_rules"
             android:textColor="@color/white"
             android:textSize="15sp"
             android:textStyle="bold" />
@@ -113,7 +111,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="25sp"
-        android:text="Rules"
+        android:text="@string/rules"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -140,7 +138,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            android:text="RuleInteger: 18900"
+            tools:text="RuleInteger: 18900"
             android:textSize="25sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -151,21 +149,21 @@
             style="@style/IconButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:tint="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/imageView5"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/edit_2" />
+            app:srcCompat="@drawable/edit_2"
+            app:tint="@color/black" />
 
         <ImageView
             android:id="@+id/imageView5"
             style="@style/IconButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:tint="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/share_2" />
+            app:srcCompat="@drawable/share_2"
+            app:tint="@color/black" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

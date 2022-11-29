@@ -11,7 +11,7 @@
         style="@style/SheetTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Blueprints"
+        android:text="@string/blueprints"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/quicksand"
         android:gravity="center"
-        android:text="Create or use Blueprints to place predefined sections"
+        android:text="@string/blueprints_sheet_description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -46,9 +46,9 @@
         android:padding="10dp"
         android:gravity="center"
         android:layout_width="0dp"
-        android:background="@drawable/round_rect_c"
+        android:background="@drawable/common_round_card"
         android:backgroundTint="@color/black"
-        android:text="Create new Blueprint"
+        android:text="@string/create_new_blueprint"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

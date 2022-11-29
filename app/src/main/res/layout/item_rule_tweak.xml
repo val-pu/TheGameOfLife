@@ -32,7 +32,7 @@
             android:textColor="#000"
             android:fontFamily="@font/quicksand"
             android:gravity="center"
-            android:text="Survive" />
+            android:text="@string/survive" />
 
         <CheckBox
             android:id="@+id/check_born"
@@ -43,6 +43,6 @@
             android:buttonTint="#000000"
             android:fontFamily="@font/quicksand"
             android:gravity="center"
-            android:text="Born" />
+            android:text="@string/born" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
