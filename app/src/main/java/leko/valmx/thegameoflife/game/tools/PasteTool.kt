@@ -14,43 +14,6 @@ import kotlin.math.roundToInt
 class PasteTool(val game: GameView, val sketch: Sketch) :
     SelectionTool(game) {
 
-    init {
-        allowResize = false
-
-        val gridManager = game.gridManager
-
-        val canvas = game.canvas
-
-        val h = sketch.h
-        val w = sketch.w
-
-        var step = gridManager.step
-
-        val gameWidth = canvas.width / step
-
-        if (gameWidth < w) {
-            gridManager.step = (canvas.width / w).toFloat()
-        }
-        val gameHeight = canvas.height / gridManager.step
-
-        if (gameHeight < h) {
-            gridManager.step = (canvas.height / h).toFloat()
-        }
-
-        step = gridManager.step
-
-        val startX = (gridManager.xOffset / step).roundToInt()
-        val startY = (gridManager.yOffset / step).roundToInt()
-
-        toolRect = Rect(startX, startY, startX + w, startY + h).toRectF()
-
-    }
-
-
-    override fun onInteraction(motionEvent: MotionEvent, dereg: () -> Unit) {
-        super.onInteraction(motionEvent, dereg)
-    }
-
     override fun drawInteraction() {
         super.drawInteraction()
 
@@ -85,6 +48,38 @@ class PasteTool(val game: GameView, val sketch: Sketch) :
             game.interactionManager.registeredInteraction = null
             Toast.makeText(gameView.context, "Applied Blueprint", Toast.LENGTH_SHORT).show()
         })
+
+        // Initializing the rect of the thing to be pasted
+
+        allowResize = false
+
+        val gridManager = game.gridManager
+
+        val canvas = game.canvas
+
+        val h = sketch.h
+        val w = sketch.w
+
+        var step = gridManager.step
+
+        val gameWidth = canvas.width / step
+
+        if (gameWidth < w) {
+            gridManager.step = (canvas.width / w).toFloat()
+        }
+        val gameHeight = canvas.height / gridManager.step
+
+        if (gameHeight < h) {
+            gridManager.step = (canvas.height / h).toFloat()
+        }
+
+        step = gridManager.step
+
+        val startX = (gridManager.xOffset / step).roundToInt()
+        val startY = (gridManager.yOffset / step).roundToInt()
+
+
+        toolRect = Rect(startX, startY, startX + w, startY + h).toRectF()
     }
 
     private fun applySketch() {
@@ -97,9 +92,6 @@ class PasteTool(val game: GameView, val sketch: Sketch) :
             yRow.forEachIndexed { y, isCell ->
                 actorManager.setCell(baseX + x, baseY + y, !isCell)
             }
-
         }
-
-
     }
 }

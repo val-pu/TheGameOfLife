@@ -1,11 +1,12 @@
 package leko.valmx.thegameoflife.game
 
-import android.util.Log
 import android.view.MotionEvent
 import android.view.MotionEvent.*
 import android.view.View
-import android.view.View.OnTouchListener
+import android.view.View.*
 import android.widget.Toast
+import androidx.core.view.isVisible
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
 import leko.valmx.thegameoflife.game.animations.Animation
 import leko.valmx.thegameoflife.game.tools.SelectionTool
@@ -32,35 +33,50 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
     var resetMoveValues = false
     var resetZoomValues = false
 
-    interface Interactable {
-        fun onInteraction(motionEvent: MotionEvent, dereg: () -> Unit)
+    abstract class Interactable {
 
-        fun getName() = ""
+        lateinit var toolsRecycler: RecyclerView
 
-        fun drawInteraction() {} // Draws stuff as long as the interaction is active
+        fun isToolsVisible() = toolsRecycler.isVisible
 
-        fun isNonMovementInteraction(event: MotionEvent): Boolean {
+        abstract fun onInteraction(motionEvent: MotionEvent, dereg: () -> Unit)
+
+        open fun getName() = ""
+
+        open fun drawInteraction() {} // Draws stuff as long as the interaction is active
+
+        open fun isNonMovementInteraction(event: MotionEvent): Boolean {
             return false
         }
 
-        fun onDeregister() {}
+        open fun onDeregister() {}
 
-        fun onInteractionEnd(event: MotionEvent?) {}
+        open fun onInteractionEnd(event: MotionEvent?) {}
 
-        fun addContextItems(items: LinkedList<ContextToolsAdapter.ContextTool>) {}
+        open fun addContextItems(items: LinkedList<ContextToolsAdapter.ContextTool>) {}
+
+        fun showTools(show: Boolean) {
+            toolsRecycler.visibility = if (show) VISIBLE else GONE
+        }
     }
 
     var registeredInteraction: Interactable? = null
-        set(value) {
-            if (value != null) {
+        set(newTool) {
+            if (newTool != null) {
+                val toolRecycler = gameView.mainActivity.context_tools_recycler
                 val list = LinkedList<ContextToolsAdapter.ContextTool>()
-                value.addContextItems(list)
-                gameView.mainActivity.context_tools_recycler.adapter = ContextToolsAdapter(list)
-            }
-            gameView.mainActivity.initContextTool(value)
+                newTool.toolsRecycler = toolRecycler
+                newTool.addContextItems(list)
 
-            if (value == null) field!!.onDeregister()
-            field = value
+
+                toolRecycler.adapter = ContextToolsAdapter(list)
+
+            }
+
+            gameView.mainActivity.initContextTool(newTool)
+
+            if (newTool == null) field!!.onDeregister()
+            field = newTool
         }
 
     fun registerInteraction(interactable: Interactable) {
@@ -121,7 +137,6 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
             }
 
             ACTION_MOVE, ACTION_UP -> {
-                mendTrackValues(event)
 
                 // Stoppe die Interaktion, falls der User zoomt
                 if (event.pointerCount == 2) {
@@ -170,29 +185,6 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
         isToolUsed = false
         allowLongTapSelection = true
     }
-
-    /**
-     * Repariere z.B. lastX, falls lange nicht geupdated und der Wert nun einfach nur stuss ist.
-     * setze auch amountmoved auf einen hohen Wert, damit nicht automatisch ne selection getriggered wird.
-     */
-
-    final val MIN_OFF_FOR_LASTXYMEND = 200
-
-    private fun mendTrackValues(event: MotionEvent) {
-        return
-
-        val dx = abs(event.x - lastX)
-        val dy = abs(event.y - lastY)
-
-        if ((dy + dx) > MIN_OFF_FOR_LASTXYMEND) {
-            lastX = event.x
-            lastY = event.y
-            summedDt = 0
-        }
-
-
-    }
-
 
     var lXP0 = 0F
     var lYP0 = 0F
@@ -424,10 +416,6 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
 
         animationManager.animations.add(object : Animation() {
 
-            var lastMovement = 0.0
-
-            var lastZoomFac = 1F
-
             override fun onAnimate(animatedValue: Float) {
                 if (!isExtraVelocityRunning) {
                     endAnim()
@@ -441,14 +429,6 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
                 }
 
                 if (abs(zoomVelocity - 1) > zoomVelocityCutoff) {
-
-
-                    val zoomFactor = (1 - animatedValue) * (1 + ((zoomVelocity - 1) * 4))
-                    Log.i(
-                        "VALUE IS",
-                        "${1 - (1 - zoomVelocity) * .1F * ((exp(-((animatedValue * 3 - 1)))))}"
-                    )
-
                     gridManager.zoomByFac(
                         1 - (1 - zoomVelocity) * .2F * ((exp(-((animatedValue * 3 - 1))))),
                         zoomFocusX,
@@ -456,9 +436,6 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
                     )
                 }
 
-            }
-
-            override fun onAnimationFinished() {
             }
 
             override fun onAnimationStart() {

@@ -89,8 +89,8 @@
             android:layout_width="150dp"
             android:layout_height="52dp"
             android:layout_marginStart="10dp"
+            android:animateLayoutChanges="true"
             android:elevation="5dp"
-
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -111,7 +111,6 @@
                 android:id="@+id/recycler_themes"
                 android:layout_width="0dp"
                 android:layout_height="52dp"
-
                 android:layout_marginStart="3dp"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -155,6 +154,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
+            android:animateLayoutChanges="true"
             android:background="@drawable/common_round_card"
             android:elevation="5dp"
             android:orientation="horizontal"
@@ -172,7 +172,6 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/context_tools_recycler"
                 android:layout_width="match_parent"
-
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="horizontal"

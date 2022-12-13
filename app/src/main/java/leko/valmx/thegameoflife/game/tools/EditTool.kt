@@ -6,7 +6,7 @@ import leko.valmx.thegameoflife.game.InteractionManager
 import leko.valmx.thegameoflife.recyclers.ContextToolsAdapter
 import java.util.*
 
-class EditTool(val game: GameView) : InteractionManager.Interactable {
+class EditTool(val game: GameView) : InteractionManager.Interactable() {
 
     init {
         game.interactionManager.editMode = true

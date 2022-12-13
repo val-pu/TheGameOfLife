@@ -51,11 +51,7 @@ class BlueprintSheet(context: Context, val gameView: GameView) : Sheet(),
         }
 
         btn_browse_preset_blueprints.setOnClickListener {
-            BlueprintPresetSelectionSheet {
-                gameView.interactionManager.registeredInteraction =
-                    PasteTool(gameView, Sketch(it.cells))
-                dismiss()
-            }.show(requireContext())
+            BlueprintPresetSelectCategorySheet(requireContext(),gameView)
         }
 
     }

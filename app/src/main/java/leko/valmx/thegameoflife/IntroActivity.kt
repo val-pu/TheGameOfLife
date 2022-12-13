@@ -4,15 +4,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.PersistableBundle
-import com.google.android.material.snackbar.Snackbar
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
 import kotlinx.android.synthetic.main.activity_intro.*
-import kotlinx.android.synthetic.main.activity_main.*
 import leko.valmx.thegameoflife.game.tools.copypasta.SketchLoadSaver
+import leko.valmx.thegameoflife.game.utils.GameRuleHelper
+import leko.valmx.thegameoflife.utils.AssetUtils
+import leko.valmx.thegameoflife.utils.blueprints.Blueprint
+import kotlin.random.Random
 
 class IntroActivity : AppCompatActivity() {
 
@@ -30,12 +29,37 @@ class IntroActivity : AppCompatActivity() {
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
         preview.post {
-            val loader = SketchLoadSaver(this)
-            preview.init() {
-//preview.previewManager.init(
-//                loader.getSketch(loader.getSketchNames()!![1])!!  )
-            }
 
+
+            val loader = SketchLoadSaver(this)
+            val r = java.util.Random()
+
+            val category = "preview"
+
+
+            val names =
+                AssetUtils.listAssetFiles("patterns/${category}", this)
+            val pickedId = r.nextInt(names.size)
+
+            val patternName =
+
+                names[pickedId]
+            Log.d(
+                "Path of intro shape", "patterns/${category}/$patternName"
+            )
+            Log.d(
+                "Size of shape pool", names.size.toString()
+            )
+            val blueprint = Blueprint(
+                AssetUtils.loadAssetString(
+                    this,
+                    "patterns/${category}/$patternName"
+                )!!
+            )
+            preview.init() {
+                preview.previewManager.init(blueprint)
+            }
+            preview.actorManager.ruleSet = GameRuleHelper.RuleSet(0b000011000000100)
 
 
         }
@@ -47,9 +71,9 @@ class IntroActivity : AppCompatActivity() {
             override fun run() {
 
                 counter++;
-                preview.actorManager.aLength = 30L
+                preview.actorManager.aLength = (300/counter).toLong()
 
-                if (counter == 30) {
+                if (counter >= 100) {
                     preview.animationManager.running = false
                     startActivity(Intent(this@IntroActivity, MainActivity::class.java))
                     return
@@ -57,11 +81,11 @@ class IntroActivity : AppCompatActivity() {
 
                 preview.actorManager.doCycle()
 
-                Handler().postDelayed(this, 100L)
+                Handler().postDelayed(this, (300/counter).toLong())
             }
 
 
-        }, 1000L)
+        }, 0L)
 
     }
 

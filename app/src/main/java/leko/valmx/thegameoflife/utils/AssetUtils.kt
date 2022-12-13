@@ -1,6 +1,7 @@
 package leko.valmx.thegameoflife.utils
 
 import android.content.Context
+import leko.valmx.thegameoflife.R
 import java.io.IOException
 import java.io.InputStream
 import java.nio.charset.Charset
@@ -31,6 +32,16 @@ object AssetUtils {
         } catch (e: IOException) {
             emptyArray<String>()
         }
+    }
+
+    fun getPresetCategories(): Array<PresetCategory> {
+        return arrayOf(
+            PresetCategory(
+                R.string.category_gliders,
+                R.string.category_gliders_description,
+                "ship"
+            )
+        )
     }
 
 }

@@ -55,7 +55,7 @@ class Blueprint(rleString: String) {
         if (params.size == 3) rule = params[2].removePrefix("r=")
     }
 
-    val cells = Array<Array<Boolean>>(width) { Array<Boolean>(height) { false } }
+    val cells = Array(width) { Array<Boolean>(height) { false } }
 
     init {
         var cellString = ""

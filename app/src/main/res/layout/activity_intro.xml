@@ -6,23 +6,41 @@
     android:layout_height="match_parent"
     tools:context=".IntroActivity"
     tools:ignore="MissingDefaultResource">
-    <leko.valmx.thegameoflife.game.GameView
-        android:layout_width="match_parent"
-        android:id="@+id/preview"
-        android:layout_height="match_parent"/>
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
+    <leko.valmx.thegameoflife.game.GameView
+        android:id="@+id/preview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/quicksand"
-        android:text="Conway's Game Of Life"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:padding="10dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/common_less_round_card"
+        android:backgroundTint="@color/black"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:srcCompat="@drawable/icon_game_od_life_dark2" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/quicksand"
+            android:text="The Game Of Life"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imageView2"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

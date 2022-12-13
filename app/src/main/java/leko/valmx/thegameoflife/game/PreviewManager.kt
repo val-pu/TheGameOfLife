@@ -1,12 +1,11 @@
 package leko.valmx.thegameoflife.game
 
-import android.util.Log
-import leko.valmx.thegameoflife.game.tools.copypasta.Sketch
-import java.util.logging.Handler
+import leko.valmx.thegameoflife.utils.blueprints.Blueprint
+import kotlin.math.roundToInt
 
 class PreviewManager(val game: GameView) {
 
-    fun init(sketch: Sketch, stopTasks: Boolean = false) {
+    fun init(sketch: Blueprint, stopTasks: Boolean = false) {
         game.paintManager.applyPreviewTheme()
         game.setOnTouchListener(null)
         val actorManager = game.actorManager
@@ -23,9 +22,13 @@ class PreviewManager(val game: GameView) {
         gridManager.step = (game.width / w).toFloat()
 
 
-        val baseH = 0
 
-        val baseX = 0
+        var baseH = 0
+        var baseX = 0
+
+        if(w>=h) {
+            baseH = (game.height/2F/gridManager.step-h/2F).roundToInt()
+        }
 
 
 

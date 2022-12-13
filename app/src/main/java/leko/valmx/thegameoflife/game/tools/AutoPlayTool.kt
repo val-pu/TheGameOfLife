@@ -8,7 +8,7 @@ import leko.valmx.thegameoflife.game.InteractionManager
 import leko.valmx.thegameoflife.recyclers.ContextToolsAdapter
 import java.util.*
 
-class AutoPlayTool(val game: GameView) : InteractionManager.Interactable, Runnable {
+class AutoPlayTool(val game: GameView) : InteractionManager.Interactable(), Runnable {
 
     val handler = Handler()
 

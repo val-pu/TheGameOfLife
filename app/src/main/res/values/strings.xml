@@ -26,4 +26,6 @@
     <string name="survive">Survive</string>
     <string name="born">Born</string>
     <string name="place">PLACE</string>
+    <string name="category_gliders">Gliders </string>
+    <string name="category_gliders_description">A generic description</string>
 </resources>

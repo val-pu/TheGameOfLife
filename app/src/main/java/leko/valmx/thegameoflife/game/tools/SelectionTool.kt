@@ -20,7 +20,7 @@ import kotlin.math.abs
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
-open class SelectionTool(val gameView: GameView) : InteractionManager.Interactable {
+open class SelectionTool(val gameView: GameView) : InteractionManager.Interactable() {
 
     companion object {
         val AUTO_TRIGGER_TIME: Long = 560L
@@ -30,6 +30,10 @@ open class SelectionTool(val gameView: GameView) : InteractionManager.Interactab
 
 
     var toolRect: RectF? = null
+        set(value) {
+            showTools(value != null)
+            field = value
+        }
 
     // relevant for child classes
     var allowResize = true
@@ -43,6 +47,7 @@ open class SelectionTool(val gameView: GameView) : InteractionManager.Interactab
     override fun getName(): String {
         return "Selecting..."
     }
+
 
     private var lastX = 0F
     private var lastY = 0F
@@ -196,6 +201,8 @@ open class SelectionTool(val gameView: GameView) : InteractionManager.Interactab
 
             saveSelectionToSketch()
         })
+
+        showTools(false)
 
     }
 

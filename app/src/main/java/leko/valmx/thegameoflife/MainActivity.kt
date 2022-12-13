@@ -64,26 +64,6 @@ class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
 
         game.mainActivity = this
 
-        onThemeUpdated()
-
-        // Fade in anim
-
-        val animationManager = game.animationManager
-        animationManager.animations.add(object : Animation() {
-            override fun onAnimate(animatedValue: Float) {
-                val cellPaint = game.paintManager.cellPaint
-
-                cellPaint.alpha = (255 * (1 - animatedValue)).toInt()
-
-                game.canvas.drawPaint(cellPaint)
-
-                cellPaint.alpha = 255
-            }
-
-            override fun onAnimationFinished() {}
-            override fun onAnimationStart() {}
-        })
-
 
         recycler_themes.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
         recycler_themes.adapter = ThemeAdapter(game, this)
@@ -127,14 +107,13 @@ class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
             MoreOptionsSheet(this, game)
         }
 
-
-        initContextTools()
-
-    }
-
-    fun initContextTools() {
         context_tools_recycler.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
+        btn_more.post {
+            onThemeUpdated()
+        }
+
     }
 
     fun initContextTool(interactable: InteractionManager.Interactable?) {
@@ -159,7 +138,7 @@ class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
 
     override fun onPause() {
         super.onPause()
-        game.interactionManager.registeredInteraction = null
+//        game.interactionManager.registeredInteraction = null
         game.animationManager.running = false
     }
 

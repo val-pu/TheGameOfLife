@@ -1,6 +1,5 @@
 package leko.valmx.thegameoflife.recyclers
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,11 +10,12 @@ import kotlinx.android.synthetic.main.item_blueprint_selection.view.*
 import leko.valmx.thegameoflife.R
 import leko.valmx.thegameoflife.game.tools.copypasta.Sketch
 import leko.valmx.thegameoflife.utils.AssetUtils
+import leko.valmx.thegameoflife.utils.PresetCategory
 import leko.valmx.thegameoflife.utils.blueprints.Blueprint
-import java.util.LinkedList
 
 class BlueprintPresetRecycler(
     private val bluePrints: Array<String>,
+    private val category: PresetCategory,
     private val onBluePrintSelected: (Blueprint) -> Unit,
     private val originSheet: Sheet? = null
 ) :
@@ -37,8 +37,12 @@ class BlueprintPresetRecycler(
 
         val itemView = holder.itemView
         val blueprintName = bluePrints[position]
-        Log.e("Parsing","$blueprintName")
-        val blueprint = Blueprint(AssetUtils.loadAssetString(itemView.context, "patterns/$blueprintName")!!)
+        val blueprint = Blueprint(
+            AssetUtils.loadAssetString(
+                itemView.context,
+                "patterns/${category.path}/$blueprintName"
+            )!!
+        )
 
         itemView.blueprintName.text = blueprint.name
         itemView.blueprint_author.text = blueprint.author
@@ -48,7 +52,7 @@ class BlueprintPresetRecycler(
         preview.post {
 
             preview.init() {
-                preview.previewManager.init(Sketch(blueprint.cells),true)
+                preview.previewManager.init(blueprint, true)
             }
         }
 

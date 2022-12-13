@@ -29,7 +29,7 @@ class SketchAdapter(context: Context, val onSketchSelectedListener: OnSketchSele
                 itemView.gameView.init() {
                     try {
 
-                        itemView.gameView.previewManager.init(sketch!!, true)
+//                        itemView.gameView.previewManager.init(sketch!!, true)
                     } catch (ignored: java.lang.Exception) {
 
                     }

@@ -39,7 +39,7 @@ class BlueprintSaveSheet(context: Context, val sketch: Sketch) : Sheet() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         preview_blueprint.post {
-            preview_blueprint.previewManager.init(sketch)
+//            preview_blueprint.previewManager.init(sketch)
         }
         displayButtonPositive(false)
 
