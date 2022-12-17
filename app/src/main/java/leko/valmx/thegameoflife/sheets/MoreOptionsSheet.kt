@@ -27,7 +27,7 @@ class MoreOptionsSheet(context: Context, gameView: GameView) {
             onPositive { index: Int, option: Option ->
 
                 if (index == 0) RulesSheet(gameView).show(context)
-                if (index == 1) BlueprintSheet(context, gameView).show(context)
+                if (index == 1) BlueprintPresetSelectCategorySheet(context, gameView)
                 if (index == 2) startActivity(Intent(context, SettingActivity::class.java))
                 if (index == 3) gameView.interactionManager.registeredInteraction = SelectionTool(gameView)
                 if (index == 4) gameView.actorManager.cells = HashMap()

@@ -1,3 +1,3 @@
 package leko.valmx.thegameoflife.utils
 
-class PresetCategory(val name: Int, val description: Int, val path: String)
+class PresetCategory(val name: Int, val description: Int, val path: String, val url: String)

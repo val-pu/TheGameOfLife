@@ -9,8 +9,8 @@ import java.util.LinkedList
 class SketchLoadSaver(val context: Context) {
 
     companion object {
-        val PREF_ID = "CWGOL_SKETCHES"
-        val NAMES_ID = "NAMES"
+        const val PREF_ID = "CWGOL_SKETCHES"
+        const val NAMES_ID = "NAMES"
     }
 
     // WTF

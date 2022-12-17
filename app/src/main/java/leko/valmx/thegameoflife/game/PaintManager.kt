@@ -55,9 +55,6 @@ class PaintManager(val gameView: GameView) {
         val toolOld = toolPaint.color
         val toolStrokeOld = toolStrokePaint.color
 
-        val dB = bgOld - bgNew
-        val dC = cellOld - cellNew
-        val dG = gridOld - gridNew
 
         animationManager.animations.add(object : Animation() {
             override fun onAnimate(animatedValue: Float) {

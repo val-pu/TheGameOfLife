@@ -5,7 +5,6 @@ import leko.valmx.thegameoflife.R
 import java.io.IOException
 import java.io.InputStream
 import java.nio.charset.Charset
-import java.util.LinkedList
 
 object AssetUtils {
 
@@ -39,7 +38,7 @@ object AssetUtils {
             PresetCategory(
                 R.string.category_gliders,
                 R.string.category_gliders_description,
-                "ship"
+                "guns", "https://conwaylife.com/wiki/Category:Guns"
             )
         )
     }

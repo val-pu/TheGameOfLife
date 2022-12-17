@@ -192,15 +192,15 @@ open class SelectionTool(val gameView: GameView) : InteractionManager.Interactab
             fillSelection()
         })
 
-        items.add(ContextToolsAdapter.ContextTool(R.drawable.save) {
-            if (toolRect == null) {
-                Toast.makeText(gameView.context, "Select something first!", Toast.LENGTH_LONG)
-                    .show()
-                return@ContextTool
-            }
-
-            saveSelectionToSketch()
-        })
+//        items.add(ContextToolsAdapter.ContextTool(R.drawable.save) {
+//            if (toolRect == null) {
+//                Toast.makeText(gameView.context, "Select something first!", Toast.LENGTH_LONG)
+//                    .show()
+//                return@ContextTool
+//            }
+//
+//            saveSelectionToSketch()
+//        })
 
         showTools(false)
 

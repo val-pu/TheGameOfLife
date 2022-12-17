@@ -7,23 +7,23 @@
     android:paddingTop="10dp"
     android:layout_height="match_parent">
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/sheetTile"
         style="@style/SheetTitle"
+        android:text="@string/select_a_ruleset"
         android:textStyle="normal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="25sp"
-        android:text="@string/select_a_ruleset"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rule_presets_recycler"
+        android:id="@+id/presets_recycler"
         android:layout_width="match_parent"
         android:layout_height="400dp"
         android:layout_marginTop="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6"
+        app:layout_constraintTop_toBottomOf="@+id/sheetTile"
         tools:layout_editor_absoluteX="1dp"
         tools:listitem="@layout/item_rule_selection" />
 
@@ -32,7 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="?android:attr/listDivider"
-        app:layout_constraintBottom_toTopOf="@+id/rule_presets_recycler"
+        app:layout_constraintBottom_toTopOf="@+id/presets_recycler"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -46,8 +46,8 @@
         android:text="@string/source"
         android:textColor="@color/white"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/textView6"
+        app:layout_constraintBottom_toBottomOf="@+id/sheetTile"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView6" />
+        app:layout_constraintTop_toTopOf="@+id/sheetTile" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

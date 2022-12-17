@@ -28,4 +28,5 @@
     <string name="place">PLACE</string>
     <string name="category_gliders">Gliders </string>
     <string name="category_gliders_description">A generic description</string>
+    <string name="title_preset_patterns">Select a Blueprint</string>
 </resources>

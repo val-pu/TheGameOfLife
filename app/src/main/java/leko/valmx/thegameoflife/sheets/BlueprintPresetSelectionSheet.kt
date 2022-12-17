@@ -6,13 +6,13 @@ import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.maxkeppeler.sheets.core.Sheet
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.item_saved_sketch.*
-import kotlinx.android.synthetic.main.sheet_predefined_rules_selector.*
+import com.maxkeppeler.sheets.info.InfoSheet
+import kotlinx.android.synthetic.main.sheet_predefined_selector.*
 import leko.valmx.thegameoflife.R
 import leko.valmx.thegameoflife.game.GameView
 import leko.valmx.thegameoflife.game.tools.PasteTool
 import leko.valmx.thegameoflife.game.tools.copypasta.Sketch
+import leko.valmx.thegameoflife.game.utils.GameRuleHelper
 import leko.valmx.thegameoflife.recyclers.BlueprintPresetRecycler
 import leko.valmx.thegameoflife.utils.AssetUtils
 import leko.valmx.thegameoflife.utils.PresetCategory
@@ -49,26 +49,56 @@ class BlueprintPresetSelectionSheet(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        data = AssetUtils.listAssetFiles("patterns/ship", requireContext())
+
+
+        data = AssetUtils.listAssetFiles("patterns/${category.path}", requireContext())
         Arrays.sort(data)
         Log.d("Loaded assets", data.contentToString())
 
-        rule_presets_recycler.layoutManager = LinearLayoutManager(context)
-        rule_presets_recycler.adapter =
+        presets_recycler.layoutManager = LinearLayoutManager(context)
+        presets_recycler.adapter =
             BlueprintPresetRecycler(data, category, {
-                gameView.interactionManager.registeredInteraction =
-                    PasteTool(gameView, Sketch(it.cells))
+
+                val newRule = GameRuleHelper.RuleSet(it.rule)
+                val gameRuleHelper = GameRuleHelper(requireContext()).apply { loadRules() }
+
+                val initPasteTool = {
+                    gameView.interactionManager.registeredInteraction =
+                        PasteTool(gameView, Sketch(it.cells))
+
+                }
+
+                if (gameRuleHelper.ruleSet.getRuleInt() != newRule.getRuleInt()) {
+                    InfoSheet().show(requireContext()) {
+                        showsDialog = true
+                        title("This pattern needs a different rule set to work")
+                        content("Change the rule to ${it.rule}?")
+                        onPositive("Yes") {
+                            gameRuleHelper.saveRule(newRule)
+                            gameView.actorManager.ruleSet = newRule
+                            initPasteTool()
+                        }
+
+                        onNegative(initPasteTool)
+
+                    }
+                    return@BlueprintPresetRecycler
+                }
+                initPasteTool()
+
+//                                                    BlueprintInfoSheet(it).show(requireContext())
             }, this)
 
         source.setOnClickListener {
             SourceSheet(
                 requireContext(),
-                "https://conwaylife.com/wiki/List_of_Life-like_cellular_automata",
-                "27.11.2022",
+                category.url,
+                "16.12.2022",
                 "GNU Free Documentation License 1.2",
                 "https://www.gnu.org/licenses/fdl-1.3.html"
             )
         }
+        sheetTile.setText(R.string.title_preset_patterns)
 
     }
 
@@ -82,7 +112,7 @@ class BlueprintPresetSelectionSheet(
     }
 
     override fun onCreateLayoutView(): View {
-        return View.inflate(context, R.layout.sheet_predefined_rules_selector, null)
+        return View.inflate(context, R.layout.sheet_predefined_selector, null)
     }
 
 

@@ -57,11 +57,4 @@ class GameView(context: Context?, attrs: AttributeSet?) :
 
         onInitilized?.let { it() }
     }
-
-
-    fun initWithSketch(sketch: Sketch) {
-
-    }
-
-
 }
