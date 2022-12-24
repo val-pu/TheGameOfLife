@@ -1,5 +1,6 @@
 package leko.valmx.thegameoflife.recyclers
 
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +13,7 @@ import leko.valmx.thegameoflife.utils.blueprints.Blueprint
 class BlueprintInfoRecycler(val blueprint: Blueprint) : Adapter<BlueprintInfoRecycler.VH>() {
 
     private val comments = blueprint.comments
-    private val websitePattern = Regex("https.*")
+    private val websitePattern = Regex(".*www.*")
 
     private val viewTypeWebsite = 1
 
@@ -27,7 +28,6 @@ class BlueprintInfoRecycler(val blueprint: Blueprint) : Adapter<BlueprintInfoRec
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
         val inflater = LayoutInflater.from(parent.context)
-
         return when (viewType) {
             viewTypeWebsite -> WebsiteInfoVH(
                 inflater.inflate(
@@ -51,7 +51,7 @@ class BlueprintInfoRecycler(val blueprint: Blueprint) : Adapter<BlueprintInfoRec
 
         val s = comments[position]
 
-        if (s.matches(websitePattern)) {
+        if (s.contains(".com")) {
             return viewTypeWebsite;
         }
 

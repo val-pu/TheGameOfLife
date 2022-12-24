@@ -24,7 +24,7 @@ class Blueprint(rleString: String) {
                 }
 
                 nextLine.startsWith("#N ") -> {
-                    name = nextLine.drop(3)
+                    name = nextLine.drop(3).replace(".rle","")
                 }
 
 
@@ -67,6 +67,8 @@ class Blueprint(rleString: String) {
 
         var rowIndex = 0
         var lineIndex = 0
+
+        Log.i("RLE",rleString)
 
         var stop = false
 

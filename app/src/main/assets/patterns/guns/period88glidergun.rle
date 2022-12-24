@@ -1,0 +1,14 @@
+#N period88glidergun.rle
+#O Matthias Merzenich, 2009
+#C https://conwaylife.com/wiki/Period-88_glider_gun
+#C https://www.conwaylife.com/patterns/period88glidergun.rle
+#C By Matthias Merzenich, September 2009
+#C Blocker supports by Jason Summers
+x = 46, y = 45, rule = B3/S23
+14b2o14b2o$14b2o14b2o$30b2o$31bo$13b2obo13bobo$14bobo12b2obo$15bo$14b
+2o$14b2o14b2o$14b2o14b2o4$4b2o35bo$4o4b2o26b3ob2o2b2o$3ob2o2b2o11b3o
+12b4o4b2o$5bo14bo2bo16b2o$20bobo$21bo2$28b2o$27bo2bo$15b2o11bobo$15bob
+o11b2o$15bo2bo$16b2o2$24bo$23bobo$4b2o16bo2bo14bo$2o4b4o12b3o11b2o2b2o
+b3o$2o2b2ob3o26b2o4b4o$4bo35b2o3$14b2o2$13bo3bo12bo$12bo4bo11bobo$11bo
+bobo6bo5bo3bo$10bobobo8b2o4bo3bo$8bo4bo8b2o6bo3bo$8bo3bo18bo3bo$32bobo
+$10b2o21bo!

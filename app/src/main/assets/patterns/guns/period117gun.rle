@@ -1,0 +1,11 @@
+#N period117gun.rle
+#O David Raucci, 2021
+#C https://conwaylife.com/wiki/Period-117_glider_gun
+#C https://www.conwaylife.com/patterns/period117gun.rle
+x = 42, y = 29, rule = B3/S23
+7bo7b2o10bob2o4b2obo$7b3o5b2o10b2o2bo2bo2b2o$10bo14b2o3bo4bo3b2o$9b2o
+13bo3b2ob4ob2o3bo$25b3obobo2bobob3o$12bo14bobobo2bobobo$11bobo16bo4bo$
+10bo3bo16b4o$10bo3bo$10bo3bo$11bobo$12bo2$5b2o$5b2o28b2o$35b2o2$29bo$
+28bobo$27bo3bo$27bo3bo$7b4o16bo3bo$6bo4bo16bobo$3bobobo2bobobo14bo$b3o
+bobo2bobob3o$o3b2ob4ob2o3bo13b2o$b2o3bo4bo3b2o14bo$3b2o2bo2bo2b2o10b2o
+5b3o$3bob2o4b2obo10b2o7bo!

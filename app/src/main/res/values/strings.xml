@@ -26,7 +26,12 @@
     <string name="survive">Survive</string>
     <string name="born">Born</string>
     <string name="place">PLACE</string>
-    <string name="category_gliders">Gliders </string>
+    <string name="category_gliders">Guns </string>
     <string name="category_gliders_description">A generic description</string>
     <string name="title_preset_patterns">Select a Blueprint</string>
+    <string name="spaceships">Spaceships</string>
+    <string name="synths">Oscillators</string>
+    <string name="shipsynths">Shipsynths</string>
+    <string name="dimensions">Dimensions</string>
+    <string name="name">Name</string>
 </resources>

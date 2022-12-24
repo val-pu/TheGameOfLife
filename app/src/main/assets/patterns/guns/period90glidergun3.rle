@@ -1,0 +1,8 @@
+#N period90glidergun3.rle
+#C https://conwaylife.com/wiki/P45_pi-heptomino_hassler
+#C https://www.conwaylife.com/patterns/period90glidergun3.rle
+x = 33, y = 29, rule = B3/S23
+24bo$23bobo$22bo3bo$22bo3bo$8bo4bo8bo3bo$6b2ob4ob2o6bo3bo$8bo4bo8bo3bo
+$22bo3bo$23bobo$2o22bo$obo$bo28b2o$29bo2bo$8b2ob2o15bobobo$9b3o14b3o2b
+o$10bo$22bo5b2o$23b2o4bo$22b2o$9b2o$9b2o2$13bobo$11bo3bo$11bo$4b2o4bo
+4bo8b2o$4b2o5bo12b2o$11bo3bo$13bobo!

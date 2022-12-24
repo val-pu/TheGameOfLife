@@ -1,11 +1,10 @@
 package leko.valmx.thegameoflife.game
 
 import android.graphics.Paint
+import android.graphics.Path
 import android.graphics.RectF
-import leko.valmx.thegameoflife.game.animations.Animation
 import kotlin.math.ceil
 import kotlin.math.floor
-import kotlin.math.roundToInt
 
 class DrawManager(val gameView: GameView) {
 
@@ -14,6 +13,8 @@ class DrawManager(val gameView: GameView) {
     }
 
     var lowDetail = false
+
+    private var contents: Path = Path() // Path for drawing the stuff
 
     private fun checkIfLowDetailShouldBeShown() {
         val gridManager = gameView.gridManager
@@ -53,7 +54,7 @@ class DrawManager(val gameView: GameView) {
             values!!.values.forEach { cell ->
                 if (cell!!.x !in startVisibleX..endVisibleX) return@forEach
                 if (cell.y !in startVisibleY..endVisibleY) return@forEach
-                val cellRect = gridManager.getCellRect(cell!!.x, cell!!.y)
+                val cellRect = gridManager.getCellRect(cell.x, cell.y)
 
 
 
@@ -87,8 +88,11 @@ class DrawManager(val gameView: GameView) {
                 }*/
             }
         }
+        drawCells()
 //        drawBoundsTool()
         drawTool()
+        drawCells()
+
 
 
     }
@@ -150,19 +154,31 @@ class DrawManager(val gameView: GameView) {
 
     }
 
+    private fun drawCells() {
+        gameView.canvas.drawPath(contents, gameView.paintManager.cellPaint)
+        contents = Path()
+    }
+
     fun drawTool() {
         gameView.interactionManager.registeredInteraction?.drawInteraction()
     }
 
     fun drawCell(rect: RectF, paint: Paint) {
         val gridManager = gameView.gridManager
+
         if (lowDetail) {
             gameView.canvas.drawRect(rect, paint)
 
 
-
-        } else
-            gameView.canvas.drawRoundRect(rect, gridManager.cellRadius, gridManager.cellRadius, paint)
+        } else {
+//            gameView.canvas.drawRoundRect(rect, gridManager.cellRadius, gridManager.cellRadius, paint)
+            contents.addRoundRect(
+                rect,
+                gridManager.cellRadius,
+                gridManager.cellRadius,
+                Path.Direction.CW
+            )
+        }
 
     }
 
@@ -182,9 +198,12 @@ class DrawManager(val gameView: GameView) {
                 paintManager.cellPaint
             )
         } else {
+
             gameView.canvas.drawRect(
                 RectF(x, y, x + step, y + step), paintManager.cellPaint
             )
+            contents.addRect(RectF(x, y, x + step, y + step), Path.Direction.CW)
+
 
         }
     }

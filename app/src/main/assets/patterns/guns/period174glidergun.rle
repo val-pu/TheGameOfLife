@@ -1,0 +1,9 @@
+#N period174glidergun.rle
+#C https://conwaylife.com/wiki/Hotcrystal0_reaction
+#C https://www.conwaylife.com/patterns/period174glidergun.rle
+x = 43, y = 37, rule = B3/S23
+11b2o20bo$12bo18b3o3b2o$12bobo15bo8bob2o$13b2o15b2o3bo2bo2b2o$35bobo$
+27b2o7bo$27b2o$36b2o$36b2o3$7b2o8b2o$7b2o10bo$16bo$17b2o3bo$6b3o13b2o$
+6b2obo2b2o7bobo$8b2o2b2o$8b2o20b4o$29bo4bo$29bo3bobo$30bo3bobo$25bo10b
+o$24b2o10bo$24b2o7bo2bo$24bo9b2o3$5b2o$5bobo$6b3o5b2o$7b2o5b2o$5bobo$
+2o2bobo4b2o$obo2bo6bo$b4o4b3o$2b2o5bo!

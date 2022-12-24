@@ -1,0 +1,14 @@
+#N period156glidergun_synth.rle
+#O Mark Niemiec, 28 May 2013
+#C 16-glider synthesis of period-156 glider gun
+#C https://conwaylife.com/wiki/Period-156_glider_gun
+#C https://conwaylife.com/forums/viewtopic.php?p=9075#p9075
+x = 177, y = 52, rule = B3/S23
+23bo$24bo$22b3o$26bo$25bo$25b3o127b2o$155b2o3$24bo128b2o$23bo125b2o2b
+2o$18b2o3b3o123b2o$17bobo$19bo$151b3o$150bo2bo$149b2o2bo$12bo136bo3bo$
+13bo136bo2bo$11b3o126b2o4b2o4bo$140b2o3b2obo$144bo$2bo141bo4bo$obo10b
+2o124b2o3b5o$b2o10bobo30bo92b2o$4b2o7bo32bobo86b2o38b2o$3bobo32bo7b2o
+87b2o38b2o$5bo30bobo10b2o120b2o$37b2o10bobo111b5o3b2o$49bo112bo4bo$
+167bo$163bob2o3b2o$38b3o118bo4b2o4b2o$38bo119bo2bo$39bo118bo3bo$158bo
+2b2o$158bo2bo$158b3o$32bo$32bobo$26b3o3b2o127b2o$28bo128b2o2b2o$27bo
+129b2o3$155b2o$24b3o128b2o$26bo$25bo$27b3o$27bo$28bo!

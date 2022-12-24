@@ -424,22 +424,22 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
 
 
                 if (sqrt(xVelocity * xVelocity + yVelocity * yVelocity) > moveVelocityCutoff) {
-                    gridManager.xOffset += ((xVelocity / dt * (1 - (counter / animLength.toFloat()) * .8F) * ((animLength - counter).absoluteValue / (10F * 10 * 10))))
-                    gridManager.yOffset += ((yVelocity / dt * (1 - (counter / animLength.toFloat()) * .8F) * ((animLength - counter).absoluteValue / (10F * 10 * 10))))
+                    gridManager.xOffset += ((xVelocity / dt * (1 - (counter / animLength.toFloat()) * .8F) * ((animLength - counter).absoluteValue / (animLength*1.3F))))
+                    gridManager.yOffset += ((yVelocity / dt * (1 - (counter / animLength.toFloat()) * .8F) * ((animLength - counter).absoluteValue / (animLength*1.3F))))
                 }
 
-                if (abs(zoomVelocity - 1) > zoomVelocityCutoff) {
-                    gridManager.zoomByFac(
-                        1 - (1 - zoomVelocity) * .2F * ((exp(-((animatedValue * 3 - 1))))),
-                        zoomFocusX,
-                        zoomFocusY
-                    )
-                }
+//                if (abs(zoomVelocity - 1) > zoomVelocityCutoff) {
+//                    gridManager.zoomByFac(
+//                        1 - (1 - zoomVelocity) * .2F * ((exp(-((animatedValue * 3 - 1))))),
+//                        zoomFocusX,
+//                        zoomFocusY
+//                    )
+//                }
 
             }
 
             override fun onAnimationStart() {
-                animLength = 700L
+                animLength = min((300L + 100* ln(sqrt(xVelocity*xVelocity+yVelocity*yVelocity))).toLong(),700L)
             }
         })
     }

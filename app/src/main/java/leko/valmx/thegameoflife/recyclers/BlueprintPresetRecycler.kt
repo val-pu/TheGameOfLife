@@ -1,5 +1,6 @@
 package leko.valmx.thegameoflife.recyclers
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,7 +9,8 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.maxkeppeler.sheets.core.Sheet
 import kotlinx.android.synthetic.main.item_blueprint_selection.view.*
 import leko.valmx.thegameoflife.R
-import leko.valmx.thegameoflife.game.tools.copypasta.Sketch
+import leko.valmx.thegameoflife.sheets.BlueprintInfoSheet
+import leko.valmx.thegameoflife.sheets.MoreOptionsSheet
 import leko.valmx.thegameoflife.utils.AssetUtils
 import leko.valmx.thegameoflife.utils.PresetCategory
 import leko.valmx.thegameoflife.utils.blueprints.Blueprint
@@ -37,6 +39,7 @@ class BlueprintPresetRecycler(
 
         val itemView = holder.itemView
         val blueprintName = bluePrints[position]
+        Log.i("Loading Blueprint",blueprintName)
         val blueprint = Blueprint(
             AssetUtils.loadAssetString(
                 itemView.context,
@@ -57,6 +60,10 @@ class BlueprintPresetRecycler(
         }
 
         itemView.setOnClickListener {
+            BlueprintInfoSheet(blueprint).show(itemView.context)
+        }
+
+        itemView.btn_select_blueprint.setOnClickListener {
             onBluePrintSelected(blueprint)
             originSheet?.dismiss()
         }

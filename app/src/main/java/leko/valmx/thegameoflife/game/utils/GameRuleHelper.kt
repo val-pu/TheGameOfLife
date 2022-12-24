@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.util.Log
 import leko.valmx.thegameoflife.utils.AssetUtils
+import java.util.*
+import kotlin.collections.HashMap
 import kotlin.math.pow
 
 class GameRuleHelper(val ctx: Context) {
@@ -60,28 +62,34 @@ class GameRuleHelper(val ctx: Context) {
     class RuleSet {
         private val bornValues: Array<Boolean> = Array<Boolean>(8) { false }
         private val surviveValues: Array<Boolean> = Array<Boolean>(8) { false }
+        private val defaultRuleInt = 0b000011000000100
+
 
         constructor(ruleInt: Int) {
             initWithRuleInt(ruleInt)
         }
 
-        constructor(ruleString: String) {
-            var result = 0
-            Log.i("Initializing rule", "$ruleString")
+        constructor(input: String) {
+            try {
+                val ruleString = input.replace("rule=", "")
+                var result = 0
 
-            val rules = ruleString.split("/")
-            val bornRules = rules[0].substringAfter("B")
-            val surivalRules = rules[1].substringAfter("S")
+                val rules = ruleString.split("/")
+                val bornRules = rules[0].toLowerCase(Locale.ROOT).strip().substringAfter("b")
+                val surivalRules = rules[1].toLowerCase(Locale.ROOT).strip().substringAfter("s")
 
 
-            bornRules.toCharArray().forEach {
-                result += (2.0.pow(it.digitToInt().toDouble()-1)).toInt()
+                bornRules.toCharArray().forEach {
+                    result += (2.0.pow(it.digitToInt().toDouble() - 1)).toInt()
+                }
+                surivalRules.toCharArray().forEach {
+                    result += (2.0.pow(8 + it.digitToInt().toDouble() - 1)).toInt()
+
+                }
+                initWithRuleInt(result)
+            } catch (e: Exception) {
+                initWithRuleInt(defaultRuleInt)
             }
-            surivalRules.toCharArray().forEach {
-                result += (2.0.pow(8 + it.digitToInt().toDouble()-1)).toInt()
-
-            }
-            initWithRuleInt(result)
         }
 
         private fun initWithRuleInt(ruleInt: Int) {
@@ -94,10 +102,8 @@ class GameRuleHelper(val ctx: Context) {
                     if (i >= 8) {
                         surviveValues[i - 8] = true
 
-                        Log.i("Rules","A cell with ${i-8} neighbours will survive")
                     } else {
                         bornValues[i] = true
-                        Log.i("Rules","A cell with ${i+1} neighbours will be born")
                     }
                 }
                 lastInt /= 2
@@ -105,7 +111,6 @@ class GameRuleHelper(val ctx: Context) {
                 i++;
             }
 
-            Log.d("Inialized rule with int", "$ruleInt")
 
         }
 

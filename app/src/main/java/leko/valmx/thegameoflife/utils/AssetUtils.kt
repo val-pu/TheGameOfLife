@@ -39,6 +39,21 @@ object AssetUtils {
                 R.string.category_gliders,
                 R.string.category_gliders_description,
                 "guns", "https://conwaylife.com/wiki/Category:Guns"
+            ),
+            PresetCategory(
+                R.string.spaceships,
+                R.string.category_gliders_description,
+                "spaceships", "https://conwaylife.com/wiki/Category:Guns"
+            ),
+            PresetCategory(
+                R.string.synths,
+                R.string.category_gliders_description,
+                "oscillators", "https://conwaylife.com/wiki/Category:Guns"
+            ),
+            PresetCategory(
+                R.string.shipsynths,
+                R.string.category_gliders_description,
+                "shipsynths", "https://conwaylife.com/wiki/Category:Guns"
             )
         )
     }

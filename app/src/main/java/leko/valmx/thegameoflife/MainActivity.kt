@@ -6,28 +6,25 @@ import android.os.PersistableBundle
 import android.util.Log
 import android.view.View
 import android.view.View.*
-import android.view.WindowInsetsController
 import android.view.WindowManager
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.maxkeppeler.sheets.core.SheetStyle
+import com.maxkeppeler.sheets.option.Option
+import com.maxkeppeler.sheets.option.OptionSheet
 import kotlinx.android.synthetic.main.activity_main.*
+import leko.valmx.thegameoflife.game.GameView
 import leko.valmx.thegameoflife.game.InteractionManager
 import leko.valmx.thegameoflife.game.PaintManager
-import leko.valmx.thegameoflife.game.animations.Animation
 import leko.valmx.thegameoflife.game.tools.AutoPlayTool
 import leko.valmx.thegameoflife.game.tools.EditTool
-import leko.valmx.thegameoflife.game.tools.PasteTool
-import leko.valmx.thegameoflife.game.tools.copypasta.Sketch
 import leko.valmx.thegameoflife.recyclers.ThemeAdapter
+import leko.valmx.thegameoflife.sheets.BlueprintPresetSelectCategorySheet
 import leko.valmx.thegameoflife.sheets.MoreOptionsSheet
-import leko.valmx.thegameoflife.sheets.RulesSheet
-import leko.valmx.thegameoflife.utils.AssetUtils
-import leko.valmx.thegameoflife.utils.blueprints.Blueprint
 import java.util.LinkedList
-import kotlin.math.roundToLong
 
 class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
     PaintManager.ThemeUpdateListener {
@@ -63,6 +60,8 @@ class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
         }
 
         game.mainActivity = this
+
+        showStartPrompt(game)
 
 
         recycler_themes.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
@@ -113,6 +112,7 @@ class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
         btn_more.post {
             onThemeUpdated()
         }
+
 
     }
 
@@ -208,6 +208,35 @@ class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
 
     }
 
+    private fun showStartPrompt(gameView: GameView) {
+        OptionSheet().show(this) {
+            title("How would you like to start?")
+            cancelableOutside(false)
+            with(Option(R.drawable.random_cube, "Random"))
+            with(Option(R.drawable.upload, "With Blueprint"))
+            with(Option("Empty"))
+
+            style(SheetStyle.DIALOG)
+
+            onPositive { index: Int, option: Option ->
+
+                when (index) {
+                    0 -> {
+                        gameView.actorManager.randomize()
+                    }
+                    1 -> {
+                        BlueprintPresetSelectCategorySheet(
+                            requireContext(),
+                            gameView
+                        )
+                    }
+                }
+
+            }
+
+        }
+
+    }
 
 }
 

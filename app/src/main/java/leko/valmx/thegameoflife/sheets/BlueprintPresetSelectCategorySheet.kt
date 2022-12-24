@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.maxkeppeler.sheets.core.Sheet
+import com.maxkeppeler.sheets.core.SheetStyle
 import kotlinx.android.synthetic.main.sheet_blueprint_library_category.*
 import leko.valmx.thegameoflife.R
 import leko.valmx.thegameoflife.game.GameView
@@ -21,6 +22,9 @@ class BlueprintPresetSelectCategorySheet(context: Context, val gameView: GameVie
         this.windowContext = ctx
         this.width = null
         displayPositiveButton(false)
+        style(SheetStyle.DIALOG)
+        title("Select a category")
+        
         this.show()
     }
 

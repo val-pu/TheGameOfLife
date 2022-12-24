@@ -1,0 +1,8 @@
+#N period113glidergun.rle
+#O Mitchell Riley, 2022
+#C https://conwaylife.com/wiki/Period-113_glider_gun
+#C https://www.conwaylife.com/patterns/period113glidergun.rle
+x = 47, y = 37, rule = B3/S23
+44b2o$44bo$42bobo$42b2o7$29b2o14b2o$11b2o4b2o10b2o14b2o$11b2o4b2o4$26b
+3o$17b3o6bo2bo$17bo2bo5bo2bo$17bo2bo6b3o$18b3o4$28b2o4b2o$2o14b2o10b2o
+4b2o$2o14b2o7$3b2o$2bobo$2bo$b2o!

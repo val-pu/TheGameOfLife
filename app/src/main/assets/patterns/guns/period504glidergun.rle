@@ -1,0 +1,9 @@
+#N period504glidergun.rle
+#C https://conwaylife.com/wiki/R126
+#C https://www.conwaylife.com/patterns/period504glidergun.rle
+x = 55, y = 55, rule = B3/S23
+27b2o$26bobo$26b2o3$21bo$20bobo24bo$6b2o12bobo22b3o$7bo13bo22bo$7bobo
+34b2o$8b2o18b2o$29bo$29bobo$30b2o7$47b2o$46bo2bo$31bo15b2o$12b2o17bobo
+$13bo17b3o$10b3o20bo$2o8bo41b2o$obo49bobo$b2o41bo8b2o$42b3o$41bo$41b2o
+$6b2o$5bo2bo$6b2o7$23b2o$23bobo$25bo$25b2o$9b2o$10bo22bo$7b3o22bobo13b
+o$7bo24bobo14b2o$33bo14b2o3$27b2o$26bobo$26b2o!

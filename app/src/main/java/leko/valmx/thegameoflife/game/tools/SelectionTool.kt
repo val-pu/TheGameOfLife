@@ -4,7 +4,6 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.util.Log
 import android.view.MotionEvent
-import android.widget.Toast
 import androidx.core.graphics.toRect
 import com.maxkeppeler.sheets.option.Info
 import com.maxkeppeler.sheets.option.Option
@@ -182,7 +181,7 @@ open class SelectionTool(val gameView: GameView) : InteractionManager.Interactab
     }
 
     override fun addContextItems(items: LinkedList<ContextToolsAdapter.ContextTool>) {
-        items.add(ContextToolsAdapter.ContextTool(R.drawable.ic_outline_casino_24) {
+        items.add(ContextToolsAdapter.ContextTool(R.drawable.random_cube) {
             randomizeSelection()
         })
         items.add(ContextToolsAdapter.ContextTool(R.drawable.trash_2) {

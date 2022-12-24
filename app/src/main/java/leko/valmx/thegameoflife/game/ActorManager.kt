@@ -20,6 +20,10 @@ class ActorManager(val gameView: GameView) {
 
     fun init() {
 
+
+    }
+
+    fun randomize() {
         repeat(3400) {
             val x = Random.nextInt(initialSize)
             val y = Random.nextInt(initialSizeY)

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.maxkeppeler.sheets.core.Sheet
+import com.maxkeppeler.sheets.core.SheetStyle
 import kotlinx.android.synthetic.main.sheet_rules.*
 import leko.valmx.thegameoflife.R
 import leko.valmx.thegameoflife.game.GameView
@@ -17,7 +18,7 @@ class RulesSheet(val gameView: GameView) : Sheet(),
     RulePresetPickerAdapter.RuleSelectedListener {
     fun show(ctx: Context) {
         this.windowContext = ctx
-
+        style(SheetStyle.DIALOG)
         positiveText = "Apply"
         positiveListener = {
             GameRuleHelper(ctx).saveRule((rulesRecycler.adapter as RuleSheetAdapter).ruleSet)
