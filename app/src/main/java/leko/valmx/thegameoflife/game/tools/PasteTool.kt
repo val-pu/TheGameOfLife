@@ -90,6 +90,7 @@ class PasteTool(val game: GameView, val sketch: Sketch) :
     }
 
     private fun rotate() {
+        // Test
 
         val newToolRect = toolRect?.let {
             RectF(
