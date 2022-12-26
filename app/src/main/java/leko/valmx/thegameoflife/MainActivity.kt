@@ -1,6 +1,8 @@
 package leko.valmx.thegameoflife
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.content.res.AssetManager
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.Log
@@ -21,10 +23,16 @@ import leko.valmx.thegameoflife.game.InteractionManager
 import leko.valmx.thegameoflife.game.PaintManager
 import leko.valmx.thegameoflife.game.tools.AutoPlayTool
 import leko.valmx.thegameoflife.game.tools.EditTool
+import leko.valmx.thegameoflife.game.tools.PasteTool
+import leko.valmx.thegameoflife.game.tools.copypasta.Sketch
 import leko.valmx.thegameoflife.recyclers.ThemeAdapter
 import leko.valmx.thegameoflife.sheets.BlueprintPresetSelectCategorySheet
 import leko.valmx.thegameoflife.sheets.MoreOptionsSheet
+import leko.valmx.thegameoflife.utils.AssetUtils
+import leko.valmx.thegameoflife.utils.AssetUtils.getPresetCategories
+import leko.valmx.thegameoflife.utils.blueprints.Blueprint
 import java.util.LinkedList
+import kotlin.random.Random
 
 class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
     PaintManager.ThemeUpdateListener {
@@ -57,11 +65,12 @@ class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
             add(ViewThemeBundle(btn_more.id))
             add(ViewThemeBundle(tool_name_bar.id))
             add(ViewThemeBundle(tools.id))
+            add(ViewThemeBundle(blueprints_btn.id))
         }
 
         game.mainActivity = this
 
-        showStartPrompt(game)
+//        showStartPrompt(game)
 
 
         recycler_themes.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
@@ -76,6 +85,27 @@ class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
             game.actorManager.doCycle()
             game.actorManager.doCycle()
             game.actorManager.doCycle()
+
+            val random = java.util.Random()
+
+            val presetCategories = getPresetCategories()
+
+            val randomCategory = presetCategories[random.nextInt(presetCategories.size)]
+
+            val patternNamesOfCategory =
+                AssetUtils.listAssetFiles("patterns/${randomCategory.path}/", this)
+
+            val randomPattern = patternNamesOfCategory[random.nextInt(patternNamesOfCategory.size)]
+            PasteTool(
+                game,
+                Blueprint(
+                    AssetUtils.loadAssetString(
+                        this,
+                        "patterns/${randomCategory.path}/${randomPattern}"
+                    )!!
+                )
+            ).applyBlueprint()
+
         }
 
         auto_play.setOnClickListener {
@@ -113,6 +143,9 @@ class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
             onThemeUpdated()
         }
 
+        blueprints_btn.setOnClickListener {
+            BlueprintPresetSelectCategorySheet(this,game)
+        }
 
     }
 
@@ -138,7 +171,6 @@ class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
 
     override fun onPause() {
         super.onPause()
-//        game.interactionManager.registeredInteraction = null
         game.animationManager.running = false
     }
 
@@ -229,6 +261,9 @@ class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
                             requireContext(),
                             gameView
                         )
+                    }
+                    2 -> {
+                        startActivity(Intent(this@MainActivity, OpenGLTestAc::class.java))
                     }
                 }
 

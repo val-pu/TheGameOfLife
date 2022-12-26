@@ -2,20 +2,49 @@ package leko.valmx.thegameoflife.game.tools
 
 import android.graphics.Rect
 import android.graphics.RectF
-import android.view.MotionEvent
 import android.widget.Toast
 import androidx.core.graphics.toRectF
 import leko.valmx.thegameoflife.R
-import leko.valmx.thegameoflife.game.ActorManager
 import leko.valmx.thegameoflife.game.GameView
-import leko.valmx.thegameoflife.game.tools.copypasta.Sketch
 import leko.valmx.thegameoflife.recyclers.ContextToolsAdapter
+import leko.valmx.thegameoflife.utils.blueprints.Blueprint
 import java.util.*
-import kotlin.collections.HashMap
 import kotlin.math.roundToInt
 
-class PasteTool(val game: GameView, val sketch: Sketch) :
+class PasteTool(val game: GameView, val blueprint: Blueprint) :
     SelectionTool(game) {
+
+ init {
+     val gridManager = game.gridManager
+
+     val canvas = game.canvas
+
+     val h = blueprint.height
+     val w = blueprint.width
+
+     var step = gridManager.step
+
+     val gameWidth = canvas.width / step
+
+     if (gameWidth < w) {
+         gridManager.step = (canvas.width / w).toFloat()
+     }
+     val gameHeight = canvas.height / gridManager.step
+
+     if (gameHeight < h) {
+         gridManager.step = (canvas.height / h).toFloat()
+     }
+
+     step = gridManager.step
+
+     val startX = (gridManager.xOffset / step).roundToInt()
+     val startY = (gridManager.yOffset / step).roundToInt()
+
+
+     toolRect = Rect(startX, startY, startX + w, startY + h).toRectF()
+     // Centering the rect
+     toolRect!!.offset(((canvas.width-w*step)/2)/step,((canvas.height-h*step)/2)/step)
+ }
 
     override fun drawInteraction() {
         super.drawInteraction()
@@ -32,7 +61,7 @@ class PasteTool(val game: GameView, val sketch: Sketch) :
         val gameX = gridManager.xOffset
         val gameY = gridManager.yOffset
 
-        sketch.cells.withIndex().forEach { (x, yArray) ->
+        blueprint.cells.withIndex().forEach { (x, yArray) ->
             yArray.forEachIndexed { y, isCell ->
                 if (isCell)
                     drawManager.drawCell((baseX + x) * step - gameX, (baseY + y) * step - gameY)
@@ -47,12 +76,12 @@ class PasteTool(val game: GameView, val sketch: Sketch) :
 
     override fun addContextItems(items: LinkedList<ContextToolsAdapter.ContextTool>) {
         items.add(ContextToolsAdapter.ContextTool(R.drawable.check) {
-            applySketch()
+            applyBlueprint()
             game.interactionManager.registeredInteraction = null
             Toast.makeText(gameView.context, "Applied Blueprint", Toast.LENGTH_SHORT).show()
         })
 
-        items.add(ContextToolsAdapter.ContextTool(R.drawable.external_link) {
+        items.add(ContextToolsAdapter.ContextTool(R.drawable.rotate_cw) {
             rotate()
         })
 
@@ -60,33 +89,8 @@ class PasteTool(val game: GameView, val sketch: Sketch) :
 
         allowResize = false
 
-        val gridManager = game.gridManager
-
-        val canvas = game.canvas
-
-        val h = sketch.h
-        val w = sketch.w
-
-        var step = gridManager.step
-
-        val gameWidth = canvas.width / step
-
-        if (gameWidth < w) {
-            gridManager.step = (canvas.width / w).toFloat()
-        }
-        val gameHeight = canvas.height / gridManager.step
-
-        if (gameHeight < h) {
-            gridManager.step = (canvas.height / h).toFloat()
-        }
-
-        step = gridManager.step
-
-        val startX = (gridManager.xOffset / step).roundToInt()
-        val startY = (gridManager.yOffset / step).roundToInt()
 
 
-        toolRect = Rect(startX, startY, startX + w, startY + h).toRectF()
     }
 
     private fun rotate() {
@@ -102,33 +106,35 @@ class PasteTool(val game: GameView, val sketch: Sketch) :
         }
         toolRect = newToolRect
 
-        sketch.cells
+        blueprint.cells
+        val width = blueprint.width
+
 
         val newCells =
-            Array<Array<Boolean>>(sketch.h) { Array<Boolean>(sketch.w) { false } }
+            Array<Array<Boolean>>(blueprint.height) { Array<Boolean>(blueprint.width) { false } }
 
-        sketch.cells.forEachIndexed { x, xRow ->
+        blueprint.cells.forEachIndexed { x, xRow ->
 
             xRow.forEachIndexed { y, isAlive ->
                 try {
 
-                    newCells[y][x] = isAlive
+                    newCells[y][width-1-x] = isAlive
                 } catch (e: Exception) {
 
                 }
             }
         }
-        sketch.cells = newCells
+        blueprint.cells = newCells
 
     }
 
-    private fun applySketch() {
+    fun applyBlueprint() {
         val baseX = toolRect!!.left.toInt()
         val baseY = toolRect!!.top.toInt()
 
         val actorManager = game.actorManager
 
-        sketch.cells.forEachIndexed { x, yRow ->
+        blueprint.cells.forEachIndexed { x, yRow ->
             yRow.forEachIndexed { y, isCell ->
                 actorManager.setCell(baseX + x, baseY + y, !isCell)
             }

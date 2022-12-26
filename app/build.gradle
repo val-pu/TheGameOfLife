@@ -1,7 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-//    id 'com.google.android.gms.oss-licenses-plugin'
+    id 'com.google.android.gms.oss-licenses-plugin'
 }
 
 android {
@@ -16,8 +16,8 @@ android {
         applicationId "leko.valmx.thegameoflife"
         minSdk 23
         targetSdk 33
-        versionCode 11
-        versionName "0.11"
+        versionCode 12
+        versionName "0.12"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -58,6 +58,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
 
-//    classpath("com.google.android.gms:oss-licenses-plugin:0.10.5")
+
 
 }

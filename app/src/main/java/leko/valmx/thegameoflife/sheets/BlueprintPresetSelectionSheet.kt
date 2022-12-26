@@ -85,7 +85,7 @@ class BlueprintPresetSelectionSheet(
 
                 val initPasteTool = {
                     gameView.interactionManager.registeredInteraction =
-                        PasteTool(gameView, Sketch(it.cells))
+                        PasteTool(gameView, it)
 
                 }
 

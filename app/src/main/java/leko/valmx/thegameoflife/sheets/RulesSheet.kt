@@ -24,13 +24,12 @@ class RulesSheet(val gameView: GameView) : Sheet(),
             GameRuleHelper(ctx).saveRule((rulesRecycler.adapter as RuleSheetAdapter).ruleSet)
             gameView.actorManager.applyRuleSet()
         }
-
+        title(R.string.rules)
         this.show()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

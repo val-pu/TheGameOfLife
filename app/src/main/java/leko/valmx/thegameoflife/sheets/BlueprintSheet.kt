@@ -61,7 +61,7 @@ class BlueprintSheet(context: Context, val gameView: GameView) : Sheet(),
     }
 
     override fun onSketchSelected(sketch: Sketch) {
-        gameView.interactionManager.registeredInteraction = PasteTool(gameView, sketch)
+//        gameView.interactionManager.registeredInteraction = PasteTool(gameView, sketch)
         dismiss()
     }
 }

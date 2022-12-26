@@ -35,9 +35,9 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
 
     abstract class Interactable {
 
-        lateinit var toolsRecycler: RecyclerView
+        var toolsRecycler: RecyclerView? = null
 
-        fun isToolsVisible() = toolsRecycler.isVisible
+        fun isToolsVisible() = (toolsRecycler != null) && toolsRecycler!!.isVisible
 
         abstract fun onInteraction(motionEvent: MotionEvent, dereg: () -> Unit)
 
@@ -56,7 +56,7 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
         open fun addContextItems(items: LinkedList<ContextToolsAdapter.ContextTool>) {}
 
         fun showTools(show: Boolean) {
-            toolsRecycler.visibility = if (show) VISIBLE else GONE
+            toolsRecycler?.visibility = if (show) VISIBLE else GONE
         }
     }
 
@@ -424,8 +424,8 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
 
 
                 if (sqrt(xVelocity * xVelocity + yVelocity * yVelocity) > moveVelocityCutoff) {
-                    gridManager.xOffset += ((xVelocity / dt * (1 - (counter / animLength.toFloat()) * .8F) * ((animLength - counter).absoluteValue / (animLength*1.3F))))
-                    gridManager.yOffset += ((yVelocity / dt * (1 - (counter / animLength.toFloat()) * .8F) * ((animLength - counter).absoluteValue / (animLength*1.3F))))
+                    gridManager.xOffset += ((xVelocity / dt * (1 - (counter / animLength.toFloat()) * .8F) * ((animLength - counter).absoluteValue / (animLength * 1.3F))))
+                    gridManager.yOffset += ((yVelocity / dt * (1 - (counter / animLength.toFloat()) * .8F) * ((animLength - counter).absoluteValue / (animLength * 1.3F))))
                 }
 
 //                if (abs(zoomVelocity - 1) > zoomVelocityCutoff) {
@@ -439,7 +439,10 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
             }
 
             override fun onAnimationStart() {
-                animLength = min((300L + 100* ln(sqrt(xVelocity*xVelocity+yVelocity*yVelocity))).toLong(),700L)
+                animLength = min(
+                    (300L + 100 * ln(sqrt(xVelocity * xVelocity + yVelocity * yVelocity))).toLong(),
+                    700L
+                )
             }
         })
     }

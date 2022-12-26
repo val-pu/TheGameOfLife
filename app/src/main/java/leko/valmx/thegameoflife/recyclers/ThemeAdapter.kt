@@ -42,7 +42,7 @@ class ThemeAdapter(val game: GameView, val mainActivity: MainActivity) :
                 res.getColor(R.color.tool_stroke_1),
             )
         )
-        themes.add(
+/*        themes.add(
             ThemeBundle(
                 res.getColor(R.color.back_2),
                 res.getColor(R.color.cell_2),
@@ -52,7 +52,7 @@ class ThemeAdapter(val game: GameView, val mainActivity: MainActivity) :
                 res.getColor(R.color.tool_1),
                 res.getColor(R.color.tool_stroke_1),
             )
-        )
+        )*/
         themes.add(
             ThemeBundle(
                 res.getColor(R.color.back_3),
@@ -64,7 +64,7 @@ class ThemeAdapter(val game: GameView, val mainActivity: MainActivity) :
                 res.getColor(R.color.tool_stroke_3),
             )
         )
-        themes.add(
+/*        themes.add(
             ThemeBundle(
                 res.getColor(R.color.back_4),
                 res.getColor(R.color.cell_4),
@@ -74,7 +74,7 @@ class ThemeAdapter(val game: GameView, val mainActivity: MainActivity) :
                 res.getColor(R.color.tool_1),
                 res.getColor(R.color.tool_stroke_1),
             )
-        )
+        )*/
     }
 
 
