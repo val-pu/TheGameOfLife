@@ -3,6 +3,7 @@ package leko.valmx.thegameoflife.sheets
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.maxkeppeler.sheets.core.IconButton
 import com.maxkeppeler.sheets.core.Sheet
@@ -32,6 +33,9 @@ class RulePresetSelectionSheet(context: Context, val gameView: GameView, val rul
             )
         }
 
+
+        displayPositiveButton(false)
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,7 +46,7 @@ class RulePresetSelectionSheet(context: Context, val gameView: GameView, val rul
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        presets_recycler.layoutManager = LinearLayoutManager(context)
+        presets_recycler.layoutManager = GridLayoutManager(context,2)
         presets_recycler.adapter = RulePresetPickerAdapter(requireContext(), ruleSelectedListener) {
             dismiss()
         }

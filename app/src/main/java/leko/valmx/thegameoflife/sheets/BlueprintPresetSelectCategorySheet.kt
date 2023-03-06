@@ -24,6 +24,10 @@ class BlueprintPresetSelectCategorySheet(context: Context, val gameView: GameVie
         displayPositiveButton(false)
         style(SheetStyle.DIALOG)
         title("Select a category")
+
+        onNegative("BACK") {
+            MoreOptionsSheet(requireContext(),gameView)
+        }
         
         this.show()
     }

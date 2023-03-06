@@ -7,6 +7,7 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.maxkeppeler.sheets.core.Sheet
 import com.maxkeppeler.sheets.core.SheetStyle
+import com.maxkeppeler.sheets.option.OptionSheet
 import kotlinx.android.synthetic.main.sheet_rules.*
 import leko.valmx.thegameoflife.R
 import leko.valmx.thegameoflife.game.GameView
@@ -23,6 +24,10 @@ class RulesSheet(val gameView: GameView) : Sheet(),
         positiveListener = {
             GameRuleHelper(ctx).saveRule((rulesRecycler.adapter as RuleSheetAdapter).ruleSet)
             gameView.actorManager.applyRuleSet()
+        }
+
+        onNegative("BACK") {
+            MoreOptionsSheet(requireContext(),gameView)
         }
         title(R.string.rules)
         this.show()
@@ -56,7 +61,6 @@ class RulesSheet(val gameView: GameView) : Sheet(),
         rulesRecycler.adapter = RuleSheetAdapter(
             requireContext(), rule
         )
-//        ruleinteger.text = "RuleInt: ${rule.getRuleInt()}"
     }
 
     override fun onRuleSelected(rule: GameRuleHelper.RuleSet) {

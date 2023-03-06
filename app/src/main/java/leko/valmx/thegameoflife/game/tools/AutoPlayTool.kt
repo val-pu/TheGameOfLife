@@ -12,14 +12,14 @@ class AutoPlayTool(val game: GameView) : InteractionManager.Interactable(), Runn
 
     val handler = Handler()
 
-    var deltaT = 500L
+    var deltaT = 800L
         set(value) {
-            if (value < 20) return
+            if (value < 0) return
             if (value > 1500) return
             game.actorManager.aLength = deltaT / 4
 
             if (value < 200)
-                game.actorManager.aLength = 0
+                game.actorManager.aLength = 100
 
 
             field = value
@@ -55,7 +55,7 @@ class AutoPlayTool(val game: GameView) : InteractionManager.Interactable(), Runn
 
     override fun run() {
         if (!runMe) return
-        game.actorManager.doCycle()
+        game.javaActorManager.calculateNextGenAsync()
         handler.postDelayed(this, deltaT)
     }
 }

@@ -16,8 +16,8 @@ android {
         applicationId "leko.valmx.thegameoflife"
         minSdk 23
         targetSdk 33
-        versionCode 12
-        versionName "0.12"
+        versionCode 16
+        versionName "0.16"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -43,21 +43,19 @@ android {
 dependencies {
     implementation("com.google.android.gms:play-services-oss-licenses:17.0.0")
     implementation 'androidx.core:core-ktx:1.9.0'
-    implementation 'androidx.appcompat:appcompat:1.5.1'
-    implementation 'com.google.android.material:material:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.6.0'
+    implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
     implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
     implementation 'com.ramotion.fluidslider:fluid-slider:0.3.1'
     testImplementation 'junit:junit:4.13.2'
-    testImplementation 'io.github.robertograham:rle-parser:1.0.1'
+
     implementation 'com.maxkeppeler.sheets:core:2.3.0'
     implementation 'com.maxkeppeler.sheets:option:2.3.0'
     implementation 'com.maxkeppeler.sheets:input:2.3.0'
     implementation 'com.maxkeppeler.sheets:info:2.3.0'
+
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
-
-
-
 }

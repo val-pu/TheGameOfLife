@@ -3,8 +3,10 @@ package leko.valmx.thegameoflife.game
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
-import kotlin.math.ceil
-import kotlin.math.floor
+import android.util.Log
+import java.lang.Math.pow
+import kotlin.experimental.and
+import kotlin.math.pow
 
 class DrawManager(val gameView: GameView) {
 
@@ -28,71 +30,35 @@ class DrawManager(val gameView: GameView) {
 
         val canvas = gameView.canvas
         val paintManager = gameView.paintManager
-        val actorManager = gameView.actorManager
         val gridManager = gameView.gridManager
+        val uiPaint = paintManager.uiPaint
 
-        val actorPaint = paintManager.cellPaint
-
-        canvas.drawPaint(paintManager.bgPaint)
-//        drawGrid()
-
-
+        val actorManager = gameView.javaActorManager
         val cells = actorManager.cells
 
-        val step = gridManager.step
+        canvas.drawPaint(paintManager.bgPaint)
 
-        val startVisibleX = floor(gridManager.xOffset / step).toInt()
-        val startVisibleY = floor(gridManager.yOffset / step).toInt()
-
-        val endVisibleX = ceil((canvas.width / step + startVisibleX).toDouble()).toInt()
-        val endVisibleY = ceil((canvas.height / step + startVisibleY).toDouble()).toInt()
-
-
-
-        cells.values.forEach { values ->
-
-            values!!.values.forEach { cell ->
-                if (cell!!.x !in startVisibleX..endVisibleX) return@forEach
-                if (cell.y !in startVisibleY..endVisibleY) return@forEach
-                val cellRect = gridManager.getCellRect(cell.x, cell.y)
-
-
-
-                drawCell(cellRect, paintManager.cellPaint)
-                /*    if (!lowDetail)
-
-                        drawConnectedPieces(cell)
-                */
-                val actorManager1 = gameView.actorManager
-                val paintManager1 = gameView.paintManager
-                paintManager.bgPaint.textSize = gameView.gridManager.step
-                /*gameView.canvas.drawText(
-                    actorManager.getNeighboursOfCell(cell).toString(),
+        cells.forEachIndexed { x, row ->
+            row.forEachIndexed { y, cell ->
+                /*val cellRect = gridManager.getCellRect(x, y)
+                uiPaint.textSize = cellRect.width()
+                canvas.drawText(
+                    cell.and(
+                        JavaActorManager.CURRENT_GEN_NEIGHBOURS_BITMASK).div(2.0.pow(5.0)).toInt().toString()
+                    .toString(),
                     cellRect.left,
-                    cellRect.top + gameView.gridManager.step,
-                    Paint().apply {
-                        color = RED
-                        textSize = gameView.gridManager.step
-                    })
+                    cellRect.top,
+                    uiPaint
+                )*/
+                if (actorManager.isCellAlive(x, y)) {
+                    drawCell(gridManager.getCellRect(x, y-1), paintManager.cellPaint)
+                }
 
-                actorManager.getDeadNeighboursOfCell(cell.x, cell.y).forEach { c ->
-                    val cellR2 = gridManager.getCellRect(c)
-                    gameView.canvas.drawText(
-                        actorManager.getNeighboursOfCell(c).toString(),
-                        cellR2.left,
-                        cellR2.top + gameView.gridManager.step,
-                        Paint().apply {
-                            color = BLUE
-                            textSize = gameView.gridManager.step
-                        })
-                }*/
             }
-        }
-        drawCells()
-//        drawBoundsTool()
-        drawTool()
-        drawCells()
 
+        }
+
+// TODO!        drawTool()
 
 
     }
@@ -164,22 +130,7 @@ class DrawManager(val gameView: GameView) {
     }
 
     fun drawCell(rect: RectF, paint: Paint) {
-        val gridManager = gameView.gridManager
-
-        if (lowDetail) {
-            gameView.canvas.drawRect(rect, paint)
-
-
-        } else {
-//            gameView.canvas.drawRoundRect(rect, gridManager.cellRadius, gridManager.cellRadius, paint)
-            contents.addRoundRect(
-                rect,
-                gridManager.cellRadius,
-                gridManager.cellRadius,
-                Path.Direction.CW
-            )
-        }
-
+        gameView.canvas.drawRect(rect, paint)
     }
 
 

@@ -12,7 +12,7 @@ class AnimationManager(val gameView: GameView) : Runnable {
 
     var running = false
 
-    var freezeLength = 1000 / 230F
+    var freezeLength = 1000 / 240F
 
     val animations = LinkedList<Animation>()
 

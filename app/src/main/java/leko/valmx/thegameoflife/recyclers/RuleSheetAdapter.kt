@@ -19,7 +19,7 @@ class RuleSheetAdapter(ctx: Context, val ruleSet: GameRuleHelper.RuleSet) : Adap
             itemView.tweak_title.text = "${position + 1} Neighbours"
 
             itemView.check_survive.isChecked = rules.willSurvive(position+1)
-            itemView.check_born.isChecked = rules.isBorn(position+1)
+            itemView.check_born.isChecked = rules.willBeBorn(position+1)
 
 
 

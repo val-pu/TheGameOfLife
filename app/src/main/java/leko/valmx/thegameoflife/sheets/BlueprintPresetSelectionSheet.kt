@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.navigation.navOptions
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.maxkeppeler.sheets.core.IconButton
 import com.maxkeppeler.sheets.core.Sheet
@@ -76,7 +77,7 @@ class BlueprintPresetSelectionSheet(
         Arrays.sort(data)
         Log.d("Loaded assets", data.contentToString())
 
-        presets_recycler.layoutManager = LinearLayoutManager(context)
+        presets_recycler.layoutManager = GridLayoutManager(context,2)
         presets_recycler.adapter =
             BlueprintPresetRecycler(data, category, {
 

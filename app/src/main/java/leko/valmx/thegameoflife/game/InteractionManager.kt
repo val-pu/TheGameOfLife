@@ -66,6 +66,7 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
                 val toolRecycler = gameView.mainActivity.context_tools_recycler
                 val list = LinkedList<ContextToolsAdapter.ContextTool>()
                 newTool.toolsRecycler = toolRecycler
+                newTool.showTools(true)
                 newTool.addContextItems(list)
 
 

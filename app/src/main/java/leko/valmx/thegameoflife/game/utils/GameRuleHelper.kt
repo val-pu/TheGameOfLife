@@ -114,7 +114,7 @@ class GameRuleHelper(val ctx: Context) {
 
         }
 
-        fun isBorn(neighbours: Int): Boolean {
+        fun willBeBorn(neighbours: Int): Boolean {
             if (neighbours == 0) return false
 
 

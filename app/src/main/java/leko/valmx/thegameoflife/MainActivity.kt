@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
         recycler_themes.adapter = ThemeAdapter(game, this)
 
         nextStep.setOnClickListener {
-            game.actorManager.doCycle()
+            game.javaActorManager.calculateNextGenAsync()
         }
 
         nextStep.post {
@@ -91,20 +91,25 @@ class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
             val presetCategories = getPresetCategories()
 
             val randomCategory = presetCategories[random.nextInt(presetCategories.size)]
+            try {
 
-            val patternNamesOfCategory =
-                AssetUtils.listAssetFiles("patterns/${randomCategory.path}/", this)
+                val patternNamesOfCategory =
+                    AssetUtils.listAssetFiles("patterns/${randomCategory.path}/", this)
 
-            val randomPattern = patternNamesOfCategory[random.nextInt(patternNamesOfCategory.size)]
-            PasteTool(
-                game,
-                Blueprint(
-                    AssetUtils.loadAssetString(
-                        this,
-                        "patterns/${randomCategory.path}/${randomPattern}"
-                    )!!
-                )
-            ).applyBlueprint()
+                val randomPattern =
+                    patternNamesOfCategory[random.nextInt(patternNamesOfCategory.size)]
+                PasteTool(
+                    game,
+                    Blueprint(
+                        AssetUtils.loadAssetString(
+                            this,
+                            "patterns/${randomCategory.path}/${randomPattern}"
+                        )!!
+                    )
+                ).applyBlueprint()
+            } catch (e: Exception) {
+                Log.e("Well","Almosz crashed")
+            }
 
         }
 
@@ -144,7 +149,7 @@ class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
         }
 
         blueprints_btn.setOnClickListener {
-            BlueprintPresetSelectCategorySheet(this,game)
+            BlueprintPresetSelectCategorySheet(this, game)
         }
 
     }
@@ -172,6 +177,14 @@ class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
     override fun onPause() {
         super.onPause()
         game.animationManager.running = false
+    }
+
+    override fun onBackPressed() {
+        if (game.interactionManager.registeredInteraction != null) {
+            game.interactionManager.registeredInteraction = null
+            return
+        }
+        super.onBackPressed()
     }
 
 
