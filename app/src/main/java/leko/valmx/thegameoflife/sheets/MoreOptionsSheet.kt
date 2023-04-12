@@ -6,7 +6,6 @@ import android.content.Intent
 import android.net.Uri
 import androidx.core.content.ContextCompat
 import com.maxkeppeler.sheets.core.SheetStyle
-import com.maxkeppeler.sheets.option.Info
 import com.maxkeppeler.sheets.option.Option
 import com.maxkeppeler.sheets.option.OptionSheet
 import leko.valmx.thegameoflife.R
@@ -38,7 +37,7 @@ class MoreOptionsSheet(context: Context, gameView: GameView) {
                 if (index == 2) startActivity(Intent(context, SettingActivity::class.java))
                 if (index == 3) gameView.interactionManager.registeredInteraction =
                     SelectionTool(gameView)
-                if (index == 4) gameView.actorManager.cells = HashMap()
+                if (index == 4) gameView.javaActorManager.clearCells()
                 if (index == 5) {
 
                     val appPackageName: String =

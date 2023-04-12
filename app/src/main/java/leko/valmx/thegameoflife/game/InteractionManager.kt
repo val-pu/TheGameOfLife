@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import leko.valmx.thegameoflife.game.animations.Animation
 import leko.valmx.thegameoflife.game.tools.SelectionTool
 import leko.valmx.thegameoflife.recyclers.ContextToolsAdapter
-import java.util.LinkedList
+import java.util.*
 import kotlin.math.*
 
 class InteractionManager(val gameView: GameView) : OnTouchListener {
@@ -358,14 +358,10 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
 
             ACTION_UP -> {
 
-
-                // Adding move stuff
-
-                val dx = lastX - event.x
-                val dy = lastY - event.y
-
-                val vx = lastDx / dt
-                val vy = lastDy / dt
+                /*
+                 * When the field is moved < 100 units and in edit-mode the state of the current
+                 * cell is swapped.
+                 */
 
                 if (!editMode) return true
 
@@ -375,7 +371,7 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
 
 
                 val gridManager = gameView.gridManager
-                val actorManager = gameView.actorManager
+                val actorManager = gameView.javaActorManager
 
                 val step = gridManager.step
 
@@ -383,11 +379,7 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
                 val y = ((event.y + gridManager.yOffset) / step - 0.5).roundToInt()
 
 
-                val cell = actorManager.getCell(x, y)
-
-
-                if (cell != null) actorManager.kill(cell)
-                else actorManager.resurrect(ActorManager.Cell(x, y))
+                actorManager.switchCurrentState(x, y)
 
                 zoomMode = false
 

@@ -2,7 +2,6 @@ package leko.valmx.thegameoflife
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.res.AssetManager
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.Log
@@ -20,19 +19,18 @@ import com.maxkeppeler.sheets.option.OptionSheet
 import kotlinx.android.synthetic.main.activity_main.*
 import leko.valmx.thegameoflife.game.GameView
 import leko.valmx.thegameoflife.game.InteractionManager
+import leko.valmx.thegameoflife.game.JavaActorManager
 import leko.valmx.thegameoflife.game.PaintManager
 import leko.valmx.thegameoflife.game.tools.AutoPlayTool
 import leko.valmx.thegameoflife.game.tools.EditTool
 import leko.valmx.thegameoflife.game.tools.PasteTool
-import leko.valmx.thegameoflife.game.tools.copypasta.Sketch
 import leko.valmx.thegameoflife.recyclers.ThemeAdapter
 import leko.valmx.thegameoflife.sheets.BlueprintPresetSelectCategorySheet
 import leko.valmx.thegameoflife.sheets.MoreOptionsSheet
 import leko.valmx.thegameoflife.utils.AssetUtils
 import leko.valmx.thegameoflife.utils.AssetUtils.getPresetCategories
 import leko.valmx.thegameoflife.utils.blueprints.Blueprint
-import java.util.LinkedList
-import kotlin.random.Random
+import java.util.*
 
 class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
     PaintManager.ThemeUpdateListener {
@@ -81,10 +79,6 @@ class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
         }
 
         nextStep.post {
-            game.actorManager.doCycle()
-            game.actorManager.doCycle()
-            game.actorManager.doCycle()
-            game.actorManager.doCycle()
 
             val random = java.util.Random()
 
@@ -92,6 +86,7 @@ class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
 
             val randomCategory = presetCategories[random.nextInt(presetCategories.size)]
             try {
+                val gridManager = game.gridManager
 
                 val patternNamesOfCategory =
                     AssetUtils.listAssetFiles("patterns/${randomCategory.path}/", this)
@@ -106,7 +101,12 @@ class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
                             "patterns/${randomCategory.path}/${randomPattern}"
                         )!!
                     )
-                ).applyBlueprint()
+                ).apply {
+                    val shapeWidth = toolRect!!.width()
+                    val centerX = JavaActorManager.mapSizeX*gridManager.step/2
+                    val centerY = JavaActorManager.mapSizeY*gridManager.step/2
+                    toolRect!!.offset(centerX-shapeWidth/2F,centerY-shapeWidth/2F)
+                }.applyBlueprint()
             } catch (e: Exception) {
                 Log.e("Well","Almosz crashed")
             }
@@ -267,7 +267,8 @@ class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
 
                 when (index) {
                     0 -> {
-                        gameView.actorManager.randomize()
+//                        gameView.actorManager.randomize()
+                        TODO()
                     }
                     1 -> {
                         BlueprintPresetSelectCategorySheet(

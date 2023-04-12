@@ -42,4 +42,6 @@
     <color name="cell_5">#FEFEFE</color>
     <color name="back_5">#847FFE</color>
     <color name="grid_5">#FEAA15</color>
+    <color name="back_secondary_1">#59686868</color>
+    <color name="back_secondary_3">#536DFE</color>
 </resources>

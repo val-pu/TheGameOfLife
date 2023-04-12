@@ -11,13 +11,13 @@ import com.maxkeppeler.sheets.option.OptionSheet
 import leko.valmx.thegameoflife.R
 import leko.valmx.thegameoflife.game.GameView
 import leko.valmx.thegameoflife.game.InteractionManager
+import leko.valmx.thegameoflife.game.JavaActorManager
 import leko.valmx.thegameoflife.game.tools.copypasta.Sketch
 import leko.valmx.thegameoflife.recyclers.ContextToolsAdapter
 import leko.valmx.thegameoflife.sheets.BlueprintSaveSheet
 import java.util.*
 import kotlin.math.abs
 import kotlin.math.roundToInt
-import kotlin.random.Random
 
 open class SelectionTool(val gameView: GameView) : InteractionManager.Interactable() {
 
@@ -54,8 +54,7 @@ open class SelectionTool(val gameView: GameView) : InteractionManager.Interactab
     override fun onInteraction(motionEvent: MotionEvent, dereg: () -> Unit) {
 
         val gridManager = gameView.gridManager
-
-
+        val actorManager = gameView.javaActorManager
         val x =
             (gridManager.xOffset + motionEvent.x) / gridManager.step
         val y =
@@ -63,6 +62,9 @@ open class SelectionTool(val gameView: GameView) : InteractionManager.Interactab
 
         val dx = x - lastX
         val dy = y - lastY
+
+        if(x<0 || x>=JavaActorManager.mapSizeX) return
+        if(y<0 || y>=JavaActorManager.mapSizeY) return
 
 
 
@@ -120,22 +122,13 @@ open class SelectionTool(val gameView: GameView) : InteractionManager.Interactab
 
 
     override fun drawInteraction() {
-
         if (toolRect == null) return
-
-        val paintManager = gameView.paintManager
-        val c = gameView.canvas
-        gameView.gridManager
-
         drawBoundsTool()
     }
 
     override fun isNonMovementInteraction(event: MotionEvent): Boolean {
 
         val gridManager = gameView.gridManager
-
-        val normedX = gridManager.xOffset / gridManager.step
-        val normedY = gridManager.yOffset / gridManager.step
 
         val x = (gridManager.xOffset + event.x) / gridManager.step
         val y = (gridManager.yOffset + event.y) / gridManager.step
@@ -211,7 +204,7 @@ open class SelectionTool(val gameView: GameView) : InteractionManager.Interactab
 
     private fun getSketchForSelection(): Sketch {
 
-        val actorManager = gameView.actorManager
+        val actorManager = gameView.javaActorManager
 
         val startX = toolRect!!.left.toInt()
         val endX = toolRect!!.right.toInt()
@@ -282,7 +275,8 @@ open class SelectionTool(val gameView: GameView) : InteractionManager.Interactab
         val gridManager = gameView.gridManager
 
         val checkRect =
-            this.toolRect!!.toRect().apply { offset(gridManager.xOffset.toInt(), gridManager.yOffset.toInt()) }
+            this.toolRect!!.toRect()
+                .apply { offset(gridManager.xOffset.toInt(), gridManager.yOffset.toInt()) }
 
         return checkRect.contains(event.x.toInt(), event.y.toInt())
 
@@ -332,8 +326,7 @@ open class SelectionTool(val gameView: GameView) : InteractionManager.Interactab
         for (x in toolRect!!.left.toInt() until toolRect!!.right.toInt())
             for (y in toolRect!!.top.toInt() until toolRect!!.bottom.toInt()) {
 
-                gameView.actorManager.setCell(x, y, Random.nextInt(100) >= fillPercentage)
-
+                gameView.javaActorManager.switchCurrentState(x, y)
             }
 
     }
@@ -343,7 +336,7 @@ open class SelectionTool(val gameView: GameView) : InteractionManager.Interactab
         for (x in toolRect!!.left.toInt() until toolRect!!.right.toInt())
             for (y in toolRect!!.top.toInt() until toolRect!!.bottom.toInt()) {
 
-                gameView.actorManager.setCell(x, y)
+                gameView.javaActorManager.setCurrentlyAlive(x, y)
 
             }
 
@@ -373,9 +366,7 @@ open class SelectionTool(val gameView: GameView) : InteractionManager.Interactab
     private fun deleteSelection() {
         for (x in toolRect!!.left.toInt() until toolRect!!.right.toInt())
             for (y in toolRect!!.top.toInt() until toolRect!!.bottom.toInt()) {
-
-                gameView.actorManager.setCell(x, y, true)
-
+                gameView.javaActorManager.setCurrentlyDead(x, y)
             }
     }
 

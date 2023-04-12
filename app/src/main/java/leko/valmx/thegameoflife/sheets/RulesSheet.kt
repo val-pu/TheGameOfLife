@@ -1,13 +1,11 @@
 package leko.valmx.thegameoflife.sheets
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.maxkeppeler.sheets.core.Sheet
 import com.maxkeppeler.sheets.core.SheetStyle
-import com.maxkeppeler.sheets.option.OptionSheet
 import kotlinx.android.synthetic.main.sheet_rules.*
 import leko.valmx.thegameoflife.R
 import leko.valmx.thegameoflife.game.GameView
@@ -22,12 +20,13 @@ class RulesSheet(val gameView: GameView) : Sheet(),
         style(SheetStyle.DIALOG)
         positiveText = "Apply"
         positiveListener = {
-            GameRuleHelper(ctx).saveRule((rulesRecycler.adapter as RuleSheetAdapter).ruleSet)
-            gameView.actorManager.applyRuleSet()
+            val resultRuleSet = (rulesRecycler.adapter as RuleSheetAdapter).ruleSet
+            GameRuleHelper(ctx).saveRule(resultRuleSet)
+            gameView.javaActorManager.ruleSet = resultRuleSet
         }
 
         onNegative("BACK") {
-            MoreOptionsSheet(requireContext(),gameView)
+            MoreOptionsSheet(requireContext(), gameView)
         }
         title(R.string.rules)
         this.show()

@@ -10,18 +10,12 @@ import java.util.*
 
 class AutoPlayTool(val game: GameView) : InteractionManager.Interactable(), Runnable {
 
-    val handler = Handler()
+    private val handler = Handler()
 
     var deltaT = 800L
         set(value) {
             if (value < 0) return
             if (value > 1500) return
-            game.actorManager.aLength = deltaT / 4
-
-            if (value < 200)
-                game.actorManager.aLength = 100
-
-
             field = value
         }
     var runMe = true

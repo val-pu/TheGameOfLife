@@ -4,9 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.navigation.navOptions
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.maxkeppeler.sheets.core.IconButton
 import com.maxkeppeler.sheets.core.Sheet
 import com.maxkeppeler.sheets.core.SheetStyle
@@ -15,14 +13,12 @@ import kotlinx.android.synthetic.main.sheet_predefined_selector.*
 import leko.valmx.thegameoflife.R
 import leko.valmx.thegameoflife.game.GameView
 import leko.valmx.thegameoflife.game.tools.PasteTool
-import leko.valmx.thegameoflife.game.tools.copypasta.Sketch
 import leko.valmx.thegameoflife.game.utils.GameRuleHelper
 import leko.valmx.thegameoflife.recyclers.BlueprintPresetRecycler
 import leko.valmx.thegameoflife.utils.AssetUtils
 import leko.valmx.thegameoflife.utils.PresetCategory
 import leko.valmx.thegameoflife.utils.blueprints.Blueprint
-import java.util.Arrays
-import java.util.LinkedList
+import java.util.*
 
 class BlueprintPresetSelectionSheet(
     private val gameView: GameView,
@@ -77,7 +73,7 @@ class BlueprintPresetSelectionSheet(
         Arrays.sort(data)
         Log.d("Loaded assets", data.contentToString())
 
-        presets_recycler.layoutManager = GridLayoutManager(context,2)
+        presets_recycler.layoutManager = GridLayoutManager(context, 2)
         presets_recycler.adapter =
             BlueprintPresetRecycler(data, category, {
 
@@ -97,7 +93,7 @@ class BlueprintPresetSelectionSheet(
                         content("Change the rule to ${it.rule}?")
                         onPositive("Yes") {
                             gameRuleHelper.saveRule(newRule)
-                            gameView.actorManager.ruleSet = newRule
+                            gameView.javaActorManager.ruleSet = newRule
                             initPasteTool()
                         }
 

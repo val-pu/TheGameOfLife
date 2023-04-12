@@ -3,10 +3,6 @@ package leko.valmx.thegameoflife.game
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
-import android.util.Log
-import java.lang.Math.pow
-import kotlin.experimental.and
-import kotlin.math.pow
 
 class DrawManager(val gameView: GameView) {
 
@@ -34,31 +30,24 @@ class DrawManager(val gameView: GameView) {
         val uiPaint = paintManager.uiPaint
 
         val actorManager = gameView.javaActorManager
-        val cells = actorManager.cells
+        val cells = actorManager.aliveCells
 
         canvas.drawPaint(paintManager.bgPaint)
+        val gameArenaRect = RectF(
+            0F,
+            0F,
+            gridManager.step * JavaActorManager.mapSizeX,
+            gridManager.step * JavaActorManager.mapSizeY
+        ).apply { inset(-gridManager.step, -gridManager.step) }
+        gameArenaRect.offset(-gridManager.xOffset, -gridManager.yOffset)
+        canvas.drawRoundRect(gameArenaRect, 10F, 10F, paintManager.uiPaint)
 
-        cells.forEachIndexed { x, row ->
-            row.forEachIndexed { y, cell ->
-                /*val cellRect = gridManager.getCellRect(x, y)
-                uiPaint.textSize = cellRect.width()
-                canvas.drawText(
-                    cell.and(
-                        JavaActorManager.CURRENT_GEN_NEIGHBOURS_BITMASK).div(2.0.pow(5.0)).toInt().toString()
-                    .toString(),
-                    cellRect.left,
-                    cellRect.top,
-                    uiPaint
-                )*/
-                if (actorManager.isCellAlive(x, y)) {
-                    drawCell(gridManager.getCellRect(x, y-1), paintManager.cellPaint)
-                }
-
-            }
+        cells.forEach { cell ->
+            drawCell(gridManager.getCellRect(cell.x, cell.y), paintManager.cellPaint)
 
         }
 
-// TODO!        drawTool()
+        drawTool()
 
 
     }
@@ -67,7 +56,7 @@ class DrawManager(val gameView: GameView) {
     var bypassCheckForAnimation = false
 
 
-    fun drawConnectedPieces(cell: ActorManager.Cell) {
+    /*fun drawConnectedPieces(cell: ActorManager.Cell) {
 
         val actorManager = gameView.actorManager
         val paintManager = gameView.paintManager
@@ -118,7 +107,7 @@ class DrawManager(val gameView: GameView) {
         }
 
 
-    }
+    }*/
 
     private fun drawCells() {
         gameView.canvas.drawPath(contents, gameView.paintManager.cellPaint)

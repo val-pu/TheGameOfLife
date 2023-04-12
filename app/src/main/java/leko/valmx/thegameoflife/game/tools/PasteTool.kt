@@ -14,37 +14,40 @@ import kotlin.math.roundToInt
 class PasteTool(val game: GameView, val blueprint: Blueprint) :
     SelectionTool(game) {
 
- init {
-     val gridManager = game.gridManager
+    init {
+        val gridManager = game.gridManager
 
-     val canvas = game.canvas
+        val canvas = game.canvas
 
-     val h = blueprint.height
-     val w = blueprint.width
+        val h = blueprint.height
+        val w = blueprint.width
 
-     var step = gridManager.step
+        var step = gridManager.step
 
-     val gameWidth = canvas.width / step
+        val gameWidth = canvas.width / step
 
-     if (gameWidth < w) {
-         gridManager.step = (canvas.width / w).toFloat()
-     }
-     val gameHeight = canvas.height / gridManager.step
+        if (gameWidth < w) {
+            gridManager.step = (canvas.width / w).toFloat()
+        }
+        val gameHeight = canvas.height / gridManager.step
 
-     if (gameHeight < h) {
-         gridManager.step = (canvas.height / h).toFloat()
-     }
+        if (gameHeight < h) {
+            gridManager.step = (canvas.height / h).toFloat()
+        }
 
-     step = gridManager.step
+        step = gridManager.step
 
-     val startX = (gridManager.xOffset / step).roundToInt()
-     val startY = (gridManager.yOffset / step).roundToInt()
+        val startX = (gridManager.xOffset / step).roundToInt()
+        val startY = (gridManager.yOffset / step).roundToInt()
 
 
-     toolRect = Rect(startX, startY, startX + w, startY + h).toRectF()
-     // Centering the rect
-     toolRect!!.offset(((canvas.width-w*step)/2)/step,((canvas.height-h*step)/2)/step)
- }
+        toolRect = Rect(startX, startY, startX + w, startY + h).toRectF()
+        // Centering the rect
+        toolRect!!.offset(
+            ((canvas.width - w * step) / 2) / step,
+            ((canvas.height - h * step) / 2) / step
+        )
+    }
 
     override fun drawInteraction() {
         super.drawInteraction()
@@ -90,7 +93,6 @@ class PasteTool(val game: GameView, val blueprint: Blueprint) :
         allowResize = false
 
 
-
     }
 
     private fun rotate() {
@@ -118,7 +120,7 @@ class PasteTool(val game: GameView, val blueprint: Blueprint) :
             xRow.forEachIndexed { y, isAlive ->
                 try {
 
-                    newCells[y][width-1-x] = isAlive
+                    newCells[y][width - 1 - x] = isAlive
                 } catch (e: Exception) {
 
                 }
@@ -132,11 +134,15 @@ class PasteTool(val game: GameView, val blueprint: Blueprint) :
         val baseX = toolRect!!.left.toInt()
         val baseY = toolRect!!.top.toInt()
 
-        val actorManager = game.actorManager
+        val actorManager = game.javaActorManager
 
         blueprint.cells.forEachIndexed { x, yRow ->
             yRow.forEachIndexed { y, isCell ->
-                actorManager.setCell(baseX + x, baseY + y, !isCell)
+                if (isCell) {
+                    actorManager.setCurrentlyAlive(baseX + x, baseY +y)
+                } else {
+                    actorManager.setCurrentlyDead(baseX + x, baseY + y)
+                }
             }
         }
     }
