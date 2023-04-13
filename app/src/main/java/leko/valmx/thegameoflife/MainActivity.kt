@@ -3,7 +3,6 @@ package leko.valmx.thegameoflife
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.util.Log
 import android.view.View
 import android.view.View.*
@@ -35,9 +34,7 @@ import java.util.*
 class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
     PaintManager.ThemeUpdateListener {
 
-    private var autoPlayRunning = false
     private var themeSelectingMode = false
-
 
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,7 +65,7 @@ class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
 
         game.mainActivity = this
 
-//        showStartPrompt(game)
+        showStartPrompt(game)
 
 
         recycler_themes.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
@@ -80,7 +77,7 @@ class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
 
         nextStep.post {
 
-            val random = java.util.Random()
+            val random = Random()
 
             val presetCategories = getPresetCategories()
 
@@ -103,12 +100,12 @@ class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
                     )
                 ).apply {
                     val shapeWidth = toolRect!!.width()
-                    val centerX = JavaActorManager.mapSizeX*gridManager.step/2
-                    val centerY = JavaActorManager.mapSizeY*gridManager.step/2
-                    toolRect!!.offset(centerX-shapeWidth/2F,centerY-shapeWidth/2F)
+                    val centerX = JavaActorManager.mapSizeX * gridManager.step / 2
+                    val centerY = JavaActorManager.mapSizeY * gridManager.step / 2
+                    toolRect!!.offset(centerX - shapeWidth / 2F, centerY - shapeWidth / 2F)
                 }.applyBlueprint()
             } catch (e: Exception) {
-                Log.e("Well","Almosz crashed")
+                Log.e("Well", "Almost crashed")
             }
 
         }
@@ -123,9 +120,9 @@ class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
 
             if (theme_selector.visibility == GONE) {
                 theme_selector.visibility = VISIBLE
-
-            } else
+            } else {
                 theme_selector.visibility = GONE
+            }
         }
 
         edit_btn.setOnClickListener {
@@ -155,7 +152,6 @@ class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
     }
 
     fun initContextTool(interactable: InteractionManager.Interactable?) {
-
         if (context_tools.visibility == VISIBLE) {
             context_tools.visibility = INVISIBLE
             tool_bar.visibility = VISIBLE
@@ -167,11 +163,10 @@ class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
             if (interactable != null)
                 context_tool_info.text = interactable.getName()
         }
-
     }
 
-    override fun onPostCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onPostCreate(savedInstanceState, persistentState)
+    fun loadStartScematic() {
+
     }
 
     override fun onPause() {
@@ -193,9 +188,6 @@ class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
         game.animationManager.running = true
         game.animationManager.run()
     }
-
-
-    var generations = 0
 
 
     val PREF_ID = "CGOL_VALGAMES"
