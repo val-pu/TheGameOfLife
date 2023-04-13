@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import leko.valmx.thegameoflife.game.animations.Animation
 import leko.valmx.thegameoflife.game.tools.SelectionTool
 import leko.valmx.thegameoflife.recyclers.ContextToolsAdapter
-import java.util.LinkedList
+import java.util.*
 import kotlin.math.*
 
 class InteractionManager(val gameView: GameView) : OnTouchListener {
@@ -35,9 +35,9 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
 
     abstract class Interactable {
 
-        lateinit var toolsRecycler: RecyclerView
+        var toolsRecycler: RecyclerView? = null
 
-        fun isToolsVisible() = toolsRecycler.isVisible
+        fun isToolsVisible() = (toolsRecycler != null) && toolsRecycler!!.isVisible
 
         abstract fun onInteraction(motionEvent: MotionEvent, dereg: () -> Unit)
 
@@ -56,16 +56,17 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
         open fun addContextItems(items: LinkedList<ContextToolsAdapter.ContextTool>) {}
 
         fun showTools(show: Boolean) {
-            toolsRecycler.visibility = if (show) VISIBLE else GONE
+            toolsRecycler?.visibility = if (show) VISIBLE else GONE
         }
     }
 
     var registeredInteraction: Interactable? = null
         set(newTool) {
             if (newTool != null) {
-                val toolRecycler = gameView.mainActivity.context_tools_recycler
+                val toolRecycler = gameView.mainActivity.recycler_contextTools
                 val list = LinkedList<ContextToolsAdapter.ContextTool>()
                 newTool.toolsRecycler = toolRecycler
+                newTool.showTools(true)
                 newTool.addContextItems(list)
 
 
@@ -357,14 +358,10 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
 
             ACTION_UP -> {
 
-
-                // Adding move stuff
-
-                val dx = lastX - event.x
-                val dy = lastY - event.y
-
-                val vx = lastDx / dt
-                val vy = lastDy / dt
+                /*
+                 * When the field is moved < 100 units and in edit-mode the state of the current
+                 * cell is swapped.
+                 */
 
                 if (!editMode) return true
 
@@ -374,7 +371,7 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
 
 
                 val gridManager = gameView.gridManager
-                val actorManager = gameView.actorManager
+                val actorManager = gameView.javaActorManager
 
                 val step = gridManager.step
 
@@ -382,11 +379,7 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
                 val y = ((event.y + gridManager.yOffset) / step - 0.5).roundToInt()
 
 
-                val cell = actorManager.getCell(x, y)
-
-
-                if (cell != null) actorManager.kill(cell)
-                else actorManager.resurrect(ActorManager.Cell(x, y))
+                actorManager.switchCurrentState(x, y)
 
                 zoomMode = false
 
@@ -424,8 +417,8 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
 
 
                 if (sqrt(xVelocity * xVelocity + yVelocity * yVelocity) > moveVelocityCutoff) {
-                    gridManager.xOffset += ((xVelocity / dt * (1 - (counter / animLength.toFloat()) * .8F) * ((animLength - counter).absoluteValue / (animLength*1.3F))))
-                    gridManager.yOffset += ((yVelocity / dt * (1 - (counter / animLength.toFloat()) * .8F) * ((animLength - counter).absoluteValue / (animLength*1.3F))))
+                    gridManager.xOffset += ((xVelocity / dt * (1 - (counter / animLength.toFloat()) * .8F) * ((animLength - counter).absoluteValue / (animLength * 1.3F))))
+                    gridManager.yOffset += ((yVelocity / dt * (1 - (counter / animLength.toFloat()) * .8F) * ((animLength - counter).absoluteValue / (animLength * 1.3F))))
                 }
 
 //                if (abs(zoomVelocity - 1) > zoomVelocityCutoff) {
@@ -439,7 +432,10 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
             }
 
             override fun onAnimationStart() {
-                animLength = min((300L + 100* ln(sqrt(xVelocity*xVelocity+yVelocity*yVelocity))).toLong(),700L)
+                animLength = min(
+                    (300L + 100 * ln(sqrt(xVelocity * xVelocity + yVelocity * yVelocity))).toLong(),
+                    700L
+                )
             }
         })
     }

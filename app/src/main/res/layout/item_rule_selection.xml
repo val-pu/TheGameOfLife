@@ -7,13 +7,14 @@
 
     <TextView
         android:id="@+id/ruleName"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
         android:text="Rulename"
         android:textColor="@color/black"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="10dp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/imageView8"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -21,27 +22,20 @@
         android:id="@+id/imageView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/divider3"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/chevron_right" />
 
     <TextView
         android:id="@+id/rule_str"
+        android:layout_marginBottom="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="(Explosive)"
         android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/ruleName"
         app:layout_constraintTop_toBottomOf="@+id/ruleName" />
 
-    <View
-        android:id="@+id/divider3"
-        android:layout_width="match_parent"
-        android:layout_marginHorizontal="10dp"
-        android:layout_height="1dp"
-        android:background="?android:attr/listDivider"
-        android:layout_marginTop="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/rule_str"
-         />
 </androidx.constraintlayout.widget.ConstraintLayout>

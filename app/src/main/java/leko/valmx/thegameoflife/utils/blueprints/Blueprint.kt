@@ -24,7 +24,7 @@ class Blueprint(rleString: String) {
                 }
 
                 nextLine.startsWith("#N ") -> {
-                    name = nextLine.drop(3).replace(".rle","")
+                    name = nextLine.drop(3).replace(".rle", "")
                 }
 
 
@@ -41,7 +41,6 @@ class Blueprint(rleString: String) {
 
     var width: Int
     var height: Int
-
     var rule = "3/23"
 
     init {
@@ -55,7 +54,12 @@ class Blueprint(rleString: String) {
         if (params.size == 3) rule = params[2].removePrefix("r=")
     }
 
-    val cells = Array(width) { Array<Boolean>(height) { false } }
+    var cells = Array(width) { Array<Boolean>(height) { false } }
+        set(value) {
+            field = value
+            height = cells[0].size
+            width = cells.size
+        }
 
     init {
         var cellString = ""
@@ -68,17 +72,17 @@ class Blueprint(rleString: String) {
         var rowIndex = 0
         var lineIndex = 0
 
-        Log.i("RLE",rleString)
+        Log.i("RLE", rleString)
 
         var stop = false
 
         cellString.toCharArray().forEach { char ->
 
-            if(char == '!') {
+            if (char == '!') {
                 stop = true
             }
 
-            if(stop) return@forEach
+            if (stop) return@forEach
 
             if (!char.isDigit() && !arrayOf('o', 'b', '$').contains(char)) return@forEach
 

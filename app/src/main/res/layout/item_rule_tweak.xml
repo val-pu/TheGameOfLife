@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/quicksand"
             android:layout_weight="1"
-            android:padding="10dp"
+            android:paddingStart="10dp"
             android:text="X Neighbours"
             android:textColor="@color/black"
             android:textStyle="bold" />

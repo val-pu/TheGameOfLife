@@ -1,8 +1,6 @@
 package leko.valmx.thegameoflife.game
 
 import android.graphics.RectF
-import android.widget.Toast
-import kotlin.math.max
 
 /**
  * One of the more commonly used classes in the project
@@ -17,7 +15,17 @@ class GridManager(val gameView: GameView) {
 
     // Offset vars (How much is the screen away from the projects (0,0)) Used the enable moving & zooming
     var xOffset = 0F
+        set(value) {
+            if (value + gameView.width < 0) return
+            if (value - gameView.width > step * JavaActorManager.mapSizeX) return
+            field = value
+        }
     var yOffset = 0F
+        set(value) {
+            if (value + gameView.height < 0) return
+            if (value - gameView.height > step * JavaActorManager.mapSizeX) return
+            field = value
+        }
 
     // Style variables
     var cellRadius = 0F

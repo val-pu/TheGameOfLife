@@ -8,10 +8,8 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_intro.*
 import leko.valmx.thegameoflife.game.tools.copypasta.SketchLoadSaver
-import leko.valmx.thegameoflife.game.utils.GameRuleHelper
 import leko.valmx.thegameoflife.utils.AssetUtils
 import leko.valmx.thegameoflife.utils.blueprints.Blueprint
-import kotlin.random.Random
 
 class IntroActivity : AppCompatActivity() {
 
@@ -59,7 +57,7 @@ class IntroActivity : AppCompatActivity() {
             preview.init() {
                 preview.previewManager.init(blueprint)
             }
-            preview.actorManager.ruleSet = GameRuleHelper.RuleSet(0b000011000000100)
+//            preview.actorManager.ruleSet = GameRuleHelper.RuleSet(0b000011000000100)
 
 
         }
@@ -71,7 +69,7 @@ class IntroActivity : AppCompatActivity() {
             override fun run() {
 
                 counter++;
-                preview.actorManager.aLength = (300/counter).toLong()
+//                preview.actorManager.aLength = (300/counter).toLong()
 
                 if (counter >= 100) {
                     preview.animationManager.running = false
@@ -79,7 +77,7 @@ class IntroActivity : AppCompatActivity() {
                     return
                 }
 
-                preview.actorManager.doCycle()
+//                preview.actorManager.doCycle()
 
                 Handler().postDelayed(this, (300/counter).toLong())
             }

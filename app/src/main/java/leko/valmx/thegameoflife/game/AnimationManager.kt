@@ -2,7 +2,7 @@ package leko.valmx.thegameoflife.game
 
 import android.os.Handler
 import leko.valmx.thegameoflife.game.animations.Animation
-import java.util.LinkedList
+import java.util.*
 import kotlin.math.roundToLong
 
 
@@ -12,7 +12,7 @@ class AnimationManager(val gameView: GameView) : Runnable {
 
     var running = false
 
-    var freezeLength = 1000 / 230F
+    var freezeLength = 1000 / 240F
 
     val animations = LinkedList<Animation>()
 
@@ -24,18 +24,15 @@ class AnimationManager(val gameView: GameView) : Runnable {
         running = true
 
         Handler().postDelayed(this, freezeLength.roundToLong())
-
     }
 
     override fun run() {
 
-
-        if(!running) return
+        if (!running) return
 
         val startTimeStamp = System.currentTimeMillis()
 
         val drawManager = gameView.drawManager
-        val actorManager = gameView.actorManager
 
         drawManager.draw()
 
@@ -43,12 +40,11 @@ class AnimationManager(val gameView: GameView) : Runnable {
 
         animations.forEach {
 
-
             if (it.counter == 0L) it.onAnimationStart()
 
             it.counter += freezeLength.toLong()
-            var av = Math.pow((1F*it.counter/it.animLength).toDouble(),2.0).toFloat()
-            if( av> 1) av = 1F
+            var av = Math.pow((1F * it.counter / it.animLength).toDouble(), 2.0).toFloat()
+            if (av > 1) av = 1F
 
             it.onAnimate(av)
 
@@ -66,9 +62,9 @@ class AnimationManager(val gameView: GameView) : Runnable {
 
         gameView.invalidate()
 
-        val dt = System.currentTimeMillis()-startTimeStamp
+        val dt = System.currentTimeMillis() - startTimeStamp
 
-        Handler().postDelayed(this, freezeLength.roundToLong()-dt/2)
+        Handler().postDelayed(this, freezeLength.roundToLong() - dt / 2)
     }
 
 }

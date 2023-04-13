@@ -7,7 +7,6 @@ import android.graphics.drawable.BitmapDrawable
 import android.util.AttributeSet
 import leko.valmx.thegameoflife.MainActivity
 import leko.valmx.thegameoflife.game.tools.SelectionTool
-import leko.valmx.thegameoflife.game.tools.copypasta.Sketch
 
 class GameView(context: Context?, attrs: AttributeSet?) :
     androidx.appcompat.widget.AppCompatImageView(context!!, attrs) {
@@ -19,7 +18,8 @@ class GameView(context: Context?, attrs: AttributeSet?) :
     val gridManager = GridManager(this)
     val animationManager = AnimationManager(this)
     val paintManager = PaintManager(this)
-    val actorManager = ActorManager(this)
+//    val actorManager = ActorManager(this)
+    val javaActorManager = JavaActorManager(context)
     val interactionManager = InteractionManager(this)
     val interfaceManager = InterfaceManager(this)
     val toolsManager = SelectionTool(this)
@@ -48,12 +48,10 @@ class GameView(context: Context?, attrs: AttributeSet?) :
         drawManager.init()
         gridManager.init()
         paintManager.init()
-        actorManager
-        actorManager.init()
         paintManager.loadSavedTheme(context)
         animationManager.init()
 //        actorManager.cells = HashMap()
-        actorManager.applyRuleSet()
+//       TODO actorManager.applyRuleSet()
 
         onInitilized?.let { it() }
     }

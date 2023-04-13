@@ -2,62 +2,67 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:elevation="2dp"
+    android:padding="2dp"
+    android:layout_margin="4dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginVertical="2dp"
     android:background="@drawable/common_less_round_card"
-    android:backgroundTint="@color/white"
-    >
+    android:backgroundTint="@color/white">
 
     <TextView
         android:id="@+id/blueprintName"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginEnd="10dp"
+        android:maxLines="1"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Rulename"
         android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/btn_more_info"
-        app:layout_constraintEnd_toStartOf="@+id/btn_select_blueprint"
-        app:layout_constraintStart_toStartOf="@+id/btn_more_info"
-        app:layout_constraintTop_toTopOf="@+id/preview" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/blueprint_author"
-        android:visibility="invisible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="(Explosive)"
         android:textColor="@color/black"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="@+id/blueprintName"
         app:layout_constraintTop_toBottomOf="@+id/blueprintName" />
 
     <leko.valmx.thegameoflife.game.GameView
         android:id="@+id/preview"
-        android:layout_width="100dp"
-        android:layout_margin="4dp"
-        android:layout_height="100dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/blueprintName" />
 
     <LinearLayout
-        android:layout_width="0dp"
-        android:foreground="?android:selectableItemBackground"
-        android:layout_height="30dp"
         android:id="@+id/btn_more_info"
+        android:layout_width="0dp"
+        android:visibility="gone"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
+
+        android:layout_marginTop="5dp"
         android:background="@drawable/common_less_round_card"
+        android:foreground="?android:selectableItemBackground"
         android:orientation="horizontal"
         android:padding="5dp"
-        app:layout_constraintBottom_toBottomOf="@+id/preview"
-        app:layout_constraintEnd_toStartOf="@+id/btn_select_blueprint"
-        app:layout_constraintStart_toEndOf="@+id/preview">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/preview">
 
         <TextView
             android:layout_width="0dp"
+
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
@@ -75,16 +80,27 @@
 
     <LinearLayout
         android:id="@+id/btn_select_blueprint"
-        android:layout_width="45dp"
-        android:layout_marginEnd="6dp"
-        android:layout_height="0dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         android:background="@drawable/common_less_round_card"
         android:foreground="?android:selectableItemBackground"
         android:orientation="horizontal"
         android:padding="5dp"
-        app:layout_constraintBottom_toBottomOf="@+id/btn_more_info"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_more_info">
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Place"
+            android:textColor="@color/white" />
 
         <ImageView
             android:id="@+id/imageView8"
@@ -93,16 +109,8 @@
 
 
             android:layout_gravity="center"
-            android:layout_weight="1"
             app:srcCompat="@drawable/chevron_right"
             app:tint="@color/white" />
     </LinearLayout>
 
-    <View
-        android:id="@+id/divider6"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

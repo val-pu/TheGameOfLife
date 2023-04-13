@@ -9,8 +9,7 @@ import kotlinx.android.synthetic.main.activity_main.view.*
 import leko.valmx.thegameoflife.MainActivity
 import leko.valmx.thegameoflife.R
 import leko.valmx.thegameoflife.game.GameView
-import leko.valmx.thegameoflife.game.PaintManager
-import java.util.LinkedList
+import java.util.*
 
 class ThemeAdapter(val game: GameView, val mainActivity: MainActivity) :
     Adapter<ThemeAdapter.VH>() {
@@ -34,15 +33,15 @@ class ThemeAdapter(val game: GameView, val mainActivity: MainActivity) :
         themes.add(
             ThemeBundle(
                 res.getColor(R.color.back_1),
+                res.getColor(R.color.back_secondary_1),
                 res.getColor(R.color.cell_1),
                 res.getColor(R.color.grid_1),
                 res.getColor(R.color.ui_1),
                 res.getColor(R.color.icon_1),
                 res.getColor(R.color.tool_1),
-                res.getColor(R.color.tool_stroke_1),
             )
         )
-        themes.add(
+/*        themes.add(
             ThemeBundle(
                 res.getColor(R.color.back_2),
                 res.getColor(R.color.cell_2),
@@ -52,19 +51,19 @@ class ThemeAdapter(val game: GameView, val mainActivity: MainActivity) :
                 res.getColor(R.color.tool_1),
                 res.getColor(R.color.tool_stroke_1),
             )
-        )
+        )*/
         themes.add(
             ThemeBundle(
                 res.getColor(R.color.back_3),
+                res.getColor(R.color.back_secondary_3),
                 res.getColor(R.color.cell_3),
                 res.getColor(R.color.grid_3),
                 res.getColor(R.color.ui_3),
                 res.getColor(R.color.icon_3),
                 res.getColor(R.color.tool_3),
-                res.getColor(R.color.tool_stroke_3),
             )
         )
-        themes.add(
+/*        themes.add(
             ThemeBundle(
                 res.getColor(R.color.back_4),
                 res.getColor(R.color.cell_4),
@@ -74,7 +73,7 @@ class ThemeAdapter(val game: GameView, val mainActivity: MainActivity) :
                 res.getColor(R.color.tool_1),
                 res.getColor(R.color.tool_stroke_1),
             )
-        )
+        )*/
     }
 
 

@@ -2,19 +2,14 @@ package leko.valmx.thegameoflife.game.utils
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
-import android.util.Log
 import leko.valmx.thegameoflife.utils.AssetUtils
 import java.util.*
-import kotlin.collections.HashMap
 import kotlin.math.pow
 
 class GameRuleHelper(val ctx: Context) {
     val PREF_ID = "CWGOL_VAL_RULES"
     val SAVE_ID = "RULE"
 
-    init {
-//        loadRules()
-    }
 
     lateinit var ruleSet: RuleSet
 
@@ -114,9 +109,8 @@ class GameRuleHelper(val ctx: Context) {
 
         }
 
-        fun isBorn(neighbours: Int): Boolean {
-            if (neighbours == 0) return false
-
+        fun willBeBorn(neighbours: Int): Boolean {
+            if (neighbours == 0 || neighbours>=8) return false
 
             return bornValues[neighbours - 1]
         }

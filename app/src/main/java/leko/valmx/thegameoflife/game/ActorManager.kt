@@ -72,6 +72,7 @@ class ActorManager(val gameView: GameView) {
     }
 
     fun doCycle() {
+        return
 
 
         toBeKilled = LinkedList()
@@ -85,7 +86,7 @@ class ActorManager(val gameView: GameView) {
 
 
                 getDeadNeighboursOfCell(cell.x, cell.y).forEach { a ->
-                    if (ruleSet.isBorn(getNeighboursOfCell(a))) toBeResurrected.add(a)
+                    if (ruleSet.willBeBorn(getNeighboursOfCell(a))) toBeResurrected.add(a)
                 }
 
                 if (ruleSet.willSurvive(neighbours)) return@forEach

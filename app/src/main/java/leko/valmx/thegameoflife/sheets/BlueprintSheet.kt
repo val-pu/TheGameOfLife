@@ -9,7 +9,6 @@ import kotlinx.android.synthetic.main.sheet_rules.*
 import kotlinx.android.synthetic.main.sheet_stencil.*
 import leko.valmx.thegameoflife.R
 import leko.valmx.thegameoflife.game.GameView
-import leko.valmx.thegameoflife.game.tools.PasteTool
 import leko.valmx.thegameoflife.game.tools.SelectionTool
 import leko.valmx.thegameoflife.game.tools.copypasta.Sketch
 import leko.valmx.thegameoflife.game.utils.GameRuleHelper
@@ -24,8 +23,9 @@ class BlueprintSheet(context: Context, val gameView: GameView) : Sheet(),
 
         positiveText = "Apply"
         positiveListener = {
+            val ruleSet = (rulesRecycler.adapter as RuleSheetAdapter).ruleSet
             GameRuleHelper(ctx).saveRule((rulesRecycler.adapter as RuleSheetAdapter).ruleSet)
-            gameView.actorManager.applyRuleSet()
+            gameView.javaActorManager.ruleSet = ruleSet
         }
         showsDialog = true
         displayPositiveButton(false)
@@ -51,7 +51,7 @@ class BlueprintSheet(context: Context, val gameView: GameView) : Sheet(),
         }
 
         btn_browse_preset_blueprints.setOnClickListener {
-            BlueprintPresetSelectCategorySheet(requireContext(),gameView)
+            BlueprintPresetSelectCategorySheet(requireContext(), gameView)
         }
 
     }
@@ -61,7 +61,7 @@ class BlueprintSheet(context: Context, val gameView: GameView) : Sheet(),
     }
 
     override fun onSketchSelected(sketch: Sketch) {
-        gameView.interactionManager.registeredInteraction = PasteTool(gameView, sketch)
+//        gameView.interactionManager.registeredInteraction = PasteTool(gameView, sketch)
         dismiss()
     }
 }

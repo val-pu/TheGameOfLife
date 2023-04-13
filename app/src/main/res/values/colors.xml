@@ -25,13 +25,13 @@
     <color name="ui_2">#393939</color>
     <color name="icon_2">#FFFFFF</color>
 
-    <color name="back_3">#FEC3A6</color>
-    <color name="cell_3">#FB6376</color>
+    <color name="back_3">#003566</color>
+    <color name="cell_3">#ffd60a</color>
     <color name="grid_3">#FFFFFF</color>
-    <color name="ui_3">#FFAC81</color>
-    <color name="icon_3">#FFFFFF</color>
-    <color name="tool_3">#FB6376</color>
-    <color name="tool_stroke_3">#5D2A42</color>
+    <color name="ui_3">#001d3d</color>
+    <color name="icon_3">#ffc300</color>
+    <color name="tool_3">#003566</color>
+    <color name="tool_stroke_3">#fb8b24</color>
 
     <color name="cell_4">#F95738</color>
     <color name="back_4">#FFFFFF</color>
@@ -42,4 +42,6 @@
     <color name="cell_5">#FEFEFE</color>
     <color name="back_5">#847FFE</color>
     <color name="grid_5">#FEAA15</color>
+    <color name="back_secondary_1">#59686868</color>
+    <color name="back_secondary_3">#536DFE</color>
 </resources>

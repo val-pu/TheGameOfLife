@@ -34,4 +34,5 @@
     <string name="shipsynths">Shipsynths</string>
     <string name="dimensions">Dimensions</string>
     <string name="name">Name</string>
+    <string name="category_bee">Bee Patterns</string>
 </resources>

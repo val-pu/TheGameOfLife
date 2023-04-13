@@ -1,6 +1,5 @@
 package leko.valmx.thegameoflife.sheets
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.view.View
@@ -21,16 +20,20 @@ class RulesSheet(val gameView: GameView) : Sheet(),
         style(SheetStyle.DIALOG)
         positiveText = "Apply"
         positiveListener = {
-            GameRuleHelper(ctx).saveRule((rulesRecycler.adapter as RuleSheetAdapter).ruleSet)
-            gameView.actorManager.applyRuleSet()
+            val resultRuleSet = (rulesRecycler.adapter as RuleSheetAdapter).ruleSet
+            GameRuleHelper(ctx).saveRule(resultRuleSet)
+            gameView.javaActorManager.ruleSet = resultRuleSet
         }
 
+        onNegative("BACK") {
+            MoreOptionsSheet(requireContext(), gameView)
+        }
+        title(R.string.rules)
         this.show()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -57,7 +60,6 @@ class RulesSheet(val gameView: GameView) : Sheet(),
         rulesRecycler.adapter = RuleSheetAdapter(
             requireContext(), rule
         )
-//        ruleinteger.text = "RuleInt: ${rule.getRuleInt()}"
     }
 
     override fun onRuleSelected(rule: GameRuleHelper.RuleSet) {
