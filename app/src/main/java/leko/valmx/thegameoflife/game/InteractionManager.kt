@@ -63,7 +63,7 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
     var registeredInteraction: Interactable? = null
         set(newTool) {
             if (newTool != null) {
-                val toolRecycler = gameView.mainActivity.context_tools_recycler
+                val toolRecycler = gameView.mainActivity.recycler_contextTools
                 val list = LinkedList<ContextToolsAdapter.ContextTool>()
                 newTool.toolsRecycler = toolRecycler
                 newTool.showTools(true)

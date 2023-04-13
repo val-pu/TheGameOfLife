@@ -27,7 +27,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
-            android:id="@+id/nextStep"
+            android:id="@+id/btn_nextGeration"
             style="@style/IconButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
             android:src="@drawable/chevron_right" />
 
         <ImageView
-            android:id="@+id/auto_play"
+            android:id="@+id/btn_autoPlay"
             style="@style/IconButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -44,14 +44,14 @@
             android:src="@drawable/play" />
 
         <ImageView
-            android:id="@+id/edit_btn"
+            android:id="@+id/btn_edit"
             style="@style/IconButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:src="@drawable/edit_2" />
         <ImageView
-            android:id="@+id/blueprints_btn"
+            android:id="@+id/btn_showSchematics"
             style="@style/IconButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
             android:src="@drawable/book" />
 
         <ImageView
-            android:id="@+id/btn_more"
+            android:id="@+id/btn_moreGameOptions"
             style="@style/IconButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -169,7 +169,7 @@
             app:layout_constraintEnd_toEndOf="parent">
 
             <ImageView
-                android:id="@+id/btn_end_tool"
+                android:id="@+id/btn_endInteration"
                 style="@style/IconButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -177,7 +177,7 @@
                 android:src="@drawable/x" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/context_tools_recycler"
+                android:id="@+id/recycler_contextTools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"

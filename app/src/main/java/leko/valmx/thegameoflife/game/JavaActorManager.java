@@ -25,12 +25,7 @@ public class JavaActorManager {
 
 
     public JavaActorManager(Context context) {
-//        for (int i = 0; i < 20000; i++) {
-//            int x = Random.Default.nextInt(mapSizeX);
-//            int y = Random.Default.nextInt(mapSizeY);
-//            if ((getCell(x, y) & ALIVE_NEXT_GEN_BITMASK) == 0)
-//                changeCellState(x, y);
-//        }
+
         fetchNextGeneration();
 
         // Loading user gamerule settings.
@@ -231,7 +226,7 @@ public class JavaActorManager {
 
             int currX = x + offset[0];
             int currY = y + offset[1];
-            Cell c = new Cell(mod(currX,mapSizeX), mod(currY,mapSizeY));
+            Cell c = new Cell(mod(currX, mapSizeX), mod(currY, mapSizeY));
 
             if (lookedUpNeighbours.contains(c)) continue;
             if (isCellAlive(currX, currY)) continue;
@@ -256,7 +251,7 @@ public class JavaActorManager {
     }
 
     public void calculateNextGenAsync() {
-        if(!ASyncNextGenerationTask.PROCESS_RUNNING) {
+        if (!ASyncNextGenerationTask.PROCESS_RUNNING) {
             ASyncNextGenerationTask aSyncNextGenerationTask = new ASyncNextGenerationTask();
             aSyncNextGenerationTask.execute(this);
         }
@@ -264,6 +259,16 @@ public class JavaActorManager {
 
     public void clearCells() {
         cells = new short[mapSizeX][mapSizeY];
+    }
+
+    public void randomize() {
+        for (int i = 0; i < 20000; i++) {
+            int x = Random.Default.nextInt(mapSizeX);
+            int y = Random.Default.nextInt(mapSizeY);
+            if ((getCell(x, y) & ALIVE_NEXT_GEN_BITMASK) == 0)
+                changeCellState(x, y);
+        }
+        fetchNextGeneration();
     }
 
     private static class ASyncNextGenerationTask extends AsyncTask<JavaActorManager, Void, Void> {
@@ -295,7 +300,6 @@ public class JavaActorManager {
     private int mod(int m, int n) {
         return ((m % n) + n) % n;
     }
-
 
 
     public short[][] getCells() {
