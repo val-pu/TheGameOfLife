@@ -7,8 +7,9 @@ import android.graphics.RectF
 class DrawManager(
     private val canvas: Canvas,
     private val gridManager: GridManager,
-    private val actorManager: JavaActorManager,
-    private val colors: GameColors
+    private val actorManager: Cells,
+    private val colors: GameColors,
+    private val interactionManager: InteractionManager
 ) {
 
     fun draw() {
@@ -44,13 +45,13 @@ class DrawManager(
         return RectF(
             0F,
             0F,
-            gridManager.cellWidth * JavaActorManager.mapSizeX,
-            gridManager.cellWidth * JavaActorManager.mapSizeY
+            gridManager.cellWidth * Cells.mapSizeX,
+            gridManager.cellWidth * Cells.mapSizeY
         ).apply { inset(-gridManager.cellWidth, -gridManager.cellWidth) }
     }
 
     private fun drawCurrentTool() {
-//        gameView.interactionManager.registeredInteraction?.drawInteraction()
+        interactionManager.registeredInteraction?.drawInteraction()
     }
 
     private fun drawCellAt(rect: RectF, paint: Paint) {

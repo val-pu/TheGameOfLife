@@ -25,7 +25,7 @@ class BlueprintSheet(context: Context, val gameView: GameView) : Sheet(),
         positiveListener = {
             val ruleSet = (rulesRecycler.adapter as RuleSheetAdapter).ruleSet
             GameRuleHelper(ctx).saveRule((rulesRecycler.adapter as RuleSheetAdapter).ruleSet)
-            gameView.javaActorManager.ruleSet = ruleSet
+            gameView.cells.ruleSet = ruleSet
         }
         showsDialog = true
         displayPositiveButton(false)

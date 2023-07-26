@@ -11,7 +11,7 @@ import com.maxkeppeler.sheets.option.OptionSheet
 import leko.valmx.thegameoflife.R
 import leko.valmx.thegameoflife.game.GameView
 import leko.valmx.thegameoflife.game.InteractionManager
-import leko.valmx.thegameoflife.game.JavaActorManager
+import leko.valmx.thegameoflife.game.Cells
 import leko.valmx.thegameoflife.game.tools.copypasta.Sketch
 import leko.valmx.thegameoflife.recyclers.ContextToolsAdapter
 import leko.valmx.thegameoflife.sheets.BlueprintSaveSheet
@@ -54,17 +54,17 @@ open class SelectionTool(val gameView: GameView) : InteractionManager.Interactab
     override fun onInteraction(motionEvent: MotionEvent, dereg: () -> Unit) {
 
         val gridManager = gameView.gridManager
-        val actorManager = gameView.javaActorManager
+        val actorManager = gameView.cells
         val x =
-            (gridManager.xOffset + motionEvent.x) / gridManager.step
+            (gridManager.xOffset + motionEvent.x) / gridManager.cellWidth
         val y =
-            (gridManager.yOffset + motionEvent.y) / gridManager.step
+            (gridManager.yOffset + motionEvent.y) / gridManager.cellWidth
 
         val dx = x - lastX
         val dy = y - lastY
 
-        if(x<0 || x>=JavaActorManager.mapSizeX) return
-        if(y<0 || y>=JavaActorManager.mapSizeY) return
+        if(x<0 || x>= Cells.mapSizeX) return
+        if(y<0 || y>= Cells.mapSizeY) return
 
 
 
@@ -130,8 +130,8 @@ open class SelectionTool(val gameView: GameView) : InteractionManager.Interactab
 
         val gridManager = gameView.gridManager
 
-        val x = (gridManager.xOffset + event.x) / gridManager.step
-        val y = (gridManager.yOffset + event.y) / gridManager.step
+        val x = (gridManager.xOffset + event.x) / gridManager.cellWidth
+        val y = (gridManager.yOffset + event.y) / gridManager.cellWidth
         lastX = x
         lastY = y
 
@@ -204,7 +204,7 @@ open class SelectionTool(val gameView: GameView) : InteractionManager.Interactab
 
     private fun getSketchForSelection(): Sketch {
 
-        val actorManager = gameView.javaActorManager
+        val actorManager = gameView.cells
 
         val startX = toolRect!!.left.toInt()
         val endX = toolRect!!.right.toInt()
@@ -236,11 +236,11 @@ open class SelectionTool(val gameView: GameView) : InteractionManager.Interactab
     private fun drawBoundsTool() {
         val toolsManager = gameView.toolsManager
         val gridManager = gameView.gridManager
-        val paintManager = gameView.paintManager
+        val paintManager = gameView.gameColors
 
 
         val rad = gridManager.cellRadius
-        val step = gridManager.step
+        val step = gridManager.cellWidth
 
         val toolBounds = toolRect!!
 
@@ -326,7 +326,7 @@ open class SelectionTool(val gameView: GameView) : InteractionManager.Interactab
         for (x in toolRect!!.left.toInt() until toolRect!!.right.toInt())
             for (y in toolRect!!.top.toInt() until toolRect!!.bottom.toInt()) {
 
-                gameView.javaActorManager.switchCurrentState(x, y)
+                gameView.cells.switchCurrentState(x, y)
             }
 
     }
@@ -336,7 +336,7 @@ open class SelectionTool(val gameView: GameView) : InteractionManager.Interactab
         for (x in toolRect!!.left.toInt() until toolRect!!.right.toInt())
             for (y in toolRect!!.top.toInt() until toolRect!!.bottom.toInt()) {
 
-                gameView.javaActorManager.setCurrentlyAlive(x, y)
+                gameView.cells.setCurrentlyAlive(x, y)
 
             }
 
@@ -366,7 +366,7 @@ open class SelectionTool(val gameView: GameView) : InteractionManager.Interactab
     private fun deleteSelection() {
         for (x in toolRect!!.left.toInt() until toolRect!!.right.toInt())
             for (y in toolRect!!.top.toInt() until toolRect!!.bottom.toInt()) {
-                gameView.javaActorManager.setCurrentlyDead(x, y)
+                gameView.cells.setCurrentlyDead(x, y)
             }
     }
 

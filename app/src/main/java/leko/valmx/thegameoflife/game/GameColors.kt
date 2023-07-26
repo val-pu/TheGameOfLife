@@ -11,15 +11,15 @@ import leko.valmx.thegameoflife.R
 import leko.valmx.thegameoflife.game.animations.Animation
 import leko.valmx.thegameoflife.recyclers.ThemeAdapter
 
-class PaintManager(val gameView: GameView) {
+class GameColors(val gameView: GameView) {
 
-    val cellPaint = Paint()
-    val bgPaint = Paint()
+    val cell = Paint()
+    val background = Paint()
     val actorDyingPaint = Paint()
     val actorAlivePaint = Paint()
     val gridPaint = Paint()
     val iconPaint = Paint()
-    val uiPaint = Paint()
+    val ui = Paint()
     val toolPaint = Paint()
     val toolStrokePaint = Paint()
 
@@ -47,8 +47,8 @@ class PaintManager(val gameView: GameView) {
         val toolStrokeNew = bundle.toolStroke
         val toolNew = bundle.tool
 
-        val bgOld = bgPaint.color
-        val cellOld = cellPaint.color
+        val bgOld = background.color
+        val cellOld = cell.color
         val gridOld = gridPaint.color
         val iconOld = bundle.icon
         val uiOld = bundle.ui
@@ -59,10 +59,10 @@ class PaintManager(val gameView: GameView) {
         animationManager.animations.add(object : Animation() {
             override fun onAnimate(animatedValue: Float) {
 
-                bgPaint.color = multiplyColorWithScalar(bgOld, bgNew, animatedValue)
+                background.color = multiplyColorWithScalar(bgOld, bgNew, animatedValue)
                 gridPaint.color = multiplyColorWithScalar(gridOld, gridNew, animatedValue)
-                cellPaint.color = multiplyColorWithScalar(cellOld, cellNew, animatedValue)
-                uiPaint.color = multiplyColorWithScalar(uiOld, uiNew, animatedValue)
+                cell.color = multiplyColorWithScalar(cellOld, cellNew, animatedValue)
+                ui.color = multiplyColorWithScalar(uiOld, uiNew, animatedValue)
                 iconPaint.color = multiplyColorWithScalar(iconOld, iconNew, animatedValue)
                 toolPaint.color = multiplyColorWithScalar(toolOld, toolNew, animatedValue)
                 toolStrokePaint.color =
@@ -86,8 +86,8 @@ class PaintManager(val gameView: GameView) {
     }
 
     fun applyPreviewTheme() {
-        cellPaint.color = BLACK
-        bgPaint.color = WHITE
+        cell.color = BLACK
+        background.color = WHITE
     }
 
     val PREF_ID = "CGOL_VALGAMES"
@@ -108,9 +108,9 @@ class PaintManager(val gameView: GameView) {
         )
 
         gridPaint.color = bundle.grid
-        bgPaint.color = bundle.back
-        cellPaint.color = bundle.cell
-        uiPaint.color = bundle.ui
+        background.color = bundle.back
+        cell.color = bundle.cell
+        ui.color = bundle.ui
         iconPaint.color = bundle.icon
         toolPaint.color = bundle.tool
         toolStrokePaint.color = bundle.toolStroke

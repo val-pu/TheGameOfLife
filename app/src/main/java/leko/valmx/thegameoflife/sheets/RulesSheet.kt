@@ -22,7 +22,7 @@ class RulesSheet(val gameView: GameView) : Sheet(),
         positiveListener = {
             val resultRuleSet = (rulesRecycler.adapter as RuleSheetAdapter).ruleSet
             GameRuleHelper(ctx).saveRule(resultRuleSet)
-            gameView.javaActorManager.ruleSet = resultRuleSet
+            gameView.cells.ruleSet = resultRuleSet
         }
 
         onNegative("BACK") {

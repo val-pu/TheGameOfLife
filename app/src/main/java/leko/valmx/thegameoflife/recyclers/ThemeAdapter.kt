@@ -94,7 +94,7 @@ class ThemeAdapter(val game: GameView, val mainActivity: MainActivity) :
         itemView.themeView.gridColor.color = themeBundle.grid
 
         itemView.setOnClickListener {
-            game.paintManager.applyTheme(themeBundle, mainActivity)
+            game.gameColors.applyTheme(themeBundle, mainActivity)
             mainActivity.onThemeSelected(themeBundle)
         }
 

@@ -49,7 +49,7 @@ class AutoPlayTool(val game: GameView) : InteractionManager.Interactable(), Runn
 
     override fun run() {
         if (!runMe) return
-        game.javaActorManager.calculateNextGenAsync()
+        game.cells.calculateNextGenAsync()
         handler.postDelayed(this, deltaT)
     }
 }

@@ -22,20 +22,20 @@ class PasteTool(val game: GameView, val blueprint: Blueprint) :
         val h = blueprint.height
         val w = blueprint.width
 
-        var step = gridManager.step
+        var step = gridManager.cellWidth
 
         val gameWidth = canvas.width / step
 
         if (gameWidth < w) {
-            gridManager.step = (canvas.width / w).toFloat()
+            gridManager.cellWidth = (canvas.width / w).toFloat()
         }
-        val gameHeight = canvas.height / gridManager.step
+        val gameHeight = canvas.height / gridManager.cellWidth
 
         if (gameHeight < h) {
-            gridManager.step = (canvas.height / h).toFloat()
+            gridManager.cellWidth = (canvas.height / h).toFloat()
         }
 
-        step = gridManager.step
+        step = gridManager.cellWidth
 
         val startX = (gridManager.xOffset / step).roundToInt()
         val startY = (gridManager.yOffset / step).roundToInt()
@@ -58,7 +58,7 @@ class PasteTool(val game: GameView, val blueprint: Blueprint) :
 
         val baseX = toolRect!!.left
         val baseY = toolRect!!.top
-        val step = gridManager.step
+        val step = gridManager.cellWidth
 
         // X \land Y um wie viel das Brett verschoben ist (von 0,0)
         val gameX = gridManager.xOffset
@@ -67,7 +67,7 @@ class PasteTool(val game: GameView, val blueprint: Blueprint) :
         blueprint.cells.withIndex().forEach { (x, yArray) ->
             yArray.forEachIndexed { y, isCell ->
                 if (isCell)
-                    drawManager.drawCell((baseX + x) * step - gameX, (baseY + y) * step - gameY)
+                    drawManager.drawCellAt((baseX + x) * step - gameX, (baseY + y) * step - gameY)
             }
         }
 
@@ -134,7 +134,7 @@ class PasteTool(val game: GameView, val blueprint: Blueprint) :
         val baseX = toolRect!!.left.toInt()
         val baseY = toolRect!!.top.toInt()
 
-        val actorManager = game.javaActorManager
+        val actorManager = game.cells
 
         blueprint.cells.forEachIndexed { x, yRow ->
             yRow.forEachIndexed { y, isCell ->

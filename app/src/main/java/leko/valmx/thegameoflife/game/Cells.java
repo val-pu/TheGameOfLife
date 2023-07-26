@@ -1,6 +1,5 @@
 package leko.valmx.thegameoflife.game;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
 
@@ -8,13 +7,12 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.Objects;
 
 import kotlin.random.Random;
 import leko.valmx.thegameoflife.game.utils.GameRuleHelper;
 
-public class JavaActorManager {
+public class Cells {
     /**
      * Cleaner implementation using bit magic with shorts
      * 0 | Alive or not
@@ -24,7 +22,7 @@ public class JavaActorManager {
      */
 
 
-    public JavaActorManager(Context context) {
+    public Cells(Context context) {
 
         fetchNextGeneration();
 
@@ -271,7 +269,7 @@ public class JavaActorManager {
         fetchNextGeneration();
     }
 
-    private static class ASyncNextGenerationTask extends AsyncTask<JavaActorManager, Void, Void> {
+    private static class ASyncNextGenerationTask extends AsyncTask<Cells, Void, Void> {
 
         public static boolean PROCESS_RUNNING = false;
 
@@ -286,8 +284,8 @@ public class JavaActorManager {
         }
 
         @Override
-        protected Void doInBackground(JavaActorManager... javaActorManagers) {
-            JavaActorManager javaActorManager = javaActorManagers[0];
+        protected Void doInBackground(Cells... javaActorManagers) {
+            Cells javaActorManager = javaActorManagers[0];
 
             javaActorManager.calculateNextGeneration(new GameRuleHelper.RuleSet(0b000011000000100));
             javaActorManager.fetchNextGeneration();

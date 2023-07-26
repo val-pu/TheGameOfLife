@@ -2,111 +2,76 @@ package leko.valmx.thegameoflife.game
 
 import android.graphics.RectF
 
-/**
- * One of the more commonly used classes in the project
- *
- * @author val-mx
- *
- * Used in the context of { GameView.kt } and stores dimension variables
- * and manipulates them
- */
-
 class GridManager(val gameView: GameView) {
 
-    // Offset vars (How much is the screen away from the projects (0,0)) Used the enable moving & zooming
     var xOffset = 0F
         set(value) {
             if (value + gameView.width < 0) return
-            if (value - gameView.width > step * JavaActorManager.mapSizeX) return
+            if (value - gameView.width > cellWidth * Cells.mapSizeX) return
             field = value
         }
     var yOffset = 0F
         set(value) {
             if (value + gameView.height < 0) return
-            if (value - gameView.height > step * JavaActorManager.mapSizeX) return
+            if (value - gameView.height > cellWidth * Cells.mapSizeX) return
             field = value
         }
 
-    // Style variables
     var cellRadius = 0F
     var cellInset = 1F
-    var gridWidth = 0F // Currently unused as no grid is present
 
     var defaultWidthCells = 40
 
-    var step = 0F
+    var cellWidth = 0F
         set(value) {
-            // recalculate style vars when the value of cell is changed
             field = value
-            cellInset = step * .05F
-            cellRadius = step * .08F
-            gridWidth = step * .08F
+            cellInset = cellWidth * .05F
+            cellRadius = cellWidth * .08F
         }
 
-    /**
-     * Called when gameview is initialized
-     */
     fun init() {
-        step = (gameView.width / defaultWidthCells).toFloat()
+        cellWidth = (gameView.width / defaultWidthCells).toFloat()
 
-        maxZoomWidth = gameView.width / 1000F
-        minZoomWidth = gameView.width / 7F
+        maxCellWidth = gameView.width / 1000F
+        minCellWidth = gameView.width / 7F
     }
 
-    // Gets the fitting rect to draw the cell, with styles applied
     fun getCellRect(x: Int, y: Int): RectF {
         return RectF(
-            step * x - this.xOffset,
-            step * y - this.yOffset,
-            step * (x + 1) - this.xOffset,
-            step * (y + 1) - this.yOffset
-        ).apply {
-            if (!gameView.drawManager.lowDetail)
-                inset(cellInset, cellInset)
-        }
+            cellWidth * x - this.xOffset,
+            cellWidth * y - this.yOffset,
+            cellWidth * (x + 1) - this.xOffset,
+            cellWidth * (y + 1) - this.yOffset
+        )
     }
 
-    fun getCellRect(cell: ActorManager.Cell): RectF = getCellRect(cell.x, cell.y)
+    private var maxCellWidth = gameView.width / 1000F
+    private var minCellWidth = gameView.width / 7F
 
-    // Help methods to convert canvas x, y to game x, y
-    fun convertX(x: Float): Float {
-        return x - this.xOffset
-    }
-
-    fun convertY(y: Float): Float {
-        return y - this.yOffset
-    }
-
-    // Min and max of zoom (Min 7 cells width and max 1000)
-    private var maxZoomWidth = gameView.width / 1000F
-    private var minZoomWidth = gameView.width / 7F
-
-    /**
-     *
-     */
-    fun zoomByFac(
+    fun zoom(
         zoomFactor: Float,
         focusX: Float = gameView.width / 2F,
         focusY: Float = gameView.height / 2f
     ) {
-        // Return if zoomed out or zoomed in too much and doing the corresponding action to worsen the toomuchness
 
-        if (step >= minZoomWidth && zoomFactor > 1) return
-        if (step <= maxZoomWidth && zoomFactor < 1) return
+        if (validZoom(zoomFactor)) return
 
-        // The offset from 0,0 in cells
-        var absX = this.xOffset / this.step
-        var absY = this.yOffset / this.step
+        var absX = this.xOffset / this.cellWidth
+        var absY = this.yOffset / this.cellWidth
 
-        absX -= (focusX / this.step) * (1 - zoomFactor)
-        absY -= (focusY / this.step) * (1 - zoomFactor)
+        absX -= (focusX / this.cellWidth) * (1 - zoomFactor)
+        absY -= (focusY / this.cellWidth) * (1 - zoomFactor)
+        
+        this.cellWidth *= zoomFactor
 
+        this.xOffset = absX * this.cellWidth
+        this.yOffset = absY * this.cellWidth
+    }
 
-        // Changing cell size
-        this.step *= zoomFactor
-
-        this.xOffset = absX * this.step
-        this.yOffset = absY * this.step
+    private fun validZoom(zoomFactor: Float): Boolean {
+        if (cellWidth >= minCellWidth && zoomFactor > 1) return true
+        if (cellWidth <= maxCellWidth && zoomFactor < 1) return true
+        return false
     }
 
 

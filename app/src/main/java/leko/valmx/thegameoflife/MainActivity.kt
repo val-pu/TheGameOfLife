@@ -17,7 +17,7 @@ import com.maxkeppeler.sheets.option.OptionSheet
 import kotlinx.android.synthetic.main.activity_main.*
 import leko.valmx.thegameoflife.game.GameView
 import leko.valmx.thegameoflife.game.InteractionManager
-import leko.valmx.thegameoflife.game.JavaActorManager
+import leko.valmx.thegameoflife.game.Cells
 import leko.valmx.thegameoflife.game.GameColors
 import leko.valmx.thegameoflife.game.tools.AutoPlayTool
 import leko.valmx.thegameoflife.game.tools.EditTool
@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
         }
 
         btn_nextGeration.setOnClickListener {
-            game.javaActorManager.calculateNextGenAsync()
+            game.cells.calculateNextGenAsync()
         }
 
         /*      MISC        */
@@ -153,8 +153,8 @@ class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
                 )
             ).apply {
                 val shapeWidth = toolRect!!.width()
-                val centerX = JavaActorManager.mapSizeX * gridManager.cellWidth / 2
-                val centerY = JavaActorManager.mapSizeY * gridManager.cellWidth / 2
+                val centerX = Cells.mapSizeX * gridManager.cellWidth / 2
+                val centerY = Cells.mapSizeY * gridManager.cellWidth / 2
                 toolRect!!.offset(centerX - shapeWidth / 2F, centerY - shapeWidth / 2F)
             }.applyBlueprint()
         } catch (e: Exception) {
@@ -246,7 +246,7 @@ class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
             onPositive { index: Int, option: Option ->
                 when (index) {
                     0 -> {
-                        gameView.javaActorManager.randomize()
+                        gameView.cells.randomize()
                     }
                     1 -> {
                         BlueprintPresetSelectCategorySheet(

@@ -14,15 +14,13 @@ class GameView(context: Context?, attrs: AttributeSet?) :
     var initialized = false
 
     val canvas = Canvas()
-    val drawManager = DrawManager(this)
     val gridManager = GridManager(this)
     val animationManager = AnimationManager(this)
-    val paintManager = PaintManager(this)
-
-    //    val actorManager = ActorManager(this)
-    val javaActorManager = JavaActorManager(context)
+    val gameColors = GameColors(this)
+    val cells = Cells(context)
     val interactionManager = InteractionManager(this)
-    val interfaceManager = InterfaceManager(this)
+    val drawManager =
+        DrawManager(canvas, gridManager, cells, gameColors, interactionManager)
     val toolsManager = SelectionTool(this)
     val previewManager = PreviewManager(this)
     val feedBackManager = FeedBackManager(this)
@@ -47,13 +45,10 @@ class GameView(context: Context?, attrs: AttributeSet?) :
 
         setOnTouchListener(interactionManager)
 
-        drawManager.init()
         gridManager.init()
-        paintManager.init()
-        paintManager.loadSavedTheme(context)
+        gameColors.init()
+        gameColors.loadSavedTheme(context)
         animationManager.init()
-//        actorManager.cells = HashMap()
-//       TODO actorManager.applyRuleSet()
 
         onInitilized?.let { it() }
     }

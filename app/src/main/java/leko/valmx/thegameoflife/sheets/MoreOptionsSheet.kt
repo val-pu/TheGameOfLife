@@ -37,7 +37,7 @@ class MoreOptionsSheet(context: Context, gameView: GameView) {
                 if (index == 2) startActivity(Intent(context, SettingActivity::class.java))
                 if (index == 3) gameView.interactionManager.registeredInteraction =
                     SelectionTool(gameView)
-                if (index == 4) gameView.javaActorManager.clearCells()
+                if (index == 4) gameView.cells.clearCells()
                 if (index == 5) {
 
                     val appPackageName: String =

@@ -93,7 +93,7 @@ class BlueprintPresetSelectionSheet(
                         content("Change the rule to ${it.rule}?")
                         onPositive("Yes") {
                             gameRuleHelper.saveRule(newRule)
-                            gameView.javaActorManager.ruleSet = newRule
+                            gameView.cells.ruleSet = newRule
                             initPasteTool()
                         }
 

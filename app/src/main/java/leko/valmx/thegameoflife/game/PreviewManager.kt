@@ -5,9 +5,9 @@ import leko.valmx.thegameoflife.utils.blueprints.Blueprint
 class PreviewManager(val game: GameView) {
 
     fun init(sketch: Blueprint, stopTasks: Boolean = false) {
-        game.paintManager.applyPreviewTheme()
+        game.gameColors.applyPreviewTheme()
         game.setOnTouchListener(null)
-        val actorManager = game.javaActorManager
+        val actorManager = game.cells
 
         val gridManager = game.gridManager
 
@@ -17,15 +17,11 @@ class PreviewManager(val game: GameView) {
         val w = cells.size
         val h = cells[0].size
 
-        gridManager.step = (game.width / w).toFloat()
+        gridManager.cellWidth = (game.width / w).toFloat()
 
 
         var baseH = 0
         val baseX = 0
-
-        if (w >= h) {
-//            baseH = (game.height / 2F / gridManager.step - h / 2F).roundToInt()
-        }
 
 
 

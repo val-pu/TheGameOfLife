@@ -24,13 +24,11 @@ class ThemeView(context: Context, attrs: AttributeSet?) : AppCompatImageView(con
 
         val bgRect = RectF(0F, 0F, width.toFloat(), height.toFloat())
 
-        val radius = width * .1F
 
         canvas.drawCircle(bgRect.centerX(),bgRect.centerX(), bgRect.width()/2, backColor)
 
         val dxy = width / 3F
 
-        val cellRadius = dxy * .1F
 
         val inset = width * .19F
 

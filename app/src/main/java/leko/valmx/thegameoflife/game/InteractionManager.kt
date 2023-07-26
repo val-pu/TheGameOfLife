@@ -187,20 +187,16 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
         allowLongTapSelection = true
     }
 
-    var lXP0 = 0F
-    var lYP0 = 0F
-    var lXP1 = 0F
-    var lYP1 = 0F
+    var lastXPosition0 = 0F
+    var lastYPosition0 = 0F
+    var lastXPosition1 = 0F
+    var lastYPosition1 = 0F
 
     private fun onZoom(event: MotionEvent) {
         allowLongTapSelection = false
         if (event.pointerCount != 2) return
         if (resetZoomValues) {
-            // TODO fehler
-            lXP0 = event.getX(0)
-            lYP0 = event.getY(0)
-            lXP1 = event.getX(1)
-            lYP1 = event.getY(1)
+            updateLastPosition(event)
             resetZoomValues = false
             return
         }
@@ -212,10 +208,7 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
 
         when (event.action) {
             ACTION_DOWN -> {
-                lXP0 = event.getX(0)
-                lYP0 = event.getY(0)
-                lXP1 = event.getX(1)
-                lYP1 = event.getY(1)
+                updateLastPosition(event)
             }
 
             ACTION_MOVE -> {
@@ -232,8 +225,8 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
 
                 val x = ((xP1 + xP0) / 2F)
                 val y = ((yP0 + yP1) / 2F)
-                val lX = ((lXP0 + lXP1) / 2F)
-                val lY = ((lYP0 + lYP1) / 2F)
+                val lX = ((lastXPosition0 + lastXPosition1) / 2F)
+                val lY = ((lastYPosition0 + lastYPosition1) / 2F)
 
                 val movedX = x - lX
                 val movedY = y - lY
@@ -243,8 +236,8 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
 
                 val dx = abs(xP0 - xP1)
                 val dy = abs(yP0 - yP1)
-                val lDy = abs(lYP0 - lYP1)
-                val lDx = abs(lXP0 - lXP1)
+                val lDy = abs(lastYPosition0 - lastYPosition1)
+                val lDx = abs(lastXPosition0 - lastXPosition1)
 
                 val zoomFac = if (max(dx, dy) == dx) {
                     dx / lDx
@@ -256,16 +249,13 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
 
                 if (abs(zoomFac - 1) < .3F)
 
-                    gridManager.zoomByFac(zoomFac, x, y)
+                    gridManager.zoom(zoomFac, x, y)
 
                 zoomFocusX = x
                 zoomFocusY = y
                 zoomVelocity = zoomFac
 
-                lXP0 = event.getX(0)
-                lYP0 = event.getY(0)
-                lXP1 = event.getX(1)
-                lYP1 = event.getY(1)
+                updateLastPosition(event)
 
             }
 
@@ -274,17 +264,21 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
 
     }
 
+    private fun updateLastPosition(event: MotionEvent) {
+        lastXPosition0 = event.getX(0)
+        lastYPosition0 = event.getY(0)
+        lastXPosition1 = event.getX(1)
+        lastYPosition1 = event.getY(1)
+    }
+
     var lastDx = 0F
     var lastDy = 0F
 
-    /*
-     * Check if extra zoom / movement when ACTION_UP is triggered is running stopped
-     */
+
     var isExtraVelocityRunning = true
 
     fun onMove(event: MotionEvent): Boolean {
 
-        val animationManager = gameView.animationManager
         val gridManager = gameView.gridManager
 
         if (resetMoveValues) {
@@ -298,7 +292,7 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
 
 
 
-        when (event!!.action) {
+        when (event.action) {
 
 
             ACTION_DOWN -> {
@@ -310,9 +304,6 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
             }
 
             ACTION_MOVE -> {
-
-
-                // Auswahl wird automatisch getriggert, falls der Bildschirm länger gedrückt wird
                 if (registeredInteraction == null && allowLongTapSelection)
                     if (summedDt > SelectionTool.Companion.AUTO_TRIGGER_TIME && amountMoved < 50) {
                         registeredInteraction = SelectionTool(gameView)
@@ -371,9 +362,9 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
 
 
                 val gridManager = gameView.gridManager
-                val actorManager = gameView.javaActorManager
+                val actorManager = gameView.cells
 
-                val step = gridManager.step
+                val step = gridManager.cellWidth
 
                 val x = ((event.x + gridManager.xOffset) / step - 0.5).roundToInt()
                 val y = ((event.y + gridManager.yOffset) / step - 0.5).roundToInt()
@@ -411,7 +402,7 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
 
             override fun onAnimate(animatedValue: Float) {
                 if (!isExtraVelocityRunning) {
-                    endAnim()
+                    endAnimation()
                     return
                 }
 
@@ -420,15 +411,6 @@ class InteractionManager(val gameView: GameView) : OnTouchListener {
                     gridManager.xOffset += ((xVelocity / dt * (1 - (counter / animLength.toFloat()) * .8F) * ((animLength - counter).absoluteValue / (animLength * 1.3F))))
                     gridManager.yOffset += ((yVelocity / dt * (1 - (counter / animLength.toFloat()) * .8F) * ((animLength - counter).absoluteValue / (animLength * 1.3F))))
                 }
-
-//                if (abs(zoomVelocity - 1) > zoomVelocityCutoff) {
-//                    gridManager.zoomByFac(
-//                        1 - (1 - zoomVelocity) * .2F * ((exp(-((animatedValue * 3 - 1))))),
-//                        zoomFocusX,
-//                        zoomFocusY
-//                    )
-//                }
-
             }
 
             override fun onAnimationStart() {

@@ -10,7 +10,7 @@ abstract class Animation {
 
     open fun onAnimationFinished() { }
 
-    fun endAnim() {
+    fun endAnimation() {
         counter = animLength * 2
     }
 
