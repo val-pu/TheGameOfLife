@@ -1,7 +1,6 @@
 package leko.valmx.thegameoflife
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -19,7 +18,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import leko.valmx.thegameoflife.game.GameView
 import leko.valmx.thegameoflife.game.InteractionManager
 import leko.valmx.thegameoflife.game.JavaActorManager
-import leko.valmx.thegameoflife.game.PaintManager
+import leko.valmx.thegameoflife.game.GameColors
 import leko.valmx.thegameoflife.game.tools.AutoPlayTool
 import leko.valmx.thegameoflife.game.tools.EditTool
 import leko.valmx.thegameoflife.game.tools.PasteTool
@@ -32,15 +31,14 @@ import leko.valmx.thegameoflife.utils.blueprints.Blueprint
 import java.util.*
 
 class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
-    PaintManager.ThemeUpdateListener {
+    GameColors.ThemeUpdateListener {
 
     private var themeSelectingMode = false
 
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun onCreate(savedInstanceState: Bundle?) {
 
-        // Disable night-mode, because Android does some funky invert color stuff, which is extremely irritating
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         // Enable fullscreen TODO better approach?
         window.setFlags(
@@ -155,8 +153,8 @@ class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
                 )
             ).apply {
                 val shapeWidth = toolRect!!.width()
-                val centerX = JavaActorManager.mapSizeX * gridManager.step / 2
-                val centerY = JavaActorManager.mapSizeY * gridManager.step / 2
+                val centerX = JavaActorManager.mapSizeX * gridManager.cellWidth / 2
+                val centerY = JavaActorManager.mapSizeY * gridManager.cellWidth / 2
                 toolRect!!.offset(centerX - shapeWidth / 2F, centerY - shapeWidth / 2F)
             }.applyBlueprint()
         } catch (e: Exception) {
@@ -221,9 +219,9 @@ class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
                 findViewById<View>(it.viewId).apply {
 
                     if (this is ImageView)
-                        drawable.setTint(game.paintManager.iconPaint.color)
+                        drawable.setTint(game.gameColors.iconPaint.color)
                     else {
-                        background.setTint(game.paintManager.uiPaint.color)
+                        background.setTint(game.gameColors.ui.color)
 
                     }
                 }
