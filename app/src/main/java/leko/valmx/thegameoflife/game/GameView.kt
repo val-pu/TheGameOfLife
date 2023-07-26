@@ -18,7 +18,8 @@ class GameView(context: Context?, attrs: AttributeSet?) :
     val gridManager = GridManager(this)
     val animationManager = AnimationManager(this)
     val paintManager = PaintManager(this)
-//    val actorManager = ActorManager(this)
+
+    //    val actorManager = ActorManager(this)
     val javaActorManager = JavaActorManager(context)
     val interactionManager = InteractionManager(this)
     val interfaceManager = InterfaceManager(this)
@@ -28,7 +29,8 @@ class GameView(context: Context?, attrs: AttributeSet?) :
 
     lateinit var mainActivity: MainActivity
 
-    override fun onDraw(canvas: Canvas?) {
+
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         if (!initialized) {
             init()

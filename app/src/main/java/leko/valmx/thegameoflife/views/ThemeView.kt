@@ -19,14 +19,14 @@ class ThemeView(context: Context, attrs: AttributeSet?) : AppCompatImageView(con
     val cellColor = Paint().apply { color = resources.getColor(R.color.cell_1) }
 
     @SuppressLint("DrawAllocation")
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
         val bgRect = RectF(0F, 0F, width.toFloat(), height.toFloat())
 
         val radius = width * .1F
 
-        canvas!!.drawCircle(bgRect.centerX(),bgRect.centerX(), bgRect.width()/2, backColor)
+        canvas.drawCircle(bgRect.centerX(),bgRect.centerX(), bgRect.width()/2, backColor)
 
         val dxy = width / 3F
 
@@ -38,7 +38,7 @@ class ThemeView(context: Context, attrs: AttributeSet?) : AppCompatImageView(con
 
         rect2.inset(inset, inset)
 
-        canvas!!.drawCircle(rect2.centerX(),rect2.centerX(), rect2.width()/2, cellColor)
+        canvas.drawCircle(rect2.centerX(),rect2.centerX(), rect2.width()/2, cellColor)
 
     }
 

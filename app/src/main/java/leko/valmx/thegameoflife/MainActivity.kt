@@ -256,9 +256,6 @@ class MainActivity : AppCompatActivity(), OnThemeSelectedListener,
                             gameView
                         )
                     }
-                    2 -> {
-                        startActivity(Intent(this@MainActivity, OpenGLTestAc::class.java))
-                    }
                 }
 
             }

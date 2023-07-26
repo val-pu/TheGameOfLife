@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace 'leko.valmx.thegameoflife'
-    compileSdk 33
+    compileSdk 34
 
     apply plugin: 'com.android.application'
     apply plugin: 'kotlin-android'
